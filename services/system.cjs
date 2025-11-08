@@ -1,5 +1,4 @@
-// services/system.js
-import { exec } from 'child_process';
+const { exec } = require('child_process');
 const sh = (cmd, timeout = 60000) => new Promise((resolve) => {
   exec(cmd, { maxBuffer: 16 * 1024 * 1024, timeout, shell: '/bin/bash' }, (err, stdout, stderr) => {
     if (err) return resolve({ ok: false, error: String(err), stdout: String(stdout||''), stderr: String(stderr||'') });
@@ -12,7 +11,7 @@ const which = async (cmd) => {
   return r.ok && r.stdout.trim() === '1';
 };
 
-export async function getBattery(_req, res) {
+async function getBattery(_req, res) {
   if (await which('termux-battery-status')) {
     const r = await sh('termux-battery-status');
     if (r.ok) {
@@ -35,7 +34,7 @@ export async function getBattery(_req, res) {
   });
 }
 
-export async function getWifi(_req, res) {
+async function getWifi(_req, res) {
   if (await which('termux-wifi-connectioninfo')) {
     const r = await sh('termux-wifi-connectioninfo');
     if (r.ok) {
@@ -75,7 +74,7 @@ export async function getWifi(_req, res) {
   res.status(503).json({ error: 'wifi-info-unavailable' });
 }
 
-export async function getSystem(_req, res) {
+async function getSystem(_req, res) {
   const [mem, up, load, therm] = await Promise.all([
     sh('termux-mem-info || true'),
     sh('uptime -p || true'),
@@ -96,7 +95,7 @@ export async function getSystem(_req, res) {
   res.json({ mem: memJSON, uptime: uptimePretty, loadavg, thermal });
 }
 
-export async function getNetwork(_req, res) {
+async function getNetwork(_req, res) {
   let iface = null;
   const r0 = await sh(`ip route get 1.1.1.1 2>/dev/null | awk '/dev /{for(i=1;i<=NF;i++) if($i=="dev"){print $(i+1); exit}}'`);
   if (r0.ok && r0.stdout.trim()) iface = r0.stdout.trim();
@@ -117,3 +116,5 @@ export async function getNetwork(_req, res) {
     res.status(500).json({ error: 'Failed to parse ip output', detail: e.message });
   }
 }
+
+module.exports = { getBattery, getWifi, getSystem, getNetwork };
