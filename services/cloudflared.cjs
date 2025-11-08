@@ -19,7 +19,7 @@ if [ ! -x "$CF_BIN" ]; then
   echo "cloudflared not found"; exit 127
 fi
 termux-wake-lock >/dev/null 2>&1 || true
-nohup "$CF_BIN" tunnel run --token "${CLOUDFLARED_TOKEN}" > "$HOME/cloudflared.log" 2>&1 &
+nohup "$CF_BIN" tunnel run --token "\${CLOUDFLARED_TOKEN}" > "$HOME/cloudflared.log" 2>&1 &
 echo "started"
 `;
 
