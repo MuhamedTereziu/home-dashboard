@@ -1,29 +1,25 @@
-// server.js — Termux Dashboard (works without Termux:API via Android fallbacks)
+// server.js — Termux Dashboard (REST-only, admin/admin)
 // Node >= 18
-//
+
 // Quick install on Termux:
 //   pkg update && pkg upgrade -y
 //   pkg install -y nodejs
-//   # Optional but recommended if you have Termux:API app installed:
-//   pkg install -y termux-api
 //   mkdir -p ~/dashboard && cd ~/dashboard
 //   # place index.html + server.js here
-//   npm init -y && npm i express cors compression routeros-client
+//   npm init -y && npm i express cors compression
 //
-// ENV (edit ~/.bashrc then `source ~/.bashrc`):
+// ENV (optional) — edit ~/.bashrc then `source ~/.bashrc`:
 //   export PORT=3000
 //   export MT_HOST="192.168.88.1"
-//   export MT_USER="admin"
-//   export MT_PASS="admin"
-//   export MT_USE_REST="0"          # set to 1 only on RouterOS v7 with REST
 //   export MT_REST_PROTO="http"     # http or https
 //   export MT_REST_PORT="80"        # 443 if https
+//   export MT_TLS_INSECURE="0"      # set 1 to allow self-signed HTTPS
 //   export CLOUDFLARED_TOKEN="eyJ..."
-//
+
 // Run:
 //   node server.js
 //
-// Endpoints used by your HTML:
+// Endpoints used by HTML:
 //   GET  /api/battery
 //   GET  /api/wifi
 //   GET  /api/system
@@ -31,11 +27,12 @@
 //   GET  /api/lan
 //   GET  /api/tunnel
 //   POST /api/run   { cmd: "tunnel-start"|"tunnel-stop"|"tunnel-status"|"update"|"wifi-scan" }
-//
+
 const express = require('express');
 const cors = require('cors');
 const compression = require('compression');
 const { exec } = require('child_process');
+const https = require('https');
 
 // ---------- Config ----------
 const app = express();
@@ -47,13 +44,13 @@ app.use(express.static('.'));
 const PORT = parseInt(process.env.PORT || '3000', 10);
 const HOST = '0.0.0.0';
 
-// MikroTik
+// MikroTik REST (v7)
 const MT_HOST = process.env.MT_HOST || '192.168.88.1';
-const MT_USER = process.env.MT_USER || 'admin';
-const MT_PASS = process.env.MT_PASS || 'admin';
-const MT_USE_REST = process.env.MT_USE_REST === '1';
+const MT_USER = 'admin';   // hardcoded per request
+const MT_PASS = 'admin';   // hardcoded per request
 const MT_REST_PROTO = process.env.MT_REST_PROTO || 'http';
-const MT_REST_PORT = process.env.MT_REST_PORT || '80';
+const MT_REST_PORT = process.env.MT_REST_PORT || (MT_REST_PROTO === 'https' ? '443' : '80');
+const MT_TLS_INSECURE = process.env.MT_TLS_INSECURE === '1';
 
 // Cloudflared
 const CLOUDFLARED_TOKEN = process.env.CLOUDFLARED_TOKEN || '';
@@ -67,33 +64,26 @@ function sh(cmd, timeout = 60000) {
     });
   });
 }
-
 async function which(cmd) {
   const r = await sh(`command -v ${cmd} >/dev/null 2>&1 && echo 1 || echo 0`);
   return r.ok && r.stdout.trim() === '1';
 }
-
 function parseJSON(s) { try { return JSON.parse(s); } catch { return null; } }
 
 // ---------- Battery ----------
-// Prefer termux-battery-status; fallback to `dumpsys battery`
 app.get('/api/battery', async (_req, res) => {
   if (await which('termux-battery-status')) {
     const r = await sh('termux-battery-status');
-    if (r.ok) {
-      const j = parseJSON(r.stdout);
-      if (j) return res.json(j);
-    }
+    if (r.ok) { const j = parseJSON(r.stdout); if (j) return res.json(j); }
   }
-  // Fallback: dumpsys battery
   const d = await sh(`dumpsys battery || true`);
   if (!d.ok) return res.status(503).json({ error: 'battery-unavailable' });
   const o = d.stdout;
   const get = (re) => (o.match(re) || [])[1];
   const level = parseInt(get(/level:\s*(\d+)/), 10);
-  const tempTenthC = parseInt(get(/temperature:\s*(\d+)/), 10); // tenths of degree C
-  const statusCode = parseInt(get(/status:\s*(\d+)/), 10); // Android BatteryManager
-  const charging = [2, 5].includes(statusCode); // CHARGING or FULL
+  const tempTenthC = parseInt(get(/temperature:\s*(\d+)/), 10);
+  const statusCode = parseInt(get(/status:\s*(\d+)/), 10);
+  const charging = [2, 5].includes(statusCode);
   return res.json({
     percentage: Number.isFinite(level) ? level : null,
     temperature: Number.isFinite(tempTenthC) ? (tempTenthC / 10).toFixed(1) : null,
@@ -102,9 +92,7 @@ app.get('/api/battery', async (_req, res) => {
 });
 
 // ---------- Wi‑Fi ----------
-// Order: termux-wifi-connectioninfo → dumpsys wifi → /proc/net/wireless (signal only)
 app.get('/api/wifi', async (_req, res) => {
-  // Termux:API
   if (await which('termux-wifi-connectioninfo')) {
     const r = await sh('termux-wifi-connectioninfo');
     if (r.ok) {
@@ -121,7 +109,6 @@ app.get('/api/wifi', async (_req, res) => {
       }
     }
   }
-  // dumpsys wifi (no Termux:API)
   const d = await sh(`dumpsys wifi | sed -n '1,160p' || true`);
   if (d.ok) {
     const o = d.stdout;
@@ -137,7 +124,6 @@ app.get('/api/wifi', async (_req, res) => {
       return res.json({ ssid, rssi, link_speed, ip, source: 'dumpsys' });
     }
   }
-  // /proc/net/wireless
   const pr = await sh(`awk 'NR==3{gsub(/\\./,""); print $4}' /proc/net/wireless 2>/dev/null || true`);
   if (pr.ok && pr.stdout.trim()) {
     const sig = parseInt(pr.stdout.trim(), 10);
@@ -157,7 +143,6 @@ app.get('/api/system', async (_req, res) => {
   const memJSON = parseJSON(mem.stdout) || null;
   const uptimePretty = up.ok ? up.stdout.trim() : null;
   const loadavg = load.ok ? (load.stdout.trim().split(/\s+/).slice(0,3)) : [];
-  // If termux-thermal-sensor fails, try kernel thermal zones (millideg C)
   let thermal = parseJSON(therm.stdout);
   if (!thermal) {
     const tz = await sh(`for f in /sys/class/thermal/thermal_zone*/temp; do [ -r "$f" ] && cat "$f"; done | head -n1 || true`);
@@ -171,7 +156,6 @@ app.get('/api/system', async (_req, res) => {
 
 // ---------- Network bytes (for charts) ----------
 app.get('/api/network', async (_req, res) => {
-  // Pick the active interface (route to internet) or first non-loopback UP
   let iface = null;
   const r0 = await sh(`ip route get 1.1.1.1 2>/dev/null | awk '/dev /{for(i=1;i<=NF;i++) if($i=="dev"){print $(i+1); exit}}'`);
   if (r0.ok && r0.stdout.trim()) iface = r0.stdout.trim();
@@ -193,11 +177,21 @@ app.get('/api/network', async (_req, res) => {
   }
 });
 
-// ---------- MikroTik Leases ----------
+// ---------- MikroTik Leases (REST only) ----------
 async function mikrotikLeasesREST() {
-  const url = `${MT_REST_PROTO}://${MT_HOST}:${MT_REST_PORT}/rest/ip/dhcp-server/lease`;
+  const base = `${MT_REST_PROTO}://${MT_HOST}:${MT_REST_PORT}`;
+  const url = `${base}/rest/ip/dhcp-server/lease`;
   const auth = Buffer.from(`${MT_USER}:${MT_PASS}`).toString('base64');
-  const r = await fetch(url, { headers: { 'Authorization': `Basic ${auth}`, 'Accept': 'application/json' } });
+
+  const opts = {
+    method: 'GET',
+    headers: { 'Authorization': `Basic ${auth}`, 'Accept': 'application/json' },
+    agent: MT_REST_PROTO === 'https' && MT_TLS_INSECURE
+      ? new https.Agent({ rejectUnauthorized: false })
+      : undefined
+  };
+
+  const r = await fetch(url, opts);
   if (r.status === 401) throw new Error('HTTP 401 Unauthorized');
   if (!r.ok) throw new Error(`REST error ${r.status} ${r.statusText}`);
   const data = await r.json();
@@ -209,29 +203,9 @@ async function mikrotikLeasesREST() {
   }));
 }
 
-async function mikrotikLeasesAPI() {
-  const { RouterOSClient } = require('routeros-client');
-  const api = new RouterOSClient({ host: MT_HOST, user: MT_USER, password: MT_PASS, timeout: 6000 });
-  await api.connect();
-  try {
-    const menu = api.menu('/ip/dhcp-server/lease');
-    const leases = await menu.print();
-    await api.close();
-    return (leases || []).map(l => ({
-      ip: l['address'] || '',
-      mac: l['mac-address'] || '',
-      hostname: l['host-name'] || '',
-      status: l['status'] || '',
-    }));
-  } catch (e) {
-    await api.close().catch(()=>{});
-    throw e;
-  }
-}
-
 app.get('/api/lan', async (_req, res) => {
   try {
-    const leases = MT_USE_REST ? await mikrotikLeasesREST() : await mikrotikLeasesAPI();
+    const leases = await mikrotikLeasesREST();
     return res.json(leases);
   } catch (err) {
     res.status(500).json({ error: String(err && err.message || err) });
@@ -275,6 +249,7 @@ app.get('/health', (_req, res) => res.json({ ok: true }));
 
 app.listen(PORT, HOST, () => {
   console.log(`✅ Dashboard on http://${HOST}:${PORT}`);
-  console.log(`   MikroTik via ${MT_USE_REST ? 'REST' : 'API'} — host=${MT_HOST} user=${MT_USER}`);
+  console.log(`   MikroTik via REST — host=${MT_HOST} user=admin (hardcoded)`);
+  console.log(`   REST proto=${MT_REST_PROTO} port=${MT_REST_PORT} TLS_insecure=${MT_TLS_INSECURE ? 'yes' : 'no'}`);
   console.log(`   Cloudflared token set: ${CLOUDFLARED_TOKEN ? 'yes' : 'no'}`);
 });

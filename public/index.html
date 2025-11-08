@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Termux Dashboard</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>📊 Termux Dashboard</h1>
+      <div class="chips">
+        <div class="chip"><a href="#" id="router-link" style="color:inherit;text-decoration:none">🌐 Router config</a></div>
+      </div>
+    </header>
+
+    <section class="grid">
+      <div class="card span-3">
+        <h2>Battery</h2>
+        <div class="row">
+          <div class="kpi">Level: <strong id="battery-percent">—%</strong></div>
+          <div class="kpi">Status: <strong id="charging-status">—</strong></div>
+        </div>
+        <div class="row">
+          <div class="kpi">Temp: <strong id="bat-temp">—</strong> °C</div>
+        </div>
+      </div>
+
+      <div class="card span-3">
+        <h2>System</h2>
+        <div class="row">
+          <div class="kpi">Uptime: <strong id="sys-uptime">—</strong></div>
+          <div class="kpi">Load: <strong id="sys-load">—</strong></div>
+        </div>
+        <div class="row">
+          <div class="kpi">RAM: <strong id="sys-ram">—</strong></div>
+          <div class="kpi">CPU °C: <strong id="sys-cpu">—</strong></div>
+        </div>
+      </div>
+
+      <div class="card span-6">
+        <div style="display:flex;align-items:center;justify-content:space-between;">
+          <h2>LAN Devices (DHCP leases)</h2>
+          <span id="lan-badge" class="badge" style="display:none"></span>
+        </div>
+        <table class="table" id="lan-table">
+          <thead><tr><th>IP</th><th>MAC</th><th>Hostname</th><th>Status</th></tr></thead>
+          <tbody></tbody>
+        </table>
+      </div>
+
+      <div class="card span-3">
+        <h2>Weather</h2>
+        <form onsubmit="event.preventDefault(); fetchWeather();">
+          <input id="city-input" type="text" class="kpi" value="Tirana" placeholder="City" style="flex:1;border-radius:8px;padding:8px;border:1px solid var(--border);background:#0c0e16;color:var(--text)">
+          <div style="margin-top:8px"><button type="button" onclick="fetchWeather()">Update</button></div>
+        </form>
+        <div class="row">
+          <div class="kpi">City: <strong id="wx-city">—</strong></div>
+          <div class="kpi">Temp: <strong id="wx-temp">—</strong>°C</div>
+          <div class="kpi">Wind: <strong id="wx-wind">—</strong> m/s</div>
+          <div class="kpi">Code: <strong id="wx-code">—</strong></div>
+        </div>
+      </div>
+
+      <div class="card span-3">
+        <h2>Cloudflare Tunnel</h2>
+        <div class="row"><div class="kpi">Status: <strong id="tun-status">—</strong></div></div>
+        <pre id="cmd-output">—</pre>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px">
+          <button onclick="runCmd('tunnel-status')">Status</button>
+          <button onclick="runCmd('tunnel-start')">Start</button>
+          <button onclick="runCmd('tunnel-stop')">Stop</button>
+          <button onclick="runCmd('update')">Update pkgs</button>
+          <button onclick="runCmd('wifi-scan')">Wi‑Fi Scan</button>
+        </div>
+      </div>
+
+      <div class="card span-12">
+        <h2>Status</h2>
+        <div class="sub" id="status-line">Ready.</div>
+      </div>
+    </section>
+
+    <footer>© <span id="year"></span> Termux Dashboard</footer>
+  </div>
+
+  <canvas id="net-chart" style="display:none"></canvas>
+  <script src="/js/main.js"></script>
+</body>
+</html>
