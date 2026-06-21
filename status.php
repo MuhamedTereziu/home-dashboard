@@ -3,14 +3,15 @@ header("Access-Control-Allow-Origin: *");
 header("Content-Type: application/json");
 
 $ports = [
-    "flood"    => 9991,
-    "immich"   => 2283,
-    "cockpit"  => 9090,
-    "stats"    => 8090,
-    "alist"    => 5244,
-    "plex"     => 32400,
-    "jellyfin" => 8096,
-    "crafty"   => 8443
+    "flood"        => 9991,
+    "immich"       => 2283,
+    "cockpit"      => 9090,
+    "stats"        => 8090,
+    "alist"        => 5244,
+    "plex"         => 32400,
+    "jellyfin"     => 8096,
+    "crafty"       => 8443,
+    "vaultwarden"  => 8280
 ];
 
 $services = [];
