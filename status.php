@@ -9,7 +9,8 @@ $ports = [
     "stats"    => 8090,
     "alist"    => 5244,
     "plex"     => 32400,
-    "jellyfin" => 8096
+    "jellyfin" => 8096,
+    "crafty"   => 8443
 ];
 
 $services = [];
