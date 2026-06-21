@@ -1,0 +1,13 @@
+services:
+  flood:
+    image: jesec/flood
+    container_name: flood
+    user: "1000:1000"
+    restart: unless-stopped
+    network_mode: host
+    command: --port 9991 --allowedpath /data
+    environment:
+      HOME: /config
+    volumes:
+      - /mnt/hdd/flood-config:/config
+      - /mnt/hdd:/data

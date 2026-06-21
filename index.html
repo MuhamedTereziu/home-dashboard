@@ -1,0 +1,1111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Medi's Home Server Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --bg-dark: #070a13;
+            --bg-indigo: #0c0e22;
+            --card-bg: rgba(13, 17, 39, 0.45);
+            --card-border: rgba(255, 255, 255, 0.08);
+            --card-border-hover: rgba(99, 102, 241, 0.4);
+            --text-primary: #f8fafc;
+            --text-secondary: #94a3b8;
+            --primary: #6366f1;
+            --primary-glow: rgba(99, 102, 241, 0.35);
+            --success: #10b981;
+            --success-glow: rgba(16, 185, 129, 0.3);
+            --danger: #ef4444;
+            --danger-glow: rgba(239, 68, 68, 0.3);
+            --warning: #f59e0b;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            background-image: 
+                radial-gradient(at 0% 0%, rgba(99, 102, 241, 0.15) 0px, transparent 50%),
+                radial-gradient(at 100% 0%, rgba(139, 92, 246, 0.15) 0px, transparent 50%),
+                radial-gradient(at 50% 100%, rgba(16, 185, 129, 0.05) 0px, transparent 50%);
+            background-attachment: fixed;
+            min-height: 100vh;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            color: var(--text-primary);
+            padding: 2rem 1.5rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            overflow-x: hidden;
+        }
+
+        /* Animated background mesh */
+        .mesh-gradient {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at 30% 30%, rgba(99, 102, 241, 0.05) 0%, transparent 60%),
+                        radial-gradient(circle at 70% 80%, rgba(167, 139, 250, 0.05) 0%, transparent 65%);
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1100px;
+            z-index: 1;
+        }
+
+        /* Header section */
+        header {
+            text-align: center;
+            margin-bottom: 3.5rem;
+            position: relative;
+        }
+
+        .logo-area {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .logo-icon {
+            font-size: 2.2rem;
+            background: linear-gradient(135deg, #818cf8, #c084fc);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            filter: drop-shadow(0 0 12px rgba(129, 140, 248, 0.4));
+            animation: float 4s ease-in-out infinite;
+        }
+
+        h1 {
+            font-family: 'Outfit', sans-serif;
+            font-size: 3.2rem;
+            font-weight: 800;
+            letter-spacing: -0.03em;
+            background: linear-gradient(to right, #818cf8, #a78bfa, #f472b6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 0.5rem;
+            filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.2));
+        }
+
+        p.subtitle {
+            color: var(--text-secondary);
+            font-size: 1.15rem;
+            font-weight: 400;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Control Panel bar: Search, Tabs & Settings */
+        .controls-row {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: center;
+            gap: 1.25rem;
+            margin-bottom: 2.5rem;
+            background: rgba(13, 17, 39, 0.25);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 24px;
+            padding: 0.75rem 1.25rem;
+            backdrop-filter: blur(12px);
+        }
+
+        .tabs {
+            display: flex;
+            gap: 0.5rem;
+            overflow-x: auto;
+            scrollbar-width: none; /* Firefox */
+        }
+        .tabs::-webkit-scrollbar {
+            display: none; /* Safari/Chrome */
+        }
+
+        .tab-btn {
+            background: transparent;
+            border: none;
+            color: var(--text-secondary);
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-weight: 600;
+            font-size: 0.9rem;
+            padding: 0.6rem 1.1rem;
+            border-radius: 14px;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            white-space: nowrap;
+        }
+
+        .tab-btn.active, .tab-btn:hover {
+            color: var(--text-primary);
+            background: rgba(255, 255, 255, 0.06);
+        }
+        .tab-btn.active {
+            box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.08);
+            background: rgba(99, 102, 241, 0.15);
+            color: #a5b4fc;
+        }
+
+        .search-box {
+            position: relative;
+            flex-grow: 1;
+            max-width: 320px;
+            min-width: 200px;
+        }
+
+        .search-input {
+            width: 100%;
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 14px;
+            padding: 0.65rem 1rem 0.65rem 2.5rem;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            color: var(--text-primary);
+            font-size: 0.9rem;
+            outline: none;
+            transition: all 0.25s ease;
+        }
+
+        .search-input:focus {
+            border-color: var(--primary);
+            background: rgba(255, 255, 255, 0.08);
+            box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.15);
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 0.9rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            pointer-events: none;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 0.75rem;
+        }
+
+        .btn-action {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.07);
+            color: var(--text-primary);
+            width: 42px;
+            height: 42px;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            font-size: 1.05rem;
+        }
+
+        .btn-action:hover {
+            background: rgba(99, 102, 241, 0.2);
+            border-color: var(--primary);
+            box-shadow: 0 0 12px var(--primary-glow);
+            transform: scale(1.05);
+        }
+
+        /* Cards Grid */
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 3.5rem;
+        }
+
+        .card {
+            background: var(--card-bg);
+            backdrop-filter: blur(16px);
+            border: 1px solid var(--card-border);
+            border-radius: 24px;
+            padding: 1.75rem;
+            text-decoration: none;
+            color: var(--text-primary);
+            transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Subtle glowing card back-highlights */
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(800px circle at var(--mouse-x, 0) var(--mouse-y, 0), rgba(255, 255, 255, 0.03), transparent 40%);
+            z-index: 2;
+            pointer-events: none;
+        }
+
+        .card:hover {
+            transform: translateY(-6px);
+            border-color: var(--card-border-hover);
+            background: rgba(16, 20, 48, 0.6);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.35), 
+                        0 0 20px rgba(99, 102, 241, 0.15);
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 1.25rem;
+            position: relative;
+            z-index: 3;
+        }
+
+        .icon-wrapper {
+            width: 60px;
+            height: 60px;
+            border-radius: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.6rem;
+            transition: all 0.3s ease;
+        }
+
+        .card:hover .icon-wrapper {
+            transform: scale(1.1) rotate(3deg);
+        }
+
+        /* Custom Icon Colors based on Category/Service */
+        .icon-photos { background: rgba(59, 130, 246, 0.12); color: #60a5fa; box-shadow: 0 0 15px rgba(59, 130, 246, 0.15); }
+        .icon-media { background: rgba(245, 158, 11, 0.12); color: #fbbf24; box-shadow: 0 0 15px rgba(245, 158, 11, 0.15); }
+        .icon-torrent { background: rgba(16, 185, 129, 0.12); color: #34d399; box-shadow: 0 0 15px rgba(16, 185, 129, 0.15); }
+        .icon-files { background: rgba(6, 182, 212, 0.12); color: #22d3ee; box-shadow: 0 0 15px rgba(6, 182, 212, 0.15); }
+        .icon-system { background: rgba(139, 92, 246, 0.12); color: #a78bfa; box-shadow: 0 0 15px rgba(139, 92, 246, 0.15); }
+        .icon-games { background: rgba(236, 72, 153, 0.12); color: #f472b6; box-shadow: 0 0 15px rgba(236, 72, 153, 0.15); }
+
+        .card-status {
+            font-size: 0.75rem;
+            font-weight: 700;
+            padding: 0.35rem 0.75rem;
+            border-radius: 12px;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .status-checking {
+            background: rgba(255, 255, 255, 0.05);
+            color: var(--text-secondary);
+        }
+        .status-online {
+            background: rgba(16, 185, 129, 0.1);
+            color: #34d399;
+            box-shadow: inset 0 0 0 1px rgba(16, 185, 129, 0.15);
+        }
+        .status-offline {
+            background: rgba(239, 68, 68, 0.1);
+            color: #f87171;
+            box-shadow: inset 0 0 0 1px rgba(239, 68, 68, 0.15);
+        }
+
+        .status-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+        }
+        .status-checking .status-dot { background: var(--text-secondary); }
+        .status-online .status-dot { 
+            background: #34d399; 
+            box-shadow: 0 0 8px #34d399;
+            animation: pulse 2s infinite;
+        }
+        .status-offline .status-dot { 
+            background: #f87171; 
+            box-shadow: 0 0 8px #f87171;
+        }
+
+        .card-body {
+            position: relative;
+            z-index: 3;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .card h2 {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.35rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            letter-spacing: -0.01em;
+        }
+
+        .card p.desc {
+            color: var(--text-secondary);
+            font-size: 0.92rem;
+            line-height: 1.5;
+            margin-bottom: 1.25rem;
+        }
+
+        .card-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            padding-top: 0.75rem;
+            margin-top: auto;
+            color: var(--text-secondary);
+            font-size: 0.8rem;
+        }
+
+        .card-footer span {
+            display: flex;
+            align-items: center;
+            gap: 0.35rem;
+        }
+
+        .card-footer i {
+            font-size: 0.85rem;
+        }
+
+        /* Footer System Badge */
+        .system-status-bar {
+            text-align: center;
+            margin-top: 2rem;
+        }
+
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.6rem;
+            background: rgba(13, 17, 39, 0.45);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            color: var(--text-primary);
+            padding: 0.65rem 1.25rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .dot-pulse {
+            width: 10px;
+            height: 10px;
+            background-color: var(--success);
+            border-radius: 50%;
+            box-shadow: 0 0 10px var(--success);
+            animation: pulse 2.5s infinite;
+        }
+
+        /* Configuration Modal Overlays */
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(5, 6, 15, 0.8);
+            backdrop-filter: blur(8px);
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: all 0.3s ease;
+        }
+
+        .modal.active {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .modal-content {
+            background: #0f122c;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 28px;
+            width: 90%;
+            max-width: 580px;
+            padding: 2.25rem;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5),
+                        0 0 40px rgba(99, 102, 241, 0.1);
+            transform: scale(0.9);
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            max-height: 85vh;
+            overflow-y: auto;
+        }
+
+        .modal.active .modal-content {
+            transform: scale(1);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            padding-bottom: 0.75rem;
+        }
+
+        .modal-header h3 {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
+        .modal-close {
+            background: transparent;
+            border: none;
+            color: var(--text-secondary);
+            font-size: 1.3rem;
+            cursor: pointer;
+            transition: color 0.2s ease;
+        }
+
+        .modal-close:hover {
+            color: var(--text-primary);
+        }
+
+        .form-group {
+            margin-bottom: 1.25rem;
+        }
+
+        .form-group label {
+            display: block;
+            color: var(--text-secondary);
+            font-size: 0.88rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .form-control, select {
+            width: 100%;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 12px;
+            padding: 0.75rem 1rem;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            color: var(--text-primary);
+            font-size: 0.92rem;
+            outline: none;
+            transition: all 0.2s ease;
+        }
+
+        .form-control:focus, select:focus {
+            border-color: var(--primary);
+            background: rgba(255, 255, 255, 0.06);
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15);
+        }
+
+        .form-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 0.75rem;
+            margin-top: 1.75rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            padding-top: 1.25rem;
+        }
+
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border-radius: 12px;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-weight: 600;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.25s ease;
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            color: var(--text-secondary);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--text-primary);
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            border: none;
+            color: white;
+            box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3);
+        }
+
+        .btn-primary:hover {
+            background: #4f46e5;
+            box-shadow: 0 6px 20px rgba(99, 102, 241, 0.45);
+            transform: translateY(-1px);
+        }
+
+        /* Dashboard Items List inside settings */
+        .settings-item-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.75rem 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+        }
+
+        .settings-item-row span {
+            font-weight: 600;
+            font-size: 0.95rem;
+        }
+
+        .settings-item-row-buttons {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .btn-item-action {
+            background: transparent;
+            border: none;
+            color: var(--text-secondary);
+            cursor: pointer;
+            padding: 0.35rem;
+            font-size: 1rem;
+            transition: color 0.2s ease;
+        }
+
+        .btn-item-action:hover {
+            color: var(--text-primary);
+        }
+
+        .btn-item-delete:hover {
+            color: var(--danger);
+        }
+
+        /* Float animation */
+        @keyframes float {
+            0% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-6px) rotate(3deg); }
+            100% { transform: translateY(0px) rotate(0deg); }
+        }
+
+        /* Pulse animation */
+        @keyframes pulse {
+            0% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.5; transform: scale(1.15); }
+            100% { opacity: 1; transform: scale(1); }
+        }
+
+        /* Responsive design adjustments */
+        @media (max-width: 640px) {
+            body {
+                padding: 1.5rem 1rem;
+            }
+            h1 {
+                font-size: 2.3rem;
+            }
+            .controls-row {
+                flex-direction: column;
+                align-items: stretch;
+                border-radius: 18px;
+            }
+            .search-box {
+                max-width: 100%;
+            }
+            .tabs {
+                justify-content: flex-start;
+            }
+            .grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="mesh-gradient"></div>
+
+    <div class="container">
+        <header>
+            <div class="logo-area">
+                <i class="fa-solid fa-shapes logo-icon"></i>
+            </div>
+            <h1>Medi's Network</h1>
+            <p class="subtitle">Secure remote monitoring and cloud services dashboard via Cloudflare Tunnel</p>
+        </header>
+
+        <!-- Search, Tabs and Action Options -->
+        <div class="controls-row">
+            <div class="tabs" id="categoryTabs">
+                <button class="tab-btn active" data-category="all">All Services</button>
+                <button class="tab-btn" data-category="media">Media & Cloud</button>
+                <button class="tab-btn" data-category="downloads">Downloaders</button>
+                <button class="tab-btn" data-category="system">Administration</button>
+            </div>
+
+            <div class="search-box">
+                <i class="fa-solid fa-magnifying-glass search-icon"></i>
+                <input type="text" id="searchInput" class="search-input" placeholder="Search services...">
+            </div>
+
+            <div class="action-buttons">
+                <button class="btn-action" id="btnSettings" title="Manage Services"><i class="fa-solid fa-sliders"></i></button>
+                <button class="btn-action" id="btnAddService" title="Add New Service"><i class="fa-solid fa-plus"></i></button>
+            </div>
+        </div>
+
+        <!-- Grid of Services -->
+        <div class="grid" id="servicesGrid">
+            <!-- Dynamically populated -->
+        </div>
+
+        <!-- System Operational status indicator -->
+        <div class="system-status-bar">
+            <div class="status-badge" id="systemStatusBadge">
+                <div class="dot-pulse"></div>
+                <span>Syncing network devices...</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- settings list Modal -->
+    <div class="modal" id="settingsModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Manage Dashboard Services</h3>
+                <button class="modal-close" onclick="closeModal('settingsModal')">&times;</button>
+            </div>
+            <div id="settingsServicesList" style="margin-bottom: 1.5rem;">
+                <!-- Dynamically populated list of items to edit/delete -->
+            </div>
+            <div class="form-actions" style="margin-top: 0; padding-top: 1rem;">
+                <button class="btn btn-secondary" onclick="closeModal('settingsModal')">Close</button>
+                <button class="btn btn-primary" onclick="resetDefaultServices()">Reset Defaults</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add/Edit Service Modal -->
+    <div class="modal" id="serviceFormModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="formModalTitle">Add New Service</h3>
+                <button class="modal-close" onclick="closeModal('serviceFormModal')">&times;</button>
+            </div>
+            <form id="serviceForm" onsubmit="saveServiceForm(event)">
+                <input type="hidden" id="fieldId">
+                <div class="form-group">
+                    <label for="fieldName">Service Name</label>
+                    <input type="text" id="fieldName" class="form-control" required placeholder="e.g. Jellyfin Media">
+                </div>
+                <div class="form-group">
+                    <label for="fieldUrl">Access URL</label>
+                    <input type="url" id="fieldUrl" class="form-control" required placeholder="https://jellyfin.mediii.qzz.io">
+                </div>
+                <div class="form-group">
+                    <label for="fieldDesc">Description</label>
+                    <input type="text" id="fieldDesc" class="form-control" placeholder="Brief subtitle explaining the service">
+                </div>
+                <div class="form-group">
+                    <label for="fieldIcon">FontAwesome Icon Class</label>
+                    <input type="text" id="fieldIcon" class="form-control" required placeholder="e.g. fa-solid fa-video">
+                </div>
+                <div class="form-group">
+                    <label for="fieldTheme">Theme / Category Color</label>
+                    <select id="fieldTheme">
+                        <option value="icon-media">Orange (Media)</option>
+                        <option value="icon-photos">Blue (Photos/Docs)</option>
+                        <option value="icon-torrent">Green (Downloads)</option>
+                        <option value="icon-files">Cyan (Files)</option>
+                        <option value="icon-system">Purple (System)</option>
+                        <option value="icon-games">Pink (Games)</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="fieldCategory">Category Section</label>
+                    <select id="fieldCategory">
+                        <option value="media">Media & Cloud</option>
+                        <option value="downloads">Downloaders</option>
+                        <option value="system">Administration</option>
+                    </select>
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn btn-secondary" onclick="closeModal('serviceFormModal')">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Save Service</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Default services configuration mapping to user's remote sites
+        const DEFAULT_SERVICES = [
+            {
+                id: "immich",
+                name: "Immich Photos",
+                url: "https://1.mediii.qzz.io",
+                desc: "High performance self-hosted photo and video backup solution.",
+                icon: "fa-solid fa-images",
+                theme: "icon-photos",
+                category: "media"
+            },
+            {
+                id: "jellyfin",
+                name: "Jellyfin Server",
+                url: "https://jellyfin.mediii.qzz.io",
+                desc: "Personal media streaming hub for movies, shows, and music.",
+                icon: "fa-solid fa-compact-disc",
+                theme: "icon-media",
+                category: "media"
+            },
+            {
+                id: "alist",
+                name: "AList Files",
+                url: "https://alist.mediii.qzz.io",
+                desc: "Unified file manager supporting local drives and major cloud storage services.",
+                icon: "fa-solid fa-folder-tree",
+                theme: "icon-files",
+                category: "media"
+            },
+            {
+                id: "flood",
+                name: "Flood Torrents",
+                url: "https://flood.mediii.qzz.io",
+                desc: "Sleek web companion interface for local Transmission torrent daemon.",
+                icon: "fa-solid fa-cloud-arrow-down",
+                theme: "icon-torrent",
+                category: "downloads"
+            },
+            {
+                id: "transmission",
+                name: "Transmission",
+                url: "https://transmission.mediii.qzz.io",
+                desc: "Lightweight, native BitTorrent daemon running on server backend.",
+                icon: "fa-solid fa-circle-down",
+                theme: "icon-torrent",
+                category: "downloads"
+            },
+            {
+                id: "cockpit",
+                name: "Cockpit Dashboard",
+                url: "https://2.mediii.qzz.io",
+                desc: "Ubuntu system admin console, socket management, and terminal control.",
+                icon: "fa-solid fa-terminal",
+                theme: "icon-system",
+                category: "system"
+            },
+            {
+                id: "beszel",
+                name: "Beszel Monitor",
+                url: "https://beszel.mediii.qzz.io",
+                desc: "Real-time, low-overhead resource dashboard for server and container stats.",
+                icon: "fa-solid fa-chart-line",
+                theme: "icon-system",
+                category: "system"
+            },
+            {
+                id: "dashdot",
+                name: "Dashdot Health",
+                url: "https://dashdot.mediii.qzz.io",
+                desc: "Interactive system dashboard showcasing CPU, RAM, network, and storage details.",
+                icon: "fa-solid fa-gauge-high",
+                theme: "icon-system",
+                category: "system"
+            }
+        ];
+
+        let services = [];
+        let activeCategory = "all";
+        let searchQuery = "";
+
+        // Initialize dashboard
+        document.addEventListener("DOMContentLoaded", () => {
+            loadServices();
+            setupEventListeners();
+            checkAllServicesStatus();
+        });
+
+        // Load services from localStorage or set defaults
+        function loadServices() {
+            const stored = localStorage.getItem("medi_server_services");
+            if (stored) {
+                try {
+                    services = JSON.parse(stored);
+                } catch(e) {
+                    services = [...DEFAULT_SERVICES];
+                }
+            } else {
+                services = [...DEFAULT_SERVICES];
+                localStorage.setItem("medi_server_services", JSON.stringify(services));
+            }
+            renderServicesGrid();
+        }
+
+        // Setup event handlers
+        function setupEventListeners() {
+            // Category filter click handler
+            document.getElementById("categoryTabs").addEventListener("click", (e) => {
+                if (e.target.classList.contains("tab-btn")) {
+                    document.querySelectorAll(".tab-btn").forEach(btn => btn.classList.remove("active"));
+                    e.target.classList.add("active");
+                    activeCategory = e.target.getAttribute("data-category");
+                    renderServicesGrid();
+                }
+            });
+
+            // Search input filter handler
+            document.getElementById("searchInput").addEventListener("input", (e) => {
+                searchQuery = e.target.value.toLowerCase().trim();
+                renderServicesGrid();
+            });
+
+            // Add new service click
+            document.getElementById("btnAddService").addEventListener("click", () => {
+                openServiceFormModal();
+            });
+
+            // Settings click
+            document.getElementById("btnSettings").addEventListener("click", () => {
+                openSettingsModal();
+            });
+        }
+
+        // Render cards grid
+        function renderServicesGrid() {
+            const grid = document.getElementById("servicesGrid");
+            grid.innerHTML = "";
+
+            const filtered = services.filter(service => {
+                const matchesCategory = activeCategory === "all" || service.category === activeCategory;
+                const matchesSearch = service.name.toLowerCase().includes(searchQuery) || 
+                                      service.desc.toLowerCase().includes(searchQuery);
+                return matchesCategory && matchesSearch;
+            });
+
+            if (filtered.length === 0) {
+                grid.innerHTML = `
+                    <div style="grid-column: 1/-1; text-align: center; padding: 3rem; color: var(--text-secondary);">
+                        <i class="fa-regular fa-folder-open" style="font-size: 2.5rem; margin-bottom: 1rem; display: block;"></i>
+                        No services match your filters.
+                    </div>
+                `;
+                return;
+            }
+
+            filtered.forEach(service => {
+                const card = document.createElement("a");
+                card.href = service.url;
+                card.target = "_blank";
+                card.className = "card";
+                card.dataset.id = service.id;
+
+                // Mouse move effect for hover glow styling
+                card.addEventListener("mousemove", (e) => {
+                    const rect = card.getBoundingClientRect();
+                    const x = e.clientX - rect.left;
+                    const y = e.clientY - rect.top;
+                    card.style.setProperty("--mouse-x", `${x}px`);
+                    card.style.setProperty("--mouse-y", `${y}px`);
+                });
+
+                card.innerHTML = `
+                    <div class="card-header">
+                        <div class="icon-wrapper ${service.theme}">
+                            <i class="${service.icon}"></i>
+                        </div>
+                        <div class="card-status status-checking" id="status-${service.id}">
+                            <div class="status-dot"></div>
+                            <span>Checking</span>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div>
+                            <h2>${service.name}</h2>
+                            <p class="desc">${service.desc}</p>
+                        </div>
+                        <div class="card-footer">
+                            <span><i class="fa-solid fa-arrow-up-right-from-square"></i> Open link</span>
+                            <span>${new URL(service.url).hostname}</span>
+                        </div>
+                    </div>
+                `;
+                grid.appendChild(card);
+                pingServiceStatus(service);
+            });
+        }
+
+        // Check availability of a single service via fetch no-cors ping
+        function pingServiceStatus(service) {
+            const statusElement = document.getElementById(`status-${service.id}`);
+            if (!statusElement) return;
+
+            const controller = new AbortController();
+            const timeoutId = setTimeout(() => controller.abort(), 6000); // 6s timeout
+
+            // Use no-cors mode to resolve reachable hosts even if CORS headers block direct reads
+            fetch(service.url, { mode: 'no-cors', signal: controller.signal })
+                .then(() => {
+                    clearTimeout(timeoutId);
+                    statusElement.className = "card-status status-online";
+                    statusElement.querySelector("span").textContent = "Online";
+                })
+                .catch(() => {
+                    clearTimeout(timeoutId);
+                    statusElement.className = "card-status status-offline";
+                    statusElement.querySelector("span").textContent = "Offline";
+                });
+        }
+
+        // Check availability of all services and refresh main status bar
+        function checkAllServicesStatus() {
+            const systemBadge = document.getElementById("systemStatusBadge");
+            systemBadge.querySelector("span").textContent = "Checking devices status...";
+            
+            let promises = services.map(service => {
+                const controller = new AbortController();
+                const timeoutId = setTimeout(() => controller.abort(), 6000);
+                return fetch(service.url, { mode: 'no-cors', signal: controller.signal })
+                    .then(() => { clearTimeout(timeoutId); return true; })
+                    .catch(() => { clearTimeout(timeoutId); return false; });
+            });
+
+            Promise.all(promises).then(results => {
+                const onlineCount = results.filter(Boolean).length;
+                if (onlineCount === services.length) {
+                    systemBadge.querySelector(".dot-pulse").style.backgroundColor = "var(--success)";
+                    systemBadge.querySelector(".dot-pulse").style.boxShadow = "0 0 10px var(--success)";
+                    systemBadge.querySelector("span").textContent = "All network systems operational";
+                } else if (onlineCount > 0) {
+                    systemBadge.querySelector(".dot-pulse").style.backgroundColor = "var(--warning)";
+                    systemBadge.querySelector(".dot-pulse").style.boxShadow = "0 0 10px var(--warning)";
+                    systemBadge.querySelector("span").textContent = `${services.length - onlineCount} network service(s) offline`;
+                } else {
+                    systemBadge.querySelector(".dot-pulse").style.backgroundColor = "var(--danger)";
+                    systemBadge.querySelector(".dot-pulse").style.boxShadow = "0 0 10px var(--danger)";
+                    systemBadge.querySelector("span").textContent = "All services offline / VPN disconnected";
+                }
+            });
+        }
+
+        // Open service edit/add modal
+        function openServiceFormModal(service = null) {
+            const form = document.getElementById("serviceForm");
+            form.reset();
+
+            if (service) {
+                document.getElementById("formModalTitle").textContent = "Edit Service";
+                document.getElementById("fieldId").value = service.id;
+                document.getElementById("fieldName").value = service.name;
+                document.getElementById("fieldUrl").value = service.url;
+                document.getElementById("fieldDesc").value = service.desc;
+                document.getElementById("fieldIcon").value = service.icon;
+                document.getElementById("fieldTheme").value = service.theme;
+                document.getElementById("fieldCategory").value = service.category;
+            } else {
+                document.getElementById("formModalTitle").textContent = "Add New Service";
+                document.getElementById("fieldId").value = "";
+            }
+
+            document.getElementById("serviceFormModal").classList.add("active");
+        }
+
+        // Close modal helper
+        function closeModal(id) {
+            document.getElementById(id).classList.remove("active");
+        }
+
+        // Save new or updated service to list
+        function saveServiceForm(event) {
+            event.preventDefault();
+
+            const id = document.getElementById("fieldId").value || "custom-" + Date.now();
+            const name = document.getElementById("fieldName").value;
+            const url = document.getElementById("fieldUrl").value;
+            const desc = document.getElementById("fieldDesc").value;
+            const icon = document.getElementById("fieldIcon").value;
+            const theme = document.getElementById("fieldTheme").value;
+            const category = document.getElementById("fieldCategory").value;
+
+            const newService = { id, name, url, desc, icon, theme, category };
+            const existingIndex = services.findIndex(s => s.id === id);
+
+            if (existingIndex > -1) {
+                services[existingIndex] = newService;
+            } else {
+                services.push(newService);
+            }
+
+            localStorage.setItem("medi_server_services", JSON.stringify(services));
+            closeModal("serviceFormModal");
+            loadServices();
+            checkAllServicesStatus();
+        }
+
+        // Open settings panel list of services
+        function openSettingsModal() {
+            const listDiv = document.getElementById("settingsServicesList");
+            listDiv.innerHTML = "";
+
+            services.forEach(service => {
+                const item = document.createElement("div");
+                item.className = "settings-item-row";
+                item.innerHTML = `
+                    <span>${service.name}</span>
+                    <div class="settings-item-row-buttons">
+                        <button class="btn-item-action" onclick="editService('${service.id}')" title="Edit"><i class="fa-solid fa-pen-to-square"></i></button>
+                        <button class="btn-item-action btn-item-delete" onclick="deleteService('${service.id}')" title="Delete"><i class="fa-solid fa-trash-can"></i></button>
+                    </div>
+                `;
+                listDiv.appendChild(item);
+            });
+
+            document.getElementById("settingsModal").classList.add("active");
+        }
+
+        // Edit service handler inside settings
+        function editService(id) {
+            const service = services.find(s => s.id === id);
+            if (service) {
+                closeModal("settingsModal");
+                openServiceFormModal(service);
+            }
+        }
+
+        // Delete service handler inside settings
+        function deleteService(id) {
+            if (confirm("Are you sure you want to remove this service from your dashboard?")) {
+                services = services.filter(s => s.id !== id);
+                localStorage.setItem("medi_server_services", JSON.stringify(services));
+                openSettingsModal();
+                loadServices();
+                checkAllServicesStatus();
+            }
+        }
+
+        // Reset to default services list
+        function resetDefaultServices() {
+            if (confirm("Are you sure you want to reset the dashboard to the default services list? All custom additions will be lost.")) {
+                services = [...DEFAULT_SERVICES];
+                localStorage.setItem("medi_server_services", JSON.stringify(services));
+                closeModal("settingsModal");
+                loadServices();
+                checkAllServicesStatus();
+            }
+        }
+    </script>
+</body>
+</html>
