@@ -1,0 +1,21 @@
+tunnel: 629bad7c-4f0f-4bb4-8494-c909991d1b2c
+credentials-file: /home/m/.cloudflared/629bad7c-4f0f-4bb4-8494-c909991d1b2c.json
+
+ingress:
+  - hostname: 1234.al
+    service: http://localhost:80
+  - hostname: 0.1234.al
+    service: http://localhost:9991
+  - hostname: 1.1234.al
+    service: http://localhost:2283
+  - hostname: 2.1234.al
+    service: https://localhost:9090
+    originRequest:
+      noTLSVerify: true
+  - hostname: 3.1234.al
+    service: http://localhost:8090
+  - hostname: 4.1234.al
+    service: http://localhost:5244
+  - hostname: 5.1234.al
+    service: http://localhost:8096
+  - service: http_status:404

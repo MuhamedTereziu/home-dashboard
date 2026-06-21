@@ -8,15 +8,15 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
-            --bg-dark: #070a13;
-            --bg-indigo: #0c0e22;
-            --card-bg: rgba(13, 17, 39, 0.45);
-            --card-border: rgba(255, 255, 255, 0.08);
-            --card-border-hover: rgba(99, 102, 241, 0.4);
-            --text-primary: #f8fafc;
+            --bg-dark: #08080c;
+            --bg-indigo: #121216;
+            --card-bg: rgba(18, 18, 22, 0.5);
+            --card-border: rgba(255, 255, 255, 0.06);
+            --card-border-hover: rgba(255, 255, 255, 0.2);
+            --text-primary: #f4f4f5;
             --text-secondary: #94a3b8;
-            --primary: #6366f1;
-            --primary-glow: rgba(99, 102, 241, 0.35);
+            --primary: #ffffff;
+            --primary-glow: rgba(255, 255, 255, 0.15);
             --success: #10b981;
             --success-glow: rgba(16, 185, 129, 0.3);
             --danger: #ef4444;
@@ -33,9 +33,9 @@
         body {
             background-color: var(--bg-dark);
             background-image: 
-                radial-gradient(at 0% 0%, rgba(99, 102, 241, 0.15) 0px, transparent 50%),
-                radial-gradient(at 100% 0%, rgba(139, 92, 246, 0.15) 0px, transparent 50%),
-                radial-gradient(at 50% 100%, rgba(16, 185, 129, 0.05) 0px, transparent 50%);
+                radial-gradient(at 0% 0%, rgba(255, 255, 255, 0.02) 0px, transparent 50%),
+                radial-gradient(at 100% 0%, rgba(255, 255, 255, 0.01) 0px, transparent 50%),
+                radial-gradient(at 50% 100%, rgba(255, 255, 255, 0.005) 0px, transparent 50%);
             background-attachment: fixed;
             min-height: 100vh;
             font-family: 'Plus Jakarta Sans', sans-serif;
@@ -54,8 +54,8 @@
             left: 0;
             right: 0;
             bottom: 0;
-            background: radial-gradient(circle at 30% 30%, rgba(99, 102, 241, 0.05) 0%, transparent 60%),
-                        radial-gradient(circle at 70% 80%, rgba(167, 139, 250, 0.05) 0%, transparent 65%);
+            background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.01) 0%, transparent 60%),
+                        radial-gradient(circle at 70% 80%, rgba(255, 255, 255, 0.005) 0%, transparent 65%);
             z-index: -1;
             pointer-events: none;
         }
@@ -88,7 +88,7 @@
             font-size: 2.5rem;
             font-weight: 800;
             letter-spacing: -0.03em;
-            background: linear-gradient(to right, #818cf8, #a78bfa, #f472b6);
+            background: linear-gradient(to right, #ffffff, #d4d4d8, #a1a1aa);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.2));
@@ -114,7 +114,7 @@
             display: inline-flex;
             align-items: center;
             gap: 0.6rem;
-            background: rgba(13, 17, 39, 0.45);
+            background: rgba(20, 20, 25, 0.55);
             border: 1px solid rgba(255, 255, 255, 0.06);
             color: var(--text-primary);
             padding: 0.5rem 1rem;
@@ -161,7 +161,7 @@
             align-items: center;
             gap: 1.25rem;
             margin-bottom: 2.5rem;
-            background: rgba(13, 17, 39, 0.25);
+            background: rgba(20, 20, 25, 0.35);
             border: 1px solid rgba(255, 255, 255, 0.05);
             border-radius: 24px;
             padding: 0.75rem 1.25rem;
@@ -197,9 +197,9 @@
             background: rgba(255, 255, 255, 0.06);
         }
         .tab-btn.active {
-            box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.08);
-            background: rgba(99, 102, 241, 0.15);
-            color: #a5b4fc;
+            box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.12);
+            background: rgba(255, 255, 255, 0.12);
+            color: #ffffff;
         }
 
         .search-box {
@@ -225,7 +225,7 @@
         .search-input:focus {
             border-color: var(--primary);
             background: rgba(255, 255, 255, 0.08);
-            box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.15);
+            box-shadow: 0 0 0 4px var(--primary-glow);
         }
 
         .search-icon {
@@ -259,7 +259,7 @@
         }
 
         .btn-action:hover {
-            background: rgba(99, 102, 241, 0.2);
+            background: rgba(255, 255, 255, 0.12);
             border-color: var(--primary);
             box-shadow: 0 0 12px var(--primary-glow);
             transform: scale(1.05);
@@ -306,9 +306,9 @@
         .card:hover {
             transform: translateY(-6px);
             border-color: var(--card-border-hover);
-            background: rgba(16, 20, 48, 0.6);
+            background: rgba(24, 24, 27, 0.6);
             box-shadow: 0 15px 35px rgba(0, 0, 0, 0.35), 
-                        0 0 20px rgba(99, 102, 241, 0.15);
+                        0 0 20px rgba(255, 255, 255, 0.05);
         }
 
         .card-header {
@@ -336,12 +336,12 @@
         }
 
         /* Custom Icon Colors based on Category/Service */
-        .icon-photos { background: rgba(59, 130, 246, 0.12); color: #60a5fa; box-shadow: 0 0 15px rgba(59, 130, 246, 0.15); }
-        .icon-media { background: rgba(245, 158, 11, 0.12); color: #fbbf24; box-shadow: 0 0 15px rgba(245, 158, 11, 0.15); }
-        .icon-torrent { background: rgba(16, 185, 129, 0.12); color: #34d399; box-shadow: 0 0 15px rgba(16, 185, 129, 0.15); }
-        .icon-files { background: rgba(6, 182, 212, 0.12); color: #22d3ee; box-shadow: 0 0 15px rgba(6, 182, 212, 0.15); }
-        .icon-system { background: rgba(139, 92, 246, 0.12); color: #a78bfa; box-shadow: 0 0 15px rgba(139, 92, 246, 0.15); }
-        .icon-games { background: rgba(236, 72, 153, 0.12); color: #f472b6; box-shadow: 0 0 15px rgba(236, 72, 153, 0.15); }
+        .icon-photos { background: rgba(255, 255, 255, 0.05); color: #f4f4f5; box-shadow: 0 0 15px rgba(255, 255, 255, 0.04); border: 1px solid rgba(255, 255, 255, 0.05); }
+        .icon-media { background: rgba(255, 255, 255, 0.05); color: #f4f4f5; box-shadow: 0 0 15px rgba(255, 255, 255, 0.04); border: 1px solid rgba(255, 255, 255, 0.05); }
+        .icon-torrent { background: rgba(255, 255, 255, 0.05); color: #f4f4f5; box-shadow: 0 0 15px rgba(255, 255, 255, 0.04); border: 1px solid rgba(255, 255, 255, 0.05); }
+        .icon-files { background: rgba(255, 255, 255, 0.05); color: #f4f4f5; box-shadow: 0 0 15px rgba(255, 255, 255, 0.04); border: 1px solid rgba(255, 255, 255, 0.05); }
+        .icon-system { background: rgba(255, 255, 255, 0.05); color: #f4f4f5; box-shadow: 0 0 15px rgba(255, 255, 255, 0.04); border: 1px solid rgba(255, 255, 255, 0.05); }
+        .icon-games { background: rgba(255, 255, 255, 0.05); color: #f4f4f5; box-shadow: 0 0 15px rgba(255, 255, 255, 0.04); border: 1px solid rgba(255, 255, 255, 0.05); }
 
         .card-status {
             font-size: 0.72rem;
@@ -511,8 +511,8 @@
             color: #ffffff;
             text-shadow:
                 0 0 15px rgba(255, 255, 255, 0.6),
-                0 0 30px rgba(99, 102, 241, 0.8),
-                0 0 50px rgba(99, 102, 241, 0.5);
+                0 0 35px rgba(255, 255, 255, 0.3),
+                0 0 55px rgba(255, 255, 255, 0.1);
             transform: scale(0.5);
             opacity: 0;
             transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
@@ -719,6 +719,159 @@
             color: var(--danger);
         }
 
+        /* System Metrics Bar */
+        .metrics-bar {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .metric-card {
+            flex: 1;
+            min-width: 130px;
+            background: rgba(18, 18, 22, 0.55);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 16px;
+            padding: 0.9rem 1.1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            transition: border-color 0.3s ease;
+        }
+
+        .metric-card:hover {
+            border-color: rgba(255, 255, 255, 0.15);
+        }
+
+        .metric-icon {
+            font-size: 1rem;
+            color: var(--text-secondary);
+            width: 20px;
+            text-align: center;
+            flex-shrink: 0;
+        }
+
+        .metric-info {
+            display: flex;
+            flex-direction: column;
+            gap: 0.3rem;
+            flex: 1;
+            min-width: 0;
+        }
+
+        .metric-label {
+            font-size: 0.7rem;
+            font-weight: 600;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            color: var(--text-secondary);
+        }
+
+        .metric-value {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.88rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .metric-bar-track {
+            height: 3px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 2px;
+            overflow: hidden;
+        }
+
+        .metric-bar-fill {
+            height: 100%;
+            border-radius: 2px;
+            background: rgba(255, 255, 255, 0.35);
+            transition: width 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+            width: 0%;
+        }
+
+        .metric-bar-fill.warn {
+            background: rgba(245, 158, 11, 0.7);
+        }
+
+        .metric-bar-fill.danger {
+            background: rgba(239, 68, 68, 0.7);
+        }
+
+        /* Copy toast notification */
+        .copy-toast {
+            position: fixed;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%) translateY(20px);
+            background: rgba(30, 30, 35, 0.95);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: var(--text-primary);
+            padding: 0.6rem 1.2rem;
+            border-radius: 12px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            opacity: 0;
+            pointer-events: none;
+            transition: all 0.3s ease;
+            z-index: 99999;
+            backdrop-filter: blur(10px);
+        }
+
+        .copy-toast.show {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+
+        /* Kbd shortcut hint */
+        .kbd-hint {
+            font-size: 0.72rem;
+            color: var(--text-secondary);
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        kbd {
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 5px;
+            padding: 0.1rem 0.4rem;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.7rem;
+            color: var(--text-secondary);
+        }
+
+        /* Refresh spinning animation */
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .refresh-btn.spinning i {
+            animation: spin 0.7s linear;
+        }
+
+        /* Card number badge */
+        .card-num {
+            position: absolute;
+            bottom: 1.1rem;
+            right: 1.2rem;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.65rem;
+            color: rgba(255,255,255,0.15);
+            z-index: 3;
+        }
+
+        /* Last updated timestamp */
+        .last-updated {
+            font-size: 0.72rem;
+            color: rgba(255,255,255,0.2);
+            text-align: right;
+            margin-bottom: 0.5rem;
+            margin-top: -1.5rem;
+        }
+
         @keyframes pulseGlow {
             0% { transform: scale(1); }
             100% { transform: scale(1.08); }
@@ -813,6 +966,42 @@
             </div>
         </div>
 
+        <!-- System Metrics Strip -->
+        <div class="metrics-bar" id="metricsBar">
+            <div class="metric-card">
+                <i class="fa-solid fa-microchip metric-icon"></i>
+                <div class="metric-info">
+                    <span class="metric-label">CPU</span>
+                    <span class="metric-value" id="metricCpu">—</span>
+                    <div class="metric-bar-track"><div class="metric-bar-fill" id="metricCpuBar"></div></div>
+                </div>
+            </div>
+            <div class="metric-card">
+                <i class="fa-solid fa-memory metric-icon"></i>
+                <div class="metric-info">
+                    <span class="metric-label">RAM</span>
+                    <span class="metric-value" id="metricRam">—</span>
+                    <div class="metric-bar-track"><div class="metric-bar-fill" id="metricRamBar"></div></div>
+                </div>
+            </div>
+            <div class="metric-card">
+                <i class="fa-solid fa-hard-drive metric-icon"></i>
+                <div class="metric-info">
+                    <span class="metric-label">Disk</span>
+                    <span class="metric-value" id="metricDisk">—</span>
+                    <div class="metric-bar-track"><div class="metric-bar-fill" id="metricDiskBar"></div></div>
+                </div>
+            </div>
+            <div class="metric-card">
+                <i class="fa-solid fa-clock metric-icon"></i>
+                <div class="metric-info">
+                    <span class="metric-label">Uptime</span>
+                    <span class="metric-value" id="metricUptime">—</span>
+                </div>
+            </div>
+        </div>
+        <div class="last-updated" id="lastUpdated"></div>
+
         <!-- Grid of Services -->
         <div class="grid" id="servicesGrid">
             <!-- Dynamically populated -->
@@ -826,9 +1015,16 @@
                 </a>
             </div>
 
-            <button class="refresh-btn" onclick="location.reload()" title="Refresh Dashboard">
-                <i class="fa-solid fa-rotate-right"></i> Refresh
-            </button>
+            <div style="display:flex; align-items:center; gap:1rem;">
+                <div class="kbd-hint">
+                    <kbd>/</kbd> search &nbsp;
+                    <kbd>1</kbd>–<kbd>6</kbd> open &nbsp;
+                    <kbd>Esc</kbd> close
+                </div>
+                <button class="refresh-btn" id="refreshBtn" onclick="manualRefresh()" title="Refresh Status">
+                    <i class="fa-solid fa-rotate-right"></i> Refresh
+                </button>
+            </div>
         </footer>
     </div>
 
@@ -963,6 +1159,7 @@
         let services = [];
         let activeCategory = "all";
         let searchQuery = "";
+        let serviceStatuses = {};
 
         // Initialize dashboard
         document.addEventListener("DOMContentLoaded", () => {
@@ -970,6 +1167,10 @@
             setupEventListeners();
             checkNetStatus();
             setInterval(checkNetStatus, 25000);
+            
+            // Initial fetch of statuses and setup periodic updates
+            fetchServiceStatusesAndRefresh();
+            setInterval(fetchServiceStatusesAndRefresh, 15000);
         });
 
         // Load services from localStorage or set defaults
@@ -1017,6 +1218,72 @@
             });
         }
 
+        // Fetch central status API and update DOM + system metrics
+        function fetchServiceStatusesAndRefresh() {
+            fetch("https://m.1234.al/status.php")
+                .then(res => res.json())
+                .then(data => {
+                    // Update service statuses
+                    if (data.services) {
+                        serviceStatuses = data.services;
+                        Object.keys(data.services).forEach(id => {
+                            const statusElement = document.getElementById(`status-${id}`);
+                            if (statusElement) {
+                                const isOnline = data.services[id];
+                                statusElement.className = `card-status ${isOnline ? 'status-online' : 'status-offline'}`;
+                                statusElement.querySelector("span").textContent = isOnline ? "Online" : "Offline";
+                            }
+                        });
+                    } else {
+                        // fallback: old flat format
+                        serviceStatuses = data;
+                        Object.keys(data).forEach(id => {
+                            const statusElement = document.getElementById(`status-${id}`);
+                            if (statusElement) {
+                                const isOnline = data[id];
+                                statusElement.className = `card-status ${isOnline ? 'status-online' : 'status-offline'}`;
+                                statusElement.querySelector("span").textContent = isOnline ? "Online" : "Offline";
+                            }
+                        });
+                    }
+
+                    // Update system metrics if present
+                    if (data.system) {
+                        const s = data.system;
+                        updateMetric('metricCpu', 'metricCpuBar', s.cpu, '%');
+                        updateMetric('metricRam', 'metricRamBar', s.ram, '%');
+                        updateMetric('metricDisk', 'metricDiskBar', s.disk, '%');
+                        const uptimeEl = document.getElementById('metricUptime');
+                        if (uptimeEl) uptimeEl.textContent = s.uptime || '—';
+                    }
+
+                    // Last updated
+                    const lu = document.getElementById('lastUpdated');
+                    if (lu) lu.textContent = 'Last updated ' + new Date().toLocaleTimeString('en-US', { hour12: false });
+                })
+                .catch(err => {
+                    console.warn("Status API failed, falling back to client-side checks", err);
+                });
+        }
+
+        function updateMetric(valId, barId, pct, suffix) {
+            const el = document.getElementById(valId);
+            const bar = document.getElementById(barId);
+            if (el) el.textContent = Math.round(pct) + (suffix || '');
+            if (bar) {
+                bar.style.width = Math.min(pct, 100) + '%';
+                bar.className = 'metric-bar-fill' + (pct >= 90 ? ' danger' : pct >= 70 ? ' warn' : '');
+            }
+        }
+
+        function manualRefresh() {
+            const btn = document.getElementById('refreshBtn');
+            btn.classList.add('spinning');
+            fetchServiceStatusesAndRefresh();
+            checkNetStatus();
+            setTimeout(() => btn.classList.remove('spinning'), 800);
+        }
+
         // Render cards grid
         function renderServicesGrid() {
             const grid = document.getElementById("servicesGrid");
@@ -1060,6 +1327,8 @@
                     triggerRedirectAnimation(service.url, service.name, service.icon);
                 });
 
+                const cardIndex = filtered.indexOf(service) + 1;
+
                 card.innerHTML = `
                     <div class="card-header">
                         <div class="icon-wrapper ${service.theme}">
@@ -1077,19 +1346,30 @@
                         </div>
                         <div class="card-footer">
                             <span><i class="fa-solid fa-arrow-up-right-from-square"></i> Connect</span>
-                            <span>${new URL(service.url).hostname}</span>
+                            <span class="copy-url-btn" title="Copy URL" data-url="${service.url}" onclick="copyServiceUrl(event, '${service.url}')" style="cursor:pointer;opacity:0.6;transition:opacity 0.2s;" onmouseover="this.style.opacity=1" onmouseout="this.style.opacity=0.6">
+                                <i class="fa-regular fa-copy" style="font-size:0.8rem;"></i> ${new URL(service.url).hostname}
+                            </span>
                         </div>
                     </div>
+                    ${cardIndex <= 9 ? `<span class="card-num">${cardIndex}</span>` : ''}
                 `;
                 grid.appendChild(card);
                 pingServiceStatus(service);
             });
         }
 
-        // Check availability of a single service via fetch no-cors ping
+        // Check availability of a single service via fetch no-cors ping (with fallback/cache from central API)
         function pingServiceStatus(service) {
             const statusElement = document.getElementById(`status-${service.id}`);
             if (!statusElement) return;
+
+            // If we have a cached response from the central status API, use it
+            if (serviceStatuses && serviceStatuses[service.id] !== undefined) {
+                const isOnline = serviceStatuses[service.id];
+                statusElement.className = `card-status ${isOnline ? 'status-online' : 'status-offline'}`;
+                statusElement.querySelector("span").textContent = isOnline ? "Online" : "Offline";
+                return;
+            }
 
             const controller = new AbortController();
             const timeoutId = setTimeout(() => controller.abort(), 6000); // 6s timeout
@@ -1140,6 +1420,66 @@
                 window.location.href = targetUrl;
             }, 1200);
         }
+
+        // Copy service URL to clipboard
+        function copyServiceUrl(event, url) {
+            event.preventDefault();
+            event.stopPropagation();
+            navigator.clipboard.writeText(url).then(() => {
+                showToast('URL copied to clipboard');
+            }).catch(() => {
+                showToast('Could not copy URL');
+            });
+        }
+
+        // Show a toast notification
+        function showToast(msg) {
+            let toast = document.getElementById('copyToast');
+            if (!toast) {
+                toast = document.createElement('div');
+                toast.id = 'copyToast';
+                toast.className = 'copy-toast';
+                document.body.appendChild(toast);
+            }
+            toast.textContent = msg;
+            toast.classList.add('show');
+            clearTimeout(toast._timer);
+            toast._timer = setTimeout(() => toast.classList.remove('show'), 2000);
+        }
+
+        // Keyboard shortcuts
+        document.addEventListener('keydown', (e) => {
+            const tag = document.activeElement.tagName.toLowerCase();
+            const inInput = tag === 'input' || tag === 'select' || tag === 'textarea';
+
+            // / to focus search
+            if (e.key === '/' && !inInput) {
+                e.preventDefault();
+                document.getElementById('searchInput').focus();
+                return;
+            }
+
+            // Esc to close modals / blur search
+            if (e.key === 'Escape') {
+                document.querySelectorAll('.modal.active').forEach(m => m.classList.remove('active'));
+                document.getElementById('searchInput').blur();
+                return;
+            }
+
+            // 1-9 to open nth visible service
+            if (!inInput && e.key >= '1' && e.key <= '9') {
+                const cards = document.querySelectorAll('#servicesGrid .card');
+                const idx = parseInt(e.key) - 1;
+                if (cards[idx]) cards[idx].click();
+                return;
+            }
+
+            // Ctrl+R / Cmd+R to manual refresh without full reload
+            if ((e.ctrlKey || e.metaKey) && e.key === 'r') {
+                e.preventDefault();
+                manualRefresh();
+            }
+        });
 
         // Clock Update
         function updateClock() {
