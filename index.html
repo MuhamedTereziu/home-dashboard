@@ -864,7 +864,7 @@
                 </div>
                 <div class="form-group">
                     <label for="fieldUrl">Access URL</label>
-                    <input type="url" id="fieldUrl" class="form-control" required placeholder="https://5.mediii.qzz.io">
+                    <input type="url" id="fieldUrl" class="form-control" required placeholder="https://5.1234.al">
                 </div>
                 <div class="form-group">
                     <label for="fieldDesc">Description</label>
@@ -907,7 +907,7 @@
             {
                 id: "flood",
                 name: "Flood",
-                url: "https://0.mediii.qzz.io",
+                url: "https://0.1234.al",
                 desc: "High-speed torrent client and secure download manager.",
                 icon: "fa-solid fa-download",
                 theme: "icon-torrent",
@@ -916,7 +916,7 @@
             {
                 id: "immich",
                 name: "Immich",
-                url: "https://1.mediii.qzz.io",
+                url: "https://1.1234.al",
                 desc: "Private media vault with AI recognition and automated encrypted backup.",
                 icon: "fa-solid fa-images",
                 theme: "icon-photos",
@@ -925,7 +925,7 @@
             {
                 id: "cockpit",
                 name: "Cockpit",
-                url: "https://2.mediii.qzz.io/",
+                url: "https://2.1234.al/",
                 desc: "Core server interface for Docker orchestration and hardware telemetry.",
                 icon: "fa-solid fa-microchip",
                 theme: "icon-system",
@@ -934,7 +934,7 @@
             {
                 id: "stats",
                 name: "Stats",
-                url: "https://3.mediii.qzz.io",
+                url: "https://3.1234.al",
                 desc: "Infrastructure monitoring and real-time network traffic analytics.",
                 icon: "fa-solid fa-chart-simple",
                 theme: "icon-system",
@@ -943,7 +943,7 @@
             {
                 id: "alist",
                 name: "Alist",
-                url: "https://4.mediii.qzz.io",
+                url: "https://4.1234.al",
                 desc: "Unified file gateway aggregating local and cloud storage pools.",
                 icon: "fa-solid fa-folder-tree",
                 theme: "icon-files",
@@ -952,7 +952,7 @@
             {
                 id: "plex",
                 name: "Plex",
-                url: "https://5.mediii.qzz.io",
+                url: "https://5.1234.al",
                 desc: "Centralized media server for streaming movies and television series.",
                 icon: "fa-solid fa-film",
                 theme: "icon-media",
@@ -1107,13 +1107,13 @@
                 });
         }
 
-        // Main network status check using the Alist favicon (https://4.mediii.qzz.io/favicon.ico)
+        // Main network status check using the Alist favicon (https://4.1234.al/favicon.ico)
         function checkNetStatus() {
             const indicator = document.getElementById("sysIndicator");
             const text = document.getElementById("sysStatusText");
             
             const img = new Image();
-            img.src = "https://4.mediii.qzz.io/favicon.ico?v=" + Date.now();
+            img.src = "https://4.1234.al/favicon.ico?v=" + Date.now();
 
             img.onload = () => {
                 indicator.className = 'dot-pulse online';
