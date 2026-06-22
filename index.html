@@ -1111,6 +1111,50 @@
         </footer>
     </div>
 
+    <!-- Password Auth Modal -->
+    <div class="modal" id="authModal">
+        <div class="modal-content" style="max-width: 400px;">
+            <div class="modal-header">
+                <h3>Admin Authentication</h3>
+                <button class="modal-close" onclick="closeModal('authModal')">&times;</button>
+            </div>
+            <form id="authForm" onsubmit="handleAuthSubmit(event)">
+                <div class="form-group">
+                    <label for="authPassword">Enter Admin Password</label>
+                    <input type="password" id="authPassword" class="form-control" required placeholder="••••••••">
+                    <div id="authError" style="color:var(--danger); font-size:0.8rem; margin-top:0.5rem; display:none;">Incorrect password. Access denied.</div>
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn btn-secondary" onclick="closeModal('authModal')">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Authenticate</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Webcam Modal -->
+    <div class="modal" id="webcamModal">
+        <div class="modal-content" style="max-width: 700px; padding: 1.5rem;">
+            <div class="modal-header" style="margin-bottom: 1rem;">
+                <h3>Live Webcam Feed</h3>
+                <button class="modal-close" onclick="closeWebcamModal()">&times;</button>
+            </div>
+            <div style="width: 100%; border-radius: 14px; overflow: hidden; background: #000; display: flex; align-items: center; justify-content: center; position: relative; aspect-ratio: 4/3; border: 1px solid rgba(255,255,255,0.08);">
+                <img id="webcamStream" style="width: 100%; height: 100%; object-fit: contain;" src="" alt="Webcam Live Stream">
+                <div id="webcamLoading" style="position: absolute; color: #fff; font-size: 0.9rem; font-family: 'JetBrains Mono', monospace; display: flex; align-items: center; gap: 0.5rem;">
+                    <i class="fa-solid fa-spinner fa-spin"></i> INITIALIZING LIVE STREAM...
+                </div>
+            </div>
+            <div class="form-actions" style="margin-top: 1rem; padding-top: 1rem; display: flex; justify-content: space-between; align-items: center;">
+                <span id="webcamStatus" style="font-size: 0.78rem; font-family: 'JetBrains Mono', monospace; color: var(--text-secondary);">Exposed via Port 8085</span>
+                <div style="display: flex; gap: 0.75rem;">
+                    <button class="btn btn-secondary" onclick="closeWebcamModal()">Close Feed</button>
+                    <button class="btn btn-primary" onclick="toggleWebcamMode()" id="webcamModeBtn">Snapshot Mode</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- settings list Modal -->
     <div class="modal" id="settingsModal">
         <div class="modal-content">
@@ -1263,6 +1307,15 @@
                 icon: "fa-solid fa-shield-halved",
                 theme: "icon-system",
                 category: "system"
+            },
+            {
+                id: "webcam",
+                name: "Live Webcam",
+                url: "https://9.1234.al",
+                desc: "Secure on-demand video stream from the server's connected webcam.",
+                icon: "fa-solid fa-camera",
+                theme: "icon-games",
+                category: "system"
             }
         ];
 
@@ -1327,12 +1380,12 @@
 
             // Add new service click
             document.getElementById("btnAddService").addEventListener("click", () => {
-                openServiceFormModal();
+                requireAuth(() => openServiceFormModal());
             });
 
             // Settings click
             document.getElementById("btnSettings").addEventListener("click", () => {
-                openSettingsModal();
+                requireAuth(() => openSettingsModal());
             });
         }
 
@@ -1544,7 +1597,11 @@
                 // Attach transition animation logic
                 card.addEventListener("click", function(e) {
                     e.preventDefault();
-                    triggerRedirectAnimation(service.url, service.name, service.icon);
+                    if (service.id === "webcam") {
+                        openWebcamModal();
+                    } else {
+                        triggerRedirectAnimation(service.url, service.name, service.icon);
+                    }
                 });
 
                 const cardIndex = index + 1;
@@ -1823,6 +1880,105 @@
                 overlay.classList.remove('active');
             }
         });
+
+        // ------------------ Password Authentication System ------------------
+        let pendingAction = null;
+        const PASSWORD_HASH = "6b86b273ff34fce19d6b804eff5a3f5747ada4eaa22f1d49c01e52ddb7875b4b"; // SHA-256 for admin password "1"
+
+        function requireAuth(action) {
+            if (sessionStorage.getItem("dashboard_auth") === "true") {
+                action();
+                return;
+            }
+            pendingAction = action;
+            document.getElementById("authPassword").value = "";
+            document.getElementById("authError").style.display = "none";
+            document.getElementById("authModal").classList.add("active");
+            setTimeout(() => document.getElementById("authPassword").focus(), 150);
+        }
+
+        async function sha256(message) {
+            const msgBuffer = new TextEncoder().encode(message);
+            const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
+            const hashArray = Array.from(new Uint8Array(hashBuffer));
+            return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+        }
+
+        async function handleAuthSubmit(event) {
+            event.preventDefault();
+            const passwordInput = document.getElementById("authPassword").value;
+            const hashed = await sha256(passwordInput);
+            
+            if (hashed === PASSWORD_HASH) {
+                sessionStorage.setItem("dashboard_auth", "true");
+                closeModal("authModal");
+                if (pendingAction) {
+                    pendingAction();
+                    pendingAction = null;
+                }
+            } else {
+                document.getElementById("authError").style.display = "block";
+                document.getElementById("authPassword").select();
+            }
+        }
+
+        // ------------------ Live Webcam Stream System ------------------
+        let webcamMode = "stream"; // stream or snapshot
+
+        function openWebcamModal() {
+            // Require password verification to view the webcam feed!
+            requireAuth(() => {
+                const modal = document.getElementById("webcamModal");
+                const img = document.getElementById("webcamStream");
+                const loading = document.getElementById("webcamLoading");
+                const modeBtn = document.getElementById("webcamModeBtn");
+                
+                webcamMode = "stream";
+                modeBtn.textContent = "Snapshot Mode";
+                loading.style.display = "flex";
+                img.style.opacity = "0.2";
+                
+                img.onload = () => {
+                    loading.style.display = "none";
+                    img.style.opacity = "1";
+                };
+                
+                // Append the security token to authorize the request on the Python side
+                const token = PASSWORD_HASH;
+                img.src = "https://9.1234.al/stream?token=" + token + "&v=" + Date.now();
+                modal.classList.add("active");
+            });
+        }
+
+        function closeWebcamModal() {
+            const modal = document.getElementById("webcamModal");
+            const img = document.getElementById("webcamStream");
+            
+            // Terminate the active HTTP stream connection by clearing src
+            img.src = "";
+            modal.classList.remove("active");
+        }
+
+        // Toggle between live MJPEG streaming and low-resource single snapshots
+        function toggleWebcamMode() {
+            const img = document.getElementById("webcamStream");
+            const loading = document.getElementById("webcamLoading");
+            const modeBtn = document.getElementById("webcamModeBtn");
+            
+            loading.style.display = "flex";
+            img.style.opacity = "0.2";
+            
+            const token = PASSWORD_HASH;
+            if (webcamMode === "stream") {
+                webcamMode = "snapshot";
+                modeBtn.textContent = "Live Stream";
+                img.src = "https://9.1234.al/snapshot?token=" + token + "&v=" + Date.now();
+            } else {
+                webcamMode = "stream";
+                modeBtn.textContent = "Snapshot Mode";
+                img.src = "https://9.1234.al/stream?token=" + token + "&v=" + Date.now();
+            }
+        }
 
         // Open service edit/add modal
         function openServiceFormModal(service = null) {

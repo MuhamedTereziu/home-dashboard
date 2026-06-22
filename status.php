@@ -11,7 +11,8 @@ $ports = [
     "plex"         => 32400,
     "jellyfin"     => 8096,
     "crafty"       => 8443,
-    "vaultwarden"  => 8280
+    "vaultwarden"  => 8280,
+    "webcam"       => 8085
 ];
 
 // 1. Service Port Latency Monitoring
