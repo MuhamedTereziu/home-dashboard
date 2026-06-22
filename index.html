@@ -1141,6 +1141,7 @@
             </div>
             <div style="width: 100%; border-radius: 14px; overflow: hidden; background: #000; display: flex; align-items: center; justify-content: center; position: relative; aspect-ratio: 4/3; border: 1px solid rgba(255,255,255,0.08);">
                 <img id="webcamStream" style="width: 100%; height: 100%; object-fit: contain;" src="" alt="Webcam Live Stream">
+                <audio id="webcamAudio" style="display:none;" autoplay muted></audio>
                 <div id="webcamLoading" style="position: absolute; color: #fff; font-size: 0.9rem; font-family: 'JetBrains Mono', monospace; display: flex; align-items: center; gap: 0.5rem;">
                     <i class="fa-solid fa-spinner fa-spin"></i> INITIALIZING LIVE STREAM...
                 </div>
@@ -1148,6 +1149,7 @@
             <div class="form-actions" style="margin-top: 1rem; padding-top: 1rem; display: flex; justify-content: space-between; align-items: center;">
                 <span id="webcamStatus" style="font-size: 0.78rem; font-family: 'JetBrains Mono', monospace; color: var(--text-secondary);">Exposed via Port 8085</span>
                 <div style="display: flex; gap: 0.75rem;">
+                    <button class="btn btn-secondary" onclick="toggleWebcamAudio()" id="webcamAudioBtn" style="display: flex; align-items: center; gap: 0.4rem;"><i class="fa-solid fa-volume-xmark"></i> Unmute</button>
                     <button class="btn btn-secondary" onclick="closeWebcamModal()">Close Feed</button>
                     <button class="btn btn-primary" onclick="toggleWebcamMode()" id="webcamModeBtn">Snapshot Mode</button>
                 </div>
@@ -1930,11 +1932,18 @@
             requireAuth(() => {
                 const modal = document.getElementById("webcamModal");
                 const img = document.getElementById("webcamStream");
+                const audio = document.getElementById("webcamAudio");
                 const loading = document.getElementById("webcamLoading");
                 const modeBtn = document.getElementById("webcamModeBtn");
+                const audioBtn = document.getElementById("webcamAudioBtn");
                 
                 webcamMode = "stream";
                 modeBtn.textContent = "Snapshot Mode";
+                modeBtn.style.display = "inline-block";
+                audio.muted = true;
+                audioBtn.innerHTML = `<i class="fa-solid fa-volume-xmark"></i> Unmute`;
+                audioBtn.style.display = "inline-block";
+                
                 loading.style.display = "flex";
                 img.style.opacity = "0.2";
                 
@@ -1946,6 +1955,9 @@
                 // Append the security token to authorize the request on the Python side
                 const token = PASSWORD_HASH;
                 img.src = "https://9.1234.al/stream?token=" + token + "&v=" + Date.now();
+                audio.src = "https://9.1234.al/audio?token=" + token + "&v=" + Date.now();
+                audio.load();
+                
                 modal.classList.add("active");
             });
         }
@@ -1953,17 +1965,22 @@
         function closeWebcamModal() {
             const modal = document.getElementById("webcamModal");
             const img = document.getElementById("webcamStream");
+            const audio = document.getElementById("webcamAudio");
             
-            // Terminate the active HTTP stream connection by clearing src
+            // Terminate active HTTP streams by clearing sources
             img.src = "";
+            audio.src = "";
+            audio.load();
             modal.classList.remove("active");
         }
 
         // Toggle between live MJPEG streaming and low-resource single snapshots
         function toggleWebcamMode() {
             const img = document.getElementById("webcamStream");
+            const audio = document.getElementById("webcamAudio");
             const loading = document.getElementById("webcamLoading");
             const modeBtn = document.getElementById("webcamModeBtn");
+            const audioBtn = document.getElementById("webcamAudioBtn");
             
             loading.style.display = "flex";
             img.style.opacity = "0.2";
@@ -1973,10 +1990,37 @@
                 webcamMode = "snapshot";
                 modeBtn.textContent = "Live Stream";
                 img.src = "https://9.1234.al/snapshot?token=" + token + "&v=" + Date.now();
+                
+                // Stop audio in snapshot mode
+                audio.src = "";
+                audio.load();
+                audioBtn.style.display = "none";
             } else {
                 webcamMode = "stream";
                 modeBtn.textContent = "Snapshot Mode";
                 img.src = "https://9.1234.al/stream?token=" + token + "&v=" + Date.now();
+                
+                // Restart audio in stream mode
+                audio.src = "https://9.1234.al/audio?token=" + token + "&v=" + Date.now();
+                audio.load();
+                audio.muted = true;
+                audioBtn.innerHTML = `<i class="fa-solid fa-volume-xmark"></i> Unmute`;
+                audioBtn.style.display = "inline-block";
+            }
+        }
+
+        // Toggle volume states for the live webcam feed audio stream
+        function toggleWebcamAudio() {
+            const audio = document.getElementById("webcamAudio");
+            const btn = document.getElementById("webcamAudioBtn");
+            
+            if (audio.muted) {
+                audio.muted = false;
+                audio.play().catch(e => console.log("Play failed:", e));
+                btn.innerHTML = `<i class="fa-solid fa-volume-high"></i> Mute`;
+            } else {
+                audio.muted = true;
+                btn.innerHTML = `<i class="fa-solid fa-volume-xmark"></i> Unmute`;
             }
         }
 
