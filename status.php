@@ -2,39 +2,8 @@
 header("Access-Control-Allow-Origin: *");
 header("Content-Type: application/json");
 
-$ports = [
-    "flood"        => 9991,
-    "immich"       => 2283,
-    "cockpit"      => 9090,
-    "stats"        => 8090,
-    "alist"        => 5244,
-    "plex"         => 32400,
-    "jellyfin"     => 8096,
-    "crafty"       => 8443,
-    "vaultwarden"  => 8280,
-    "webcam"       => 8085
-];
-
-// 1. Service Port Latency Monitoring
+// 1. Service Port Latency Monitoring (Disabled to stop specific container pings)
 $services = [];
-foreach ($ports as $name => $port) {
-    $start = microtime(true);
-    $connection = @fsockopen("127.0.0.1", $port, $errno, $errstr, 0.4);
-    $end = microtime(true);
-    
-    if (is_resource($connection)) {
-        $services[$name] = [
-            "online" => true,
-            "latency" => intval(round(($end - $start) * 1000))
-        ];
-        fclose($connection);
-    } else {
-        $services[$name] = [
-            "online" => false,
-            "latency" => null
-        ];
-    }
-}
 
 // 2. CPU Usage Calculation
 $cpu = 0;

@@ -1403,34 +1403,6 @@
             fetch("https://m.1234.al/status.php")
                 .then(res => res.json())
                 .then(data => {
-                    // Update service statuses
-                    if (data.services) {
-                        serviceStatuses = data.services;
-                        Object.keys(data.services).forEach(id => {
-                            const statusElement = document.getElementById(`status-${id}`);
-                            if (statusElement) {
-                                const state = data.services[id];
-                                const isOnline = typeof state === "object" ? state.online : state;
-                                const latency = typeof state === "object" ? state.latency : null;
-                                const latencyText = (isOnline && latency !== null) ? ` (${latency}ms)` : "";
-                                
-                                statusElement.className = `card-status ${isOnline ? 'status-online' : 'status-offline'}`;
-                                statusElement.querySelector("span").textContent = isOnline ? `Online${latencyText}` : "Offline";
-                            }
-                        });
-                    } else {
-                        // fallback: old flat format
-                        serviceStatuses = data;
-                        Object.keys(data).forEach(id => {
-                            const statusElement = document.getElementById(`status-${id}`);
-                            if (statusElement) {
-                                const isOnline = data[id];
-                                statusElement.className = `card-status ${isOnline ? 'status-online' : 'status-offline'}`;
-                                statusElement.querySelector("span").textContent = isOnline ? "Online" : "Offline";
-                            }
-                        });
-                    }
-
                     // Update system metrics if present
                     if (data.system) {
                         const s = data.system;
@@ -1613,10 +1585,6 @@
                         <div class="icon-wrapper ${service.theme}">
                             <i class="${service.icon}"></i>
                         </div>
-                        <div class="card-status status-checking" id="status-${service.id}">
-                            <div class="status-dot"></div>
-                            <span>Checking</span>
-                        </div>
                     </div>
                     <div class="card-body">
                         <div>
@@ -1633,45 +1601,9 @@
                     ${cardIndex <= 9 ? `<span class="card-num">${cardIndex}</span>` : ''}
                 `;
                 grid.appendChild(card);
-                pingServiceStatus(service);
             });
 
             updateCardSelection();
-        }
-
-        // Check availability of a single service via fetch no-cors ping (with fallback/cache from central API)
-        function pingServiceStatus(service) {
-            const statusElement = document.getElementById(`status-${service.id}`);
-            if (!statusElement) return;
-
-            // If we have a cached response from the central status API, use it
-            if (serviceStatuses && serviceStatuses[service.id] !== undefined) {
-                const state = serviceStatuses[service.id];
-                const isOnline = typeof state === "object" ? state.online : state;
-                const latency = typeof state === "object" ? state.latency : null;
-                const latencyText = (isOnline && latency !== null) ? ` (${latency}ms)` : "";
-                
-                statusElement.className = `card-status ${isOnline ? 'status-online' : 'status-offline'}`;
-                statusElement.querySelector("span").textContent = isOnline ? `Online${latencyText}` : "Offline";
-                return;
-            }
-
-            const controller = new AbortController();
-            const timeoutId = setTimeout(() => controller.abort(), 6000); // 6s timeout
-            const start = performance.now();
-
-            fetch(service.url, { mode: 'no-cors', signal: controller.signal })
-                .then(() => {
-                    clearTimeout(timeoutId);
-                    const latency = Math.round(performance.now() - start);
-                    statusElement.className = "card-status status-online";
-                    statusElement.querySelector("span").textContent = `Online (${latency}ms)`;
-                })
-                .catch(() => {
-                    clearTimeout(timeoutId);
-                    statusElement.className = "card-status status-offline";
-                    statusElement.querySelector("span").textContent = "Offline";
-                });
         }
 
         // Main network status check using the Alist favicon (https://4.1234.al/favicon.ico)
