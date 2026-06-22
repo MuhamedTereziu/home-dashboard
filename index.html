@@ -8,20 +8,28 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
-            --bg-dark: #08080c;
-            --bg-indigo: #121216;
-            --card-bg: rgba(18, 18, 22, 0.5);
-            --card-border: rgba(255, 255, 255, 0.06);
-            --card-border-hover: rgba(255, 255, 255, 0.2);
+            --bg-dark: #050508;
+            --bg-card: rgba(10, 11, 16, 0.45);
+            --card-border: rgba(255, 255, 255, 0.05);
+            --card-border-glow: rgba(255, 255, 255, 0.12);
             --text-primary: #f4f4f5;
-            --text-secondary: #94a3b8;
+            --text-secondary: #a1a1aa;
+            --text-tertiary: #52525b;
             --primary: #ffffff;
-            --primary-glow: rgba(255, 255, 255, 0.15);
+            --primary-glow: rgba(255, 255, 255, 0.1);
             --success: #10b981;
-            --success-glow: rgba(16, 185, 129, 0.3);
+            --success-glow: rgba(16, 185, 129, 0.15);
             --danger: #ef4444;
-            --danger-glow: rgba(239, 68, 68, 0.3);
+            --danger-glow: rgba(239, 68, 68, 0.15);
             --warning: #f59e0b;
+
+            /* Category highlight colors */
+            --color-media: #f97316;
+            --color-photos: #3b82f6;
+            --color-torrent: #22c55e;
+            --color-files: #06b6d4;
+            --color-system: #a855f7;
+            --color-games: #ec4899;
         }
 
         * {
@@ -32,49 +40,49 @@
 
         body {
             background-color: var(--bg-dark);
-            background-image: 
-                radial-gradient(at 0% 0%, rgba(255, 255, 255, 0.02) 0px, transparent 50%),
-                radial-gradient(at 100% 0%, rgba(255, 255, 255, 0.01) 0px, transparent 50%),
-                radial-gradient(at 50% 100%, rgba(255, 255, 255, 0.005) 0px, transparent 50%);
-            background-attachment: fixed;
             min-height: 100vh;
             font-family: 'Plus Jakarta Sans', sans-serif;
             color: var(--text-primary);
-            padding: 2rem 1.5rem;
+            padding: 2.5rem 1.5rem;
             display: flex;
             flex-direction: column;
             align-items: center;
             overflow-x: hidden;
         }
 
-        /* Animated background mesh */
+        /* Ambient high-tech background pattern */
         .mesh-gradient {
             position: fixed;
             top: 0;
             left: 0;
             right: 0;
             bottom: 0;
-            background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.01) 0%, transparent 60%),
-                        radial-gradient(circle at 70% 80%, rgba(255, 255, 255, 0.005) 0%, transparent 65%);
+            background: 
+                radial-gradient(circle at 15% 15%, rgba(255, 255, 255, 0.015) 0%, transparent 45%),
+                radial-gradient(circle at 85% 85%, rgba(255, 255, 255, 0.01) 0%, transparent 45%),
+                linear-gradient(rgba(255, 255, 255, 0.003) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 255, 255, 0.003) 1px, transparent 1px);
+            background-size: 100% 100%, 100% 100%, 40px 40px, 40px 40px;
             z-index: -1;
             pointer-events: none;
+            opacity: 0.8;
         }
 
         .container {
             width: 100%;
-            max-width: 1100px;
+            max-width: 1150px;
             z-index: 1;
             display: flex;
             flex-direction: column;
-            min-height: calc(100vh - 4rem);
+            min-height: calc(100vh - 5rem);
         }
 
-        /* Header section */
+        /* Header styling */
         header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 3.5rem;
+            margin-bottom: 3rem;
             position: relative;
         }
 
@@ -85,43 +93,44 @@
 
         h1 {
             font-family: 'Outfit', sans-serif;
-            font-size: 2.5rem;
+            font-size: 2.6rem;
             font-weight: 800;
-            letter-spacing: -0.03em;
-            background: linear-gradient(to right, #ffffff, #d4d4d8, #a1a1aa);
+            letter-spacing: -0.04em;
+            background: linear-gradient(135deg, #ffffff 30%, #a1a1aa 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.2));
-            margin-bottom: 0.2rem;
+            filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.3));
+            margin-bottom: 0.3rem;
         }
 
         p.subtitle {
             color: var(--text-secondary);
-            font-size: 0.95rem;
-            font-weight: 500;
-            letter-spacing: 0.05em;
+            font-size: 0.85rem;
+            font-weight: 700;
+            letter-spacing: 0.08em;
             text-transform: uppercase;
+            opacity: 0.85;
         }
 
-        /* Top status area */
+        /* Network / Status Indicators */
         .status-section {
             display: flex;
             align-items: center;
-            gap: 1.5rem;
+            gap: 1.2rem;
         }
 
         .sys-status {
             display: inline-flex;
             align-items: center;
             gap: 0.6rem;
-            background: rgba(20, 20, 25, 0.55);
-            border: 1px solid rgba(255, 255, 255, 0.06);
+            background: rgba(15, 16, 22, 0.6);
+            border: 1px solid var(--card-border);
             color: var(--text-primary);
-            padding: 0.5rem 1rem;
+            padding: 0.6rem 1.1rem;
             border-radius: 16px;
-            font-size: 0.88rem;
+            font-size: 0.85rem;
             font-weight: 600;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+            backdrop-filter: blur(8px);
         }
 
         .dot-pulse {
@@ -134,43 +143,44 @@
 
         .dot-pulse.online {
             background-color: var(--success);
-            box-shadow: 0 0 10px var(--success);
+            box-shadow: 0 0 12px var(--success);
             animation: pulse 2.5s infinite;
         }
 
         .dot-pulse.offline {
             background-color: var(--danger);
-            box-shadow: 0 0 10px var(--danger);
+            box-shadow: 0 0 12px var(--danger);
         }
 
         #clock {
             font-family: 'JetBrains Mono', monospace;
-            font-size: 1.1rem;
+            font-size: 1.05rem;
             color: var(--text-primary);
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            padding: 0.5rem 1rem;
+            background: rgba(15, 16, 22, 0.6);
+            border: 1px solid var(--card-border);
+            padding: 0.6rem 1.1rem;
             border-radius: 16px;
+            backdrop-filter: blur(8px);
         }
 
-        /* Control Panel bar: Search, Tabs & Settings */
+        /* Control Panel Row */
         .controls-row {
             display: flex;
             flex-wrap: wrap;
             justify-content: space-between;
             align-items: center;
             gap: 1.25rem;
-            margin-bottom: 2.5rem;
-            background: rgba(20, 20, 25, 0.35);
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            border-radius: 24px;
-            padding: 0.75rem 1.25rem;
-            backdrop-filter: blur(12px);
+            margin-bottom: 2.2rem;
+            background: rgba(12, 13, 18, 0.4);
+            border: 1px solid var(--card-border);
+            border-radius: 20px;
+            padding: 0.8rem 1.2rem;
+            backdrop-filter: blur(16px);
         }
 
         .tabs {
             display: flex;
-            gap: 0.5rem;
+            gap: 0.4rem;
             overflow-x: auto;
             scrollbar-width: none;
         }
@@ -184,22 +194,21 @@
             color: var(--text-secondary);
             font-family: 'Plus Jakarta Sans', sans-serif;
             font-weight: 600;
-            font-size: 0.9rem;
+            font-size: 0.88rem;
             padding: 0.6rem 1.1rem;
-            border-radius: 14px;
+            border-radius: 12px;
             cursor: pointer;
-            transition: all 0.25s ease;
+            transition: all 0.2s ease;
             white-space: nowrap;
         }
 
         .tab-btn.active, .tab-btn:hover {
             color: var(--text-primary);
-            background: rgba(255, 255, 255, 0.06);
+            background: rgba(255, 255, 255, 0.05);
         }
         .tab-btn.active {
-            box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.12);
-            background: rgba(255, 255, 255, 0.12);
-            color: #ffffff;
+            box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.08);
         }
 
         .search-box {
@@ -211,21 +220,21 @@
 
         .search-input {
             width: 100%;
-            background: rgba(255, 255, 255, 0.04);
-            border: 1px solid rgba(255, 255, 255, 0.06);
-            border-radius: 14px;
-            padding: 0.65rem 1rem 0.65rem 2.5rem;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--card-border);
+            border-radius: 12px;
+            padding: 0.65rem 1rem 0.65rem 2.4rem;
             font-family: 'Plus Jakarta Sans', sans-serif;
             color: var(--text-primary);
-            font-size: 0.9rem;
+            font-size: 0.88rem;
             outline: none;
-            transition: all 0.25s ease;
+            transition: all 0.2s ease;
         }
 
         .search-input:focus {
-            border-color: var(--primary);
-            background: rgba(255, 255, 255, 0.08);
-            box-shadow: 0 0 0 4px var(--primary-glow);
+            border-color: rgba(255, 255, 255, 0.3);
+            background: rgba(255, 255, 255, 0.06);
+            box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.05);
         }
 
         .search-icon {
@@ -234,63 +243,182 @@
             top: 50%;
             transform: translateY(-50%);
             color: var(--text-secondary);
-            font-size: 0.9rem;
+            font-size: 0.88rem;
             pointer-events: none;
         }
 
         .action-buttons {
             display: flex;
-            gap: 0.75rem;
+            gap: 0.6rem;
         }
 
         .btn-action {
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.07);
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--card-border);
             color: var(--text-primary);
-            width: 42px;
-            height: 42px;
-            border-radius: 14px;
+            width: 40px;
+            height: 40px;
+            border-radius: 12px;
             display: flex;
             align-items: center;
             justify-content: center;
             cursor: pointer;
-            transition: all 0.25s ease;
-            font-size: 1.05rem;
+            transition: all 0.2s ease;
+            font-size: 1rem;
         }
 
         .btn-action:hover {
-            background: rgba(255, 255, 255, 0.12);
-            border-color: var(--primary);
-            box-shadow: 0 0 12px var(--primary-glow);
-            transform: scale(1.05);
+            background: rgba(255, 255, 255, 0.08);
+            border-color: rgba(255, 255, 255, 0.2);
+            transform: scale(1.03);
         }
 
-        /* Cards Grid */
+        /* Metric Widgets Strip */
+        .metrics-bar {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2.2rem;
+        }
+
+        .metric-card {
+            background: rgba(10, 11, 16, 0.45);
+            border: 1px solid var(--card-border);
+            border-radius: 18px;
+            padding: 1rem 1.2rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+            backdrop-filter: blur(16px);
+            transition: all 0.3s ease;
+        }
+
+        .metric-card:hover {
+            border-color: rgba(255, 255, 255, 0.15);
+            background: rgba(14, 15, 22, 0.55);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
+        }
+
+        .metric-info {
+            display: flex;
+            flex-direction: column;
+            gap: 0.35rem;
+            flex-grow: 1;
+            min-width: 0;
+        }
+
+        .metric-icon {
+            font-size: 1.15rem;
+            color: var(--text-secondary);
+            width: 24px;
+            text-align: center;
+            flex-shrink: 0;
+            opacity: 0.7;
+        }
+
+        .metric-label {
+            font-size: 0.68rem;
+            font-weight: 700;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: var(--text-secondary);
+        }
+
+        .metric-value {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.88rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .metric-value-sub {
+            font-size: 0.72rem;
+            color: var(--text-secondary);
+            font-weight: 500;
+            margin-top: 0.1rem;
+        }
+
+        .metric-bar-track {
+            height: 3px;
+            background: rgba(255, 255, 255, 0.04);
+            border-radius: 2px;
+            overflow: hidden;
+            margin-top: 0.2rem;
+        }
+
+        .metric-bar-fill {
+            height: 100%;
+            border-radius: 2px;
+            background: rgba(255, 255, 255, 0.4);
+            transition: width 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+            width: 0%;
+        }
+
+        .metric-bar-fill.warn {
+            background: var(--warning);
+            opacity: 0.8;
+        }
+
+        .metric-bar-fill.danger {
+            background: var(--danger);
+            opacity: 0.8;
+        }
+
+        .metric-sparkline {
+            width: 85px;
+            height: 30px;
+            flex-shrink: 0;
+        }
+
+        /* Network speed label detailed layouts */
+        .net-rates-container {
+            display: flex;
+            flex-direction: column;
+            gap: 0.15rem;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.74rem;
+        }
+
+        .net-rate-item {
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            color: var(--text-secondary);
+        }
+
+        .net-rate-item i {
+            font-size: 0.65rem;
+            opacity: 0.6;
+        }
+
+        /* Services Grid */
         .grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
             gap: 1.5rem;
             margin-bottom: 3.5rem;
             flex-grow: 1;
         }
 
         .card {
-            background: var(--card-bg);
-            backdrop-filter: blur(16px);
+            background: var(--bg-card);
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
             border: 1px solid var(--card-border);
-            border-radius: 24px;
-            padding: 1.75rem;
+            border-radius: 20px;
+            padding: 1.6rem;
             text-decoration: none;
             color: var(--text-primary);
-            transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
             display: flex;
             flex-direction: column;
             position: relative;
             overflow: hidden;
-            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
         }
 
-        /* Subtle glowing card back-highlights */
+        /* Custom mouse-follow hover highlight */
         .card::before {
             content: '';
             position: absolute;
@@ -298,74 +426,90 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: radial-gradient(800px circle at var(--mouse-x, 0) var(--mouse-y, 0), rgba(255, 255, 255, 0.03), transparent 40%);
+            background: radial-gradient(400px circle at var(--mouse-x, 0) var(--mouse-y, 0), rgba(255, 255, 255, 0.035), transparent 45%);
             z-index: 2;
             pointer-events: none;
         }
 
         .card:hover {
-            transform: translateY(-6px);
-            border-color: var(--card-border-hover);
-            background: rgba(24, 24, 27, 0.6);
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.35), 
-                        0 0 20px rgba(255, 255, 255, 0.05);
+            transform: translateY(-5px);
+            border-color: var(--card-border-glow);
+            background: rgba(14, 15, 22, 0.6);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.5), 
+                        0 0 20px rgba(255, 255, 255, 0.02);
         }
+
+        /* Keyboard Selection Highlight */
+        .card.keyboard-selected {
+            border-color: rgba(255, 255, 255, 0.45) !important;
+            box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.15), 0 15px 35px rgba(0, 0, 0, 0.5) !important;
+            background: rgba(20, 21, 28, 0.7) !important;
+            outline: none;
+        }
+
+        /* Category specific border glows on hover */
+        .card.card-icon-media:hover { border-color: rgba(249, 115, 22, 0.3); box-shadow: 0 15px 40px rgba(0,0,0,0.5), 0 0 20px rgba(249, 115, 22, 0.05); }
+        .card.card-icon-photos:hover { border-color: rgba(59, 130, 246, 0.3); box-shadow: 0 15px 40px rgba(0,0,0,0.5), 0 0 20px rgba(59, 130, 246, 0.05); }
+        .card.card-icon-torrent:hover { border-color: rgba(34, 197, 94, 0.3); box-shadow: 0 15px 40px rgba(0,0,0,0.5), 0 0 20px rgba(34, 197, 94, 0.05); }
+        .card.card-icon-files:hover { border-color: rgba(6, 182, 212, 0.3); box-shadow: 0 15px 40px rgba(0,0,0,0.5), 0 0 20px rgba(6, 182, 212, 0.05); }
+        .card.card-icon-system:hover { border-color: rgba(168, 85, 247, 0.3); box-shadow: 0 15px 40px rgba(0,0,0,0.5), 0 0 20px rgba(168, 85, 247, 0.05); }
+        .card.card-icon-games:hover { border-color: rgba(236, 72, 153, 0.3); box-shadow: 0 15px 40px rgba(0,0,0,0.5), 0 0 20px rgba(236, 72, 153, 0.05); }
 
         .card-header {
             display: flex;
             justify-content: space-between;
             align-items: flex-start;
-            margin-bottom: 1.25rem;
+            margin-bottom: 1.2rem;
             position: relative;
             z-index: 3;
         }
 
         .icon-wrapper {
-            width: 60px;
-            height: 60px;
-            border-radius: 18px;
+            width: 54px;
+            height: 54px;
+            border-radius: 16px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.6rem;
-            transition: all 0.3s ease;
+            font-size: 1.45rem;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
 
         .card:hover .icon-wrapper {
-            transform: scale(1.1) rotate(3deg);
+            transform: scale(1.08) rotate(2deg);
         }
 
-        /* Custom Icon Colors based on Category/Service */
-        .icon-photos { background: rgba(255, 255, 255, 0.05); color: #f4f4f5; box-shadow: 0 0 15px rgba(255, 255, 255, 0.04); border: 1px solid rgba(255, 255, 255, 0.05); }
-        .icon-media { background: rgba(255, 255, 255, 0.05); color: #f4f4f5; box-shadow: 0 0 15px rgba(255, 255, 255, 0.04); border: 1px solid rgba(255, 255, 255, 0.05); }
-        .icon-torrent { background: rgba(255, 255, 255, 0.05); color: #f4f4f5; box-shadow: 0 0 15px rgba(255, 255, 255, 0.04); border: 1px solid rgba(255, 255, 255, 0.05); }
-        .icon-files { background: rgba(255, 255, 255, 0.05); color: #f4f4f5; box-shadow: 0 0 15px rgba(255, 255, 255, 0.04); border: 1px solid rgba(255, 255, 255, 0.05); }
-        .icon-system { background: rgba(255, 255, 255, 0.05); color: #f4f4f5; box-shadow: 0 0 15px rgba(255, 255, 255, 0.04); border: 1px solid rgba(255, 255, 255, 0.05); }
-        .icon-games { background: rgba(255, 255, 255, 0.05); color: #f4f4f5; box-shadow: 0 0 15px rgba(255, 255, 255, 0.04); border: 1px solid rgba(255, 255, 255, 0.05); }
+        /* Subtle glowing tinted icons */
+        .icon-media { background: rgba(249, 115, 22, 0.08); color: var(--color-media); border: 1px solid rgba(249, 115, 22, 0.15); box-shadow: 0 0 15px rgba(249, 115, 22, 0.05); }
+        .icon-photos { background: rgba(59, 130, 246, 0.08); color: var(--color-photos); border: 1px solid rgba(59, 130, 246, 0.15); box-shadow: 0 0 15px rgba(59, 130, 246, 0.05); }
+        .icon-torrent { background: rgba(34, 197, 94, 0.08); color: var(--color-torrent); border: 1px solid rgba(34, 197, 94, 0.15); box-shadow: 0 0 15px rgba(34, 197, 94, 0.05); }
+        .icon-files { background: rgba(6, 182, 212, 0.08); color: var(--color-files); border: 1px solid rgba(6, 182, 212, 0.15); box-shadow: 0 0 15px rgba(6, 182, 212, 0.05); }
+        .icon-system { background: rgba(168, 85, 247, 0.08); color: var(--color-system); border: 1px solid rgba(168, 85, 247, 0.15); box-shadow: 0 0 15px rgba(168, 85, 247, 0.05); }
+        .icon-games { background: rgba(236, 72, 153, 0.08); color: var(--color-games); border: 1px solid rgba(236, 72, 153, 0.15); box-shadow: 0 0 15px rgba(236, 72, 153, 0.05); }
 
         .card-status {
-            font-size: 0.72rem;
+            font-size: 0.7rem;
             font-weight: 700;
-            padding: 0.3rem 0.65rem;
+            padding: 0.35rem 0.7rem;
             border-radius: 10px;
             display: inline-flex;
             align-items: center;
             gap: 0.35rem;
             text-transform: uppercase;
-            letter-spacing: 0.05em;
+            letter-spacing: 0.04em;
         }
 
         .status-checking {
-            background: rgba(255, 255, 255, 0.05);
+            background: rgba(255, 255, 255, 0.04);
             color: var(--text-secondary);
         }
         .status-online {
-            background: rgba(16, 185, 129, 0.1);
+            background: rgba(16, 185, 129, 0.08);
             color: #34d399;
             box-shadow: inset 0 0 0 1px rgba(16, 185, 129, 0.15);
         }
         .status-offline {
-            background: rgba(239, 68, 68, 0.1);
+            background: rgba(239, 68, 68, 0.08);
             color: #f87171;
             box-shadow: inset 0 0 0 1px rgba(239, 68, 68, 0.15);
         }
@@ -395,16 +539,16 @@
 
         .card h2 {
             font-family: 'Outfit', sans-serif;
-            font-size: 1.35rem;
+            font-size: 1.3rem;
             font-weight: 600;
             margin-bottom: 0.5rem;
-            letter-spacing: -0.01em;
+            letter-spacing: -0.015em;
         }
 
         .card p.desc {
             color: var(--text-secondary);
-            font-size: 0.92rem;
-            line-height: 1.5;
+            font-size: 0.88rem;
+            line-height: 1.45;
             margin-bottom: 1.25rem;
         }
 
@@ -412,11 +556,11 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            border-top: 1px solid rgba(255, 255, 255, 0.05);
-            padding-top: 0.75rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.04);
+            padding-top: 0.8rem;
             margin-top: auto;
             color: var(--text-secondary);
-            font-size: 0.8rem;
+            font-size: 0.78rem;
         }
 
         .card-footer span {
@@ -430,7 +574,7 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            border-top: 1px solid rgba(255, 255, 255, 0.04);
             padding-top: 1.5rem;
             margin-top: 2rem;
         }
@@ -443,12 +587,12 @@
         .util-link {
             color: var(--text-secondary);
             text-decoration: none;
-            font-size: 0.92rem;
+            font-size: 0.88rem;
             font-weight: 600;
             display: flex;
             align-items: center;
             gap: 0.4rem;
-            transition: color 0.25s ease;
+            transition: color 0.2s ease;
         }
 
         .util-link:hover {
@@ -456,12 +600,12 @@
         }
 
         .util-link i {
-            font-size: 1rem;
+            font-size: 0.95rem;
         }
 
         .refresh-btn {
-            background: rgba(255, 255, 255, 0.04);
-            border: 1px solid rgba(255, 255, 255, 0.06);
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--card-border);
             color: var(--text-secondary);
             font-family: 'Plus Jakarta Sans', sans-serif;
             font-weight: 600;
@@ -469,7 +613,7 @@
             padding: 0.5rem 1rem;
             border-radius: 12px;
             cursor: pointer;
-            transition: all 0.25s ease;
+            transition: all 0.2s ease;
             display: flex;
             align-items: center;
             gap: 0.4rem;
@@ -477,19 +621,19 @@
 
         .refresh-btn:hover {
             color: var(--text-primary);
-            background: rgba(255, 255, 255, 0.08);
-            border-color: rgba(255, 255, 255, 0.12);
+            background: rgba(255, 255, 255, 0.06);
+            border-color: rgba(255, 255, 255, 0.15);
         }
 
-        /* Redirect animation overlay */
+        /* Redirect overlay screen */
         .redirect-overlay {
             position: fixed;
             top: 0;
             left: 0;
             right: 0;
             bottom: 0;
-            background: rgba(5, 6, 15, 0.92);
-            backdrop-filter: blur(12px);
+            background: rgba(3, 4, 8, 0.94);
+            backdrop-filter: blur(16px);
             z-index: 9999;
             display: flex;
             flex-direction: column;
@@ -512,7 +656,7 @@
             text-shadow:
                 0 0 15px rgba(255, 255, 255, 0.6),
                 0 0 35px rgba(255, 255, 255, 0.3),
-                0 0 55px rgba(255, 255, 255, 0.1);
+                0 0 55px rgba(255, 255, 255, 0.15);
             transform: scale(0.5);
             opacity: 0;
             transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
@@ -527,7 +671,7 @@
         .redirect-text {
             font-family: 'JetBrains Mono', monospace;
             color: var(--text-primary);
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             letter-spacing: 2px;
             opacity: 0;
             transform: translateY(15px);
@@ -546,8 +690,8 @@
             left: 0;
             right: 0;
             bottom: 0;
-            background: rgba(5, 6, 15, 0.8);
-            backdrop-filter: blur(8px);
+            background: rgba(3, 4, 8, 0.8);
+            backdrop-filter: blur(12px);
             z-index: 100;
             display: flex;
             align-items: center;
@@ -563,14 +707,13 @@
         }
 
         .modal-content {
-            background: #0f122c;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 28px;
-            width: 90%;
-            max-width: 580px;
+            background: #090a10;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 24px;
+            width: 95%;
+            max-width: 550px;
             padding: 2.25rem;
-            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5),
-                        0 0 40px rgba(99, 102, 241, 0.1);
+            box-shadow: 0 24px 60px rgba(0, 0, 0, 0.6);
             transform: scale(0.9);
             transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
             max-height: 85vh;
@@ -586,13 +729,13 @@
             justify-content: space-between;
             align-items: center;
             margin-bottom: 1.5rem;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.04);
             padding-bottom: 0.75rem;
         }
 
         .modal-header h3 {
             font-family: 'Outfit', sans-serif;
-            font-size: 1.5rem;
+            font-size: 1.4rem;
             font-weight: 700;
         }
 
@@ -616,28 +759,30 @@
         .form-group label {
             display: block;
             color: var(--text-secondary);
-            font-size: 0.88rem;
-            font-weight: 600;
+            font-size: 0.82rem;
+            font-weight: 700;
             margin-bottom: 0.5rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
         }
 
         .form-control, select {
             width: 100%;
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid rgba(255, 255, 255, 0.08);
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid var(--card-border);
             border-radius: 12px;
             padding: 0.75rem 1rem;
             font-family: 'Plus Jakarta Sans', sans-serif;
             color: var(--text-primary);
-            font-size: 0.92rem;
+            font-size: 0.9rem;
             outline: none;
             transition: all 0.2s ease;
         }
 
         .form-control:focus, select:focus {
-            border-color: var(--primary);
-            background: rgba(255, 255, 255, 0.06);
-            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15);
+            border-color: rgba(255, 255, 255, 0.2);
+            background: rgba(255, 255, 255, 0.05);
+            box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.03);
         }
 
         .form-actions {
@@ -645,41 +790,40 @@
             justify-content: flex-end;
             gap: 0.75rem;
             margin-top: 1.75rem;
-            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            border-top: 1px solid rgba(255, 255, 255, 0.04);
             padding-top: 1.25rem;
         }
 
         .btn {
-            padding: 0.75rem 1.5rem;
+            padding: 0.7rem 1.4rem;
             border-radius: 12px;
             font-family: 'Plus Jakarta Sans', sans-serif;
             font-weight: 600;
-            font-size: 0.9rem;
+            font-size: 0.88rem;
             cursor: pointer;
-            transition: all 0.25s ease;
+            transition: all 0.2s ease;
         }
 
         .btn-secondary {
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.08);
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--card-border);
             color: var(--text-secondary);
         }
 
         .btn-secondary:hover {
-            background: rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.06);
             color: var(--text-primary);
         }
 
         .btn-primary {
             background: var(--primary);
             border: none;
-            color: white;
-            box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3);
+            color: var(--bg-dark);
+            box-shadow: 0 4px 15px rgba(255, 255, 255, 0.1);
         }
 
         .btn-primary:hover {
-            background: #4f46e5;
-            box-shadow: 0 6px 20px rgba(99, 102, 241, 0.45);
+            background: #e4e4e7;
             transform: translateY(-1px);
         }
 
@@ -688,12 +832,12 @@
             justify-content: space-between;
             align-items: center;
             padding: 0.75rem 0;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.03);
         }
 
         .settings-item-row span {
             font-weight: 600;
-            font-size: 0.95rem;
+            font-size: 0.9rem;
         }
 
         .settings-item-row-buttons {
@@ -707,7 +851,7 @@
             color: var(--text-secondary);
             cursor: pointer;
             padding: 0.35rem;
-            font-size: 1rem;
+            font-size: 0.95rem;
             transition: color 0.2s ease;
         }
 
@@ -719,103 +863,25 @@
             color: var(--danger);
         }
 
-        /* System Metrics Bar */
-        .metrics-bar {
-            display: flex;
-            gap: 1rem;
-            margin-bottom: 2rem;
-            flex-wrap: wrap;
-        }
-
-        .metric-card {
-            flex: 1;
-            min-width: 130px;
-            background: rgba(18, 18, 22, 0.55);
-            border: 1px solid rgba(255, 255, 255, 0.06);
-            border-radius: 16px;
-            padding: 0.9rem 1.1rem;
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-            transition: border-color 0.3s ease;
-        }
-
-        .metric-card:hover {
-            border-color: rgba(255, 255, 255, 0.15);
-        }
-
-        .metric-icon {
-            font-size: 1rem;
-            color: var(--text-secondary);
-            width: 20px;
-            text-align: center;
-            flex-shrink: 0;
-        }
-
-        .metric-info {
-            display: flex;
-            flex-direction: column;
-            gap: 0.3rem;
-            flex: 1;
-            min-width: 0;
-        }
-
-        .metric-label {
-            font-size: 0.7rem;
-            font-weight: 600;
-            letter-spacing: 0.06em;
-            text-transform: uppercase;
-            color: var(--text-secondary);
-        }
-
-        .metric-value {
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 0.88rem;
-            font-weight: 600;
-            color: var(--text-primary);
-        }
-
-        .metric-bar-track {
-            height: 3px;
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 2px;
-            overflow: hidden;
-        }
-
-        .metric-bar-fill {
-            height: 100%;
-            border-radius: 2px;
-            background: rgba(255, 255, 255, 0.35);
-            transition: width 0.8s cubic-bezier(0.16, 1, 0.3, 1);
-            width: 0%;
-        }
-
-        .metric-bar-fill.warn {
-            background: rgba(245, 158, 11, 0.7);
-        }
-
-        .metric-bar-fill.danger {
-            background: rgba(239, 68, 68, 0.7);
-        }
-
-        /* Copy toast notification */
+        /* Toast notifications */
         .copy-toast {
             position: fixed;
             bottom: 2rem;
             left: 50%;
             transform: translateX(-50%) translateY(20px);
-            background: rgba(30, 30, 35, 0.95);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: rgba(20, 21, 28, 0.95);
+            border: 1px solid rgba(255, 255, 255, 0.08);
             color: var(--text-primary);
-            padding: 0.6rem 1.2rem;
+            padding: 0.65rem 1.3rem;
             border-radius: 12px;
-            font-size: 0.85rem;
+            font-size: 0.82rem;
             font-weight: 600;
             opacity: 0;
             pointer-events: none;
-            transition: all 0.3s ease;
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
             z-index: 99999;
             backdrop-filter: blur(10px);
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5);
         }
 
         .copy-toast.show {
@@ -823,26 +889,27 @@
             transform: translateX(-50%) translateY(0);
         }
 
-        /* Kbd shortcut hint */
+        /* Keyboard Hints */
         .kbd-hint {
             font-size: 0.72rem;
             color: var(--text-secondary);
             display: flex;
             align-items: center;
             gap: 0.4rem;
+            opacity: 0.6;
         }
 
         kbd {
-            background: rgba(255, 255, 255, 0.06);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.08);
             border-radius: 5px;
-            padding: 0.1rem 0.4rem;
+            padding: 0.1rem 0.35rem;
             font-family: 'JetBrains Mono', monospace;
-            font-size: 0.7rem;
+            font-size: 0.65rem;
             color: var(--text-secondary);
         }
 
-        /* Refresh spinning animation */
+        /* Refresh spinning icon animation */
         @keyframes spin {
             from { transform: rotate(0deg); }
             to { transform: rotate(360deg); }
@@ -852,35 +919,28 @@
             animation: spin 0.7s linear;
         }
 
-        /* Card number badge */
         .card-num {
             position: absolute;
-            bottom: 1.1rem;
+            bottom: 1rem;
             right: 1.2rem;
             font-family: 'JetBrains Mono', monospace;
             font-size: 0.65rem;
-            color: rgba(255,255,255,0.15);
+            color: rgba(255,255,255,0.1);
             z-index: 3;
         }
 
-        /* Last updated timestamp */
         .last-updated {
-            font-size: 0.72rem;
-            color: rgba(255,255,255,0.2);
+            font-size: 0.7rem;
+            color: rgba(255,255,255,0.15);
             text-align: right;
             margin-bottom: 0.5rem;
-            margin-top: -1.5rem;
+            margin-top: -1.2rem;
+            font-family: 'JetBrains Mono', monospace;
         }
 
         @keyframes pulseGlow {
             0% { transform: scale(1); }
-            100% { transform: scale(1.08); }
-        }
-
-        @keyframes float {
-            0% { transform: translateY(0px) rotate(0deg); }
-            50% { transform: translateY(-6px) rotate(3deg); }
-            100% { transform: translateY(0px) rotate(0deg); }
+            100% { transform: scale(1.05); }
         }
 
         @keyframes pulse {
@@ -889,7 +949,7 @@
             100% { opacity: 1; transform: scale(1); }
         }
 
-        @media (max-width: 640px) {
+        @media (max-width: 768px) {
             body {
                 padding: 1.5rem 1rem;
             }
@@ -897,6 +957,7 @@
                 flex-direction: column;
                 align-items: flex-start;
                 gap: 1.25rem;
+                margin-bottom: 2rem;
             }
             .status-section {
                 width: 100%;
@@ -905,10 +966,14 @@
             .controls-row {
                 flex-direction: column;
                 align-items: stretch;
-                border-radius: 18px;
+                border-radius: 16px;
+                padding: 1rem;
             }
             .search-box {
                 max-width: 100%;
+            }
+            .metrics-bar {
+                grid-template-columns: 1fr;
             }
             .grid {
                 grid-template-columns: 1fr;
@@ -972,16 +1037,33 @@
                 <i class="fa-solid fa-microchip metric-icon"></i>
                 <div class="metric-info">
                     <span class="metric-label">CPU</span>
-                    <span class="metric-value" id="metricCpu">—</span>
+                    <span class="metric-value"><span id="metricCpu">—</span> <span style="font-size:0.7rem; opacity:0.6; font-weight:normal;" id="metricCpuTemp"></span></span>
                     <div class="metric-bar-track"><div class="metric-bar-fill" id="metricCpuBar"></div></div>
                 </div>
+                <canvas class="metric-sparkline" id="cpuSparkline" width="85" height="30"></canvas>
             </div>
             <div class="metric-card">
                 <i class="fa-solid fa-memory metric-icon"></i>
                 <div class="metric-info">
                     <span class="metric-label">RAM</span>
                     <span class="metric-value" id="metricRam">—</span>
+                    <span class="metric-value-sub" id="metricRamDetails"></span>
                     <div class="metric-bar-track"><div class="metric-bar-fill" id="metricRamBar"></div></div>
+                </div>
+                <canvas class="metric-sparkline" id="ramSparkline" width="85" height="30"></canvas>
+            </div>
+            <div class="metric-card">
+                <i class="fa-solid fa-network-wired metric-icon"></i>
+                <div class="metric-info">
+                    <span class="metric-label">Network</span>
+                    <div class="net-rates-container">
+                        <div class="net-rate-item">
+                            <i class="fa-solid fa-arrow-down"></i> <span id="netDownSpeed">0 KB/s</span>
+                        </div>
+                        <div class="net-rate-item">
+                            <i class="fa-solid fa-arrow-up"></i> <span id="netUpSpeed">0 KB/s</span>
+                        </div>
+                    </div>
                 </div>
             </div>
             <div class="metric-card">
@@ -989,6 +1071,7 @@
                 <div class="metric-info">
                     <span class="metric-label">Disk</span>
                     <span class="metric-value" id="metricDisk">—</span>
+                    <span class="metric-value-sub" id="metricDiskDetails"></span>
                     <div class="metric-bar-track"><div class="metric-bar-fill" id="metricDiskBar"></div></div>
                 </div>
             </div>
@@ -1187,6 +1270,12 @@
         let activeCategory = "all";
         let searchQuery = "";
         let serviceStatuses = {};
+        
+        // Advanced metrics history
+        const cpuHistory = [];
+        const ramHistory = [];
+        const MAX_HISTORY = 20;
+        let selectedCardIndex = -1;
 
         // Initialize dashboard
         document.addEventListener("DOMContentLoaded", () => {
@@ -1224,6 +1313,7 @@
                     document.querySelectorAll(".tab-btn").forEach(btn => btn.classList.remove("active"));
                     e.target.classList.add("active");
                     activeCategory = e.target.getAttribute("data-category");
+                    selectedCardIndex = -1;
                     renderServicesGrid();
                 }
             });
@@ -1231,6 +1321,7 @@
             // Search input filter handler
             document.getElementById("searchInput").addEventListener("input", (e) => {
                 searchQuery = e.target.value.toLowerCase().trim();
+                selectedCardIndex = -1;
                 renderServicesGrid();
             });
 
@@ -1245,6 +1336,13 @@
             });
         }
 
+        // Helper to format net speed
+        function formatNetSpeed(bytesPerSec) {
+            if (bytesPerSec >= 1048576) return (bytesPerSec / 1048576).toFixed(1) + " MB/s";
+            if (bytesPerSec >= 1024) return (bytesPerSec / 1024).toFixed(1) + " KB/s";
+            return bytesPerSec + " B/s";
+        }
+
         // Fetch central status API and update DOM + system metrics
         function fetchServiceStatusesAndRefresh() {
             fetch("https://m.1234.al/status.php")
@@ -1256,9 +1354,13 @@
                         Object.keys(data.services).forEach(id => {
                             const statusElement = document.getElementById(`status-${id}`);
                             if (statusElement) {
-                                const isOnline = data.services[id];
+                                const state = data.services[id];
+                                const isOnline = typeof state === "object" ? state.online : state;
+                                const latency = typeof state === "object" ? state.latency : null;
+                                const latencyText = (isOnline && latency !== null) ? ` (${latency}ms)` : "";
+                                
                                 statusElement.className = `card-status ${isOnline ? 'status-online' : 'status-offline'}`;
-                                statusElement.querySelector("span").textContent = isOnline ? "Online" : "Offline";
+                                statusElement.querySelector("span").textContent = isOnline ? `Online${latencyText}` : "Offline";
                             }
                         });
                     } else {
@@ -1278,10 +1380,42 @@
                     if (data.system) {
                         const s = data.system;
                         updateMetric('metricCpu', 'metricCpuBar', s.cpu, '%');
+                        
+                        // Set CPU Temp if present
+                        const cpuTempEl = document.getElementById('metricCpuTemp');
+                        if (cpuTempEl) {
+                            cpuTempEl.textContent = s.cpu_temp ? `(${s.cpu_temp}°C)` : "";
+                        }
+                        
                         updateMetric('metricRam', 'metricRamBar', s.ram, '%');
+                        const ramDetailsEl = document.getElementById('metricRamDetails');
+                        if (ramDetailsEl) {
+                            ramDetailsEl.textContent = (s.ram_used && s.ram_total) ? `${s.ram_used} / ${s.ram_total} GB` : "";
+                        }
+                        
                         updateMetric('metricDisk', 'metricDiskBar', s.disk, '%');
+                        const diskDetailsEl = document.getElementById('metricDiskDetails');
+                        if (diskDetailsEl) {
+                            diskDetailsEl.textContent = (s.disk_used && s.disk_total) ? `${s.disk_used} / ${s.disk_total} GB` : "";
+                        }
+                        
                         const uptimeEl = document.getElementById('metricUptime');
                         if (uptimeEl) uptimeEl.textContent = s.uptime || '—';
+
+                        // Network Speeds
+                        const downSpeedEl = document.getElementById('netDownSpeed');
+                        const upSpeedEl = document.getElementById('netUpSpeed');
+                        if (downSpeedEl) downSpeedEl.textContent = formatNetSpeed(s.net_down || 0);
+                        if (upSpeedEl) upSpeedEl.textContent = formatNetSpeed(s.net_up || 0);
+
+                        // Push to history and draw sparklines
+                        cpuHistory.push(s.cpu || 0);
+                        if (cpuHistory.length > MAX_HISTORY) cpuHistory.shift();
+                        drawSparkline('cpuSparkline', cpuHistory, true);
+
+                        ramHistory.push(s.ram || 0);
+                        if (ramHistory.length > MAX_HISTORY) ramHistory.shift();
+                        drawSparkline('ramSparkline', ramHistory, false);
                     }
 
                     // Last updated
@@ -1301,6 +1435,65 @@
                 bar.style.width = Math.min(pct, 100) + '%';
                 bar.className = 'metric-bar-fill' + (pct >= 90 ? ' danger' : pct >= 70 ? ' warn' : '');
             }
+        }
+
+        // Draw sparklines dynamically on HTML5 canvas
+        function drawSparkline(canvasId, data, isCpu) {
+            const canvas = document.getElementById(canvasId);
+            if (!canvas) return;
+            const ctx = canvas.getContext('2d');
+            const width = canvas.width;
+            const height = canvas.height;
+            
+            ctx.clearRect(0, 0, width, height);
+            if (data.length < 2) return;
+            
+            ctx.beginPath();
+            const step = width / (MAX_HISTORY - 1);
+            const maxVal = 100;
+            
+            const firstVal = data[0];
+            const firstY = height - (firstVal / maxVal) * (height - 4) - 2;
+            ctx.moveTo(0, firstY);
+            
+            for (let i = 1; i < data.length; i++) {
+                const val = data[i];
+                const x = i * step;
+                const y = height - (val / maxVal) * (height - 4) - 2;
+                ctx.lineTo(x, y);
+            }
+            
+            const gradient = ctx.createLinearGradient(0, 0, width, 0);
+            gradient.addColorStop(0, 'rgba(255, 255, 255, 0.15)');
+            gradient.addColorStop(1, 'rgba(255, 255, 255, 0.8)');
+            
+            ctx.strokeStyle = gradient;
+            ctx.lineWidth = 1.5;
+            ctx.stroke();
+            
+            // Fill area
+            ctx.lineTo((data.length - 1) * step, height);
+            ctx.lineTo(0, height);
+            ctx.closePath();
+            const fillGradient = ctx.createLinearGradient(0, 0, 0, height);
+            fillGradient.addColorStop(0, 'rgba(255, 255, 255, 0.08)');
+            fillGradient.addColorStop(1, 'rgba(255, 255, 255, 0.0)');
+            ctx.fillStyle = fillGradient;
+            ctx.fill();
+
+            // Glow last point
+            const lastIdx = data.length - 1;
+            const lastVal = data[lastIdx];
+            const lastX = lastIdx * step;
+            const lastY = height - (lastVal / maxVal) * (height - 4) - 2;
+            
+            ctx.beginPath();
+            ctx.arc(lastX, lastY, 2, 0, 2 * Math.PI);
+            ctx.fillStyle = '#ffffff';
+            ctx.shadowBlur = 4;
+            ctx.shadowColor = '#ffffff';
+            ctx.fill();
+            ctx.shadowBlur = 0; // reset
         }
 
         function manualRefresh() {
@@ -1333,10 +1526,10 @@
                 return;
             }
 
-            filtered.forEach(service => {
+            filtered.forEach((service, index) => {
                 const card = document.createElement("a");
                 card.href = service.url;
-                card.className = "card";
+                card.className = `card card-${service.theme}`;
                 card.dataset.id = service.id;
 
                 // Mouse move effect for hover glow styling
@@ -1354,7 +1547,7 @@
                     triggerRedirectAnimation(service.url, service.name, service.icon);
                 });
 
-                const cardIndex = filtered.indexOf(service) + 1;
+                const cardIndex = index + 1;
 
                 card.innerHTML = `
                     <div class="card-header">
@@ -1383,6 +1576,8 @@
                 grid.appendChild(card);
                 pingServiceStatus(service);
             });
+
+            updateCardSelection();
         }
 
         // Check availability of a single service via fetch no-cors ping (with fallback/cache from central API)
@@ -1392,20 +1587,26 @@
 
             // If we have a cached response from the central status API, use it
             if (serviceStatuses && serviceStatuses[service.id] !== undefined) {
-                const isOnline = serviceStatuses[service.id];
+                const state = serviceStatuses[service.id];
+                const isOnline = typeof state === "object" ? state.online : state;
+                const latency = typeof state === "object" ? state.latency : null;
+                const latencyText = (isOnline && latency !== null) ? ` (${latency}ms)` : "";
+                
                 statusElement.className = `card-status ${isOnline ? 'status-online' : 'status-offline'}`;
-                statusElement.querySelector("span").textContent = isOnline ? "Online" : "Offline";
+                statusElement.querySelector("span").textContent = isOnline ? `Online${latencyText}` : "Offline";
                 return;
             }
 
             const controller = new AbortController();
             const timeoutId = setTimeout(() => controller.abort(), 6000); // 6s timeout
+            const start = performance.now();
 
             fetch(service.url, { mode: 'no-cors', signal: controller.signal })
                 .then(() => {
                     clearTimeout(timeoutId);
+                    const latency = Math.round(performance.now() - start);
                     statusElement.className = "card-status status-online";
-                    statusElement.querySelector("span").textContent = "Online";
+                    statusElement.querySelector("span").textContent = `Online (${latency}ms)`;
                 })
                 .catch(() => {
                     clearTimeout(timeoutId);
@@ -1474,7 +1675,20 @@
             toast._timer = setTimeout(() => toast.classList.remove('show'), 2000);
         }
 
-        // Keyboard shortcuts
+        // Update keyboard card selection visuals
+        function updateCardSelection() {
+            const cards = document.querySelectorAll("#servicesGrid .card");
+            cards.forEach((card, idx) => {
+                if (idx === selectedCardIndex) {
+                    card.classList.add("keyboard-selected");
+                    card.scrollIntoView({ block: "nearest", behavior: "smooth" });
+                } else {
+                    card.classList.remove("keyboard-selected");
+                }
+            });
+        }
+
+        // Keyboard shortcuts and grid navigation
         document.addEventListener('keydown', (e) => {
             const tag = document.activeElement.tagName.toLowerCase();
             const inInput = tag === 'input' || tag === 'select' || tag === 'textarea';
@@ -1490,6 +1704,8 @@
             if (e.key === 'Escape') {
                 document.querySelectorAll('.modal.active').forEach(m => m.classList.remove('active'));
                 document.getElementById('searchInput').blur();
+                selectedCardIndex = -1;
+                updateCardSelection();
                 return;
             }
 
@@ -1505,6 +1721,89 @@
             if ((e.ctrlKey || e.metaKey) && e.key === 'r') {
                 e.preventDefault();
                 manualRefresh();
+                return;
+            }
+
+            // Grid card arrow keys navigation
+            if (!inInput) {
+                const cards = document.querySelectorAll('#servicesGrid .card');
+                if (cards.length > 0) {
+                    if (e.key === 'ArrowRight') {
+                        e.preventDefault();
+                        selectedCardIndex = (selectedCardIndex + 1) % cards.length;
+                        updateCardSelection();
+                        return;
+                    }
+                    if (e.key === 'ArrowLeft') {
+                        e.preventDefault();
+                        selectedCardIndex = (selectedCardIndex - 1 + cards.length) % cards.length;
+                        updateCardSelection();
+                        return;
+                    }
+                    if (e.key === 'ArrowDown') {
+                        e.preventDefault();
+                        const currentCard = cards[selectedCardIndex];
+                        if (currentCard) {
+                            const rect = currentCard.getBoundingClientRect();
+                            let bestIdx = selectedCardIndex;
+                            let minDistance = Infinity;
+                            cards.forEach((c, idx) => {
+                                if (idx === selectedCardIndex) return;
+                                const r = c.getBoundingClientRect();
+                                if (r.top > rect.bottom - 10) {
+                                    const dist = Math.abs(r.left - rect.left) + (r.top - rect.top);
+                                    if (dist < minDistance) {
+                                        minDistance = dist;
+                                        bestIdx = idx;
+                                    }
+                                }
+                            });
+                            if (bestIdx !== selectedCardIndex) {
+                                selectedCardIndex = bestIdx;
+                                updateCardSelection();
+                            }
+                        } else {
+                            selectedCardIndex = 0;
+                            updateCardSelection();
+                        }
+                        return;
+                    }
+                    if (e.key === 'ArrowUp') {
+                        e.preventDefault();
+                        const currentCard = cards[selectedCardIndex];
+                        if (currentCard) {
+                            const rect = currentCard.getBoundingClientRect();
+                            let bestIdx = selectedCardIndex;
+                            let minDistance = Infinity;
+                            cards.forEach((c, idx) => {
+                                if (idx === selectedCardIndex) return;
+                                const r = c.getBoundingClientRect();
+                                if (r.bottom < rect.top + 10) {
+                                    const dist = Math.abs(r.left - rect.left) + (rect.top - r.top);
+                                    if (dist < minDistance) {
+                                        minDistance = dist;
+                                        bestIdx = idx;
+                                    }
+                                }
+                            });
+                            if (bestIdx !== selectedCardIndex) {
+                                selectedCardIndex = bestIdx;
+                                updateCardSelection();
+                            }
+                        } else {
+                            selectedCardIndex = cards.length - 1;
+                            updateCardSelection();
+                        }
+                        return;
+                    }
+                    if (e.key === 'Enter') {
+                        if (selectedCardIndex >= 0 && cards[selectedCardIndex]) {
+                            e.preventDefault();
+                            cards[selectedCardIndex].click();
+                        }
+                        return;
+                    }
+                }
             }
         });
 
