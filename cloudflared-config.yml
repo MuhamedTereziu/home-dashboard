@@ -26,6 +26,8 @@ ingress:
       noTLSVerify: true
   - hostname: 8.1234.al
     service: http://localhost:8280
+  - hostname: 9.1234.al
+    service: http://localhost:8085
   - hostname: m.1234.al
     service: http://localhost:80
   - service: http_status:404

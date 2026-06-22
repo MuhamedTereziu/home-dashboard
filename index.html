@@ -1945,6 +1945,7 @@
                 audioBtn.style.display = "inline-block";
                 
                 loading.style.display = "flex";
+                loading.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> INITIALIZING LIVE STREAM...`;
                 img.style.opacity = "0.2";
                 
                 img.onload = () => {
@@ -1954,6 +1955,18 @@
                 
                 // Append the security token to authorize the request on the Python side
                 const token = PASSWORD_HASH;
+                
+                img.onerror = () => {
+                    if (modal.classList.contains("active")) {
+                        loading.innerHTML = `<i class="fa-solid fa-triangle-exclamation" style="color: var(--status-offline);"></i> STREAM ERROR. RETRYING...`;
+                        setTimeout(() => {
+                            if (modal.classList.contains("active")) {
+                                img.src = (webcamMode === "stream" ? "https://9.1234.al/stream" : "https://9.1234.al/snapshot") + "?token=" + token + "&v=" + Date.now();
+                            }
+                        }, 3000);
+                    }
+                };
+
                 img.src = "https://9.1234.al/stream?token=" + token + "&v=" + Date.now();
                 audio.src = "https://9.1234.al/audio?token=" + token + "&v=" + Date.now();
                 audio.load();
@@ -1968,6 +1981,8 @@
             const audio = document.getElementById("webcamAudio");
             
             // Terminate active HTTP streams by clearing sources
+            img.onload = null;
+            img.onerror = null;
             img.src = "";
             audio.src = "";
             audio.load();
@@ -1983,6 +1998,7 @@
             const audioBtn = document.getElementById("webcamAudioBtn");
             
             loading.style.display = "flex";
+            loading.innerHTML = webcamMode === "stream" ? `<i class="fa-solid fa-spinner fa-spin"></i> LOADING SNAPSHOT...` : `<i class="fa-solid fa-spinner fa-spin"></i> INITIALIZING LIVE STREAM...`;
             img.style.opacity = "0.2";
             
             const token = PASSWORD_HASH;
