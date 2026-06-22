@@ -70,7 +70,7 @@
 
         .container {
             width: 100%;
-            max-width: 1150px;
+            max-width: 1380px;
             z-index: 1;
             display: flex;
             flex-direction: column;
@@ -949,6 +949,185 @@
             100% { opacity: 1; transform: scale(1); }
         }
 
+        /* Two-Column split dashboard layout */
+        .dashboard-layout {
+            display: grid;
+            grid-template-columns: 320px 1fr;
+            gap: 2rem;
+            align-items: start;
+            margin-bottom: 3.5rem;
+            flex-grow: 1;
+        }
+
+        .sidebar-panel {
+            display: flex;
+            flex-direction: column;
+            gap: 1.25rem;
+            position: sticky;
+            top: 2.5rem;
+        }
+
+        .sidebar-panel .metric-card {
+            flex-direction: column;
+            align-items: stretch;
+            gap: 0.6rem;
+            padding: 1.2rem 1.3rem;
+            background: rgba(10, 11, 16, 0.45);
+        }
+
+        .main-content {
+            display: flex;
+            flex-direction: column;
+            min-width: 0;
+        }
+
+        /* Sidebar widget cards */
+        .sidebar-card {
+            background: rgba(10, 11, 16, 0.45);
+            border: 1px solid var(--card-border);
+            border-radius: 20px;
+            backdrop-filter: blur(20px) saturate(180%);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+            overflow: hidden;
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        /* Dedicated Camera Widget styling */
+        .camera-card {
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            aspect-ratio: 4/3;
+            width: 100%;
+        }
+
+        .camera-card-inner {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            background: #000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .camera-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            backdrop-filter: blur(20px) saturate(140%);
+            -webkit-backdrop-filter: blur(20px) saturate(140%);
+            background: rgba(8, 9, 13, 0.75);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 1.2rem;
+            z-index: 10;
+            text-align: center;
+            transition: all 0.4s ease;
+        }
+
+        .camera-overlay .lock-icon {
+            font-size: 2rem;
+            color: var(--text-secondary);
+            margin-bottom: 0.8rem;
+            opacity: 0.8;
+        }
+
+        .camera-overlay h4 {
+            font-size: 0.95rem;
+            font-weight: 700;
+            margin-bottom: 0.4rem;
+            color: var(--text-primary);
+            font-family: 'Outfit', sans-serif;
+        }
+
+        .camera-overlay p {
+            font-size: 0.74rem;
+            color: var(--text-secondary);
+            margin-bottom: 1rem;
+            line-height: 1.45;
+        }
+
+        .camera-overlay .lock-form {
+            display: flex;
+            flex-direction: column;
+            gap: 0.6rem;
+            width: 100%;
+            max-width: 220px;
+        }
+
+        .camera-overlay .lock-form .form-control {
+            text-align: center;
+            padding: 0.5rem;
+            font-size: 0.82rem;
+        }
+
+        .camera-overlay .lock-form .btn {
+            padding: 0.5rem;
+            font-size: 0.82rem;
+            font-weight: 700;
+            letter-spacing: 0.05em;
+        }
+
+        .camera-control-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(8, 9, 13, 0.85);
+            border-top: 1px solid var(--card-border);
+            padding: 0.6rem 0.8rem;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.72rem;
+            z-index: 11;
+        }
+
+        .camera-control-bar .btn-group {
+            display: flex;
+            gap: 0.4rem;
+        }
+
+        .camera-control-bar .btn-mini {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: var(--text-primary);
+            padding: 0.3rem 0.5rem;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.7rem;
+            font-weight: 600;
+            transition: all 0.2s ease;
+        }
+
+        .camera-control-bar .btn-mini:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: rgba(255, 255, 255, 0.2);
+        }
+
+        .camera-control-bar .btn-mini.btn-mini-danger {
+            background: rgba(239, 68, 68, 0.15);
+            border-color: rgba(239, 68, 68, 0.3);
+            color: #f87171;
+        }
+
+        .camera-control-bar .btn-mini.btn-mini-danger:hover {
+            background: rgba(239, 68, 68, 0.25);
+            border-color: rgba(239, 68, 68, 0.4);
+        }
+
+        @media (max-width: 950px) {
+            .dashboard-layout {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+            .sidebar-panel {
+                position: static;
+            }
+        }
+
         @media (max-width: 768px) {
             body {
                 padding: 1.5rem 1rem;
@@ -1011,104 +1190,139 @@
             </div>
         </header>
 
-        <!-- Search, Tabs and Actions -->
-        <div class="controls-row">
-            <div class="tabs" id="categoryTabs">
-                <button class="tab-btn active" data-category="all">All Services</button>
-                <button class="tab-btn" data-category="media">Media & Cloud</button>
-                <button class="tab-btn" data-category="downloads">Downloaders</button>
-                <button class="tab-btn" data-category="system">Administration</button>
-            </div>
-
-            <div class="search-box">
-                <i class="fa-solid fa-magnifying-glass search-icon"></i>
-                <input type="text" id="searchInput" class="search-input" placeholder="Search services...">
-            </div>
-
-            <div class="action-buttons">
-                <button class="btn-action" id="btnSettings" title="Manage Services"><i class="fa-solid fa-sliders"></i></button>
-                <button class="btn-action" id="btnAddService" title="Add New Service"><i class="fa-solid fa-plus"></i></button>
-            </div>
-        </div>
-
-        <!-- System Metrics Strip -->
-        <div class="metrics-bar" id="metricsBar">
-            <div class="metric-card">
-                <i class="fa-solid fa-microchip metric-icon"></i>
-                <div class="metric-info">
-                    <span class="metric-label">CPU</span>
-                    <span class="metric-value"><span id="metricCpu">—</span> <span style="font-size:0.7rem; opacity:0.6; font-weight:normal;" id="metricCpuTemp"></span></span>
-                    <div class="metric-bar-track"><div class="metric-bar-fill" id="metricCpuBar"></div></div>
+        <div class="dashboard-layout">
+            <!-- Sidebar Panel (Camera & Telemetry) -->
+            <aside class="sidebar-panel">
+                <!-- Webcam Card -->
+                <div class="sidebar-card camera-card" id="sidebarCameraCard">
+                    <!-- Standby / Streaming will be dynamically generated by JS -->
                 </div>
-                <canvas class="metric-sparkline" id="cpuSparkline" width="85" height="30"></canvas>
-            </div>
-            <div class="metric-card">
-                <i class="fa-solid fa-memory metric-icon"></i>
-                <div class="metric-info">
-                    <span class="metric-label">RAM</span>
-                    <span class="metric-value" id="metricRam">—</span>
-                    <span class="metric-value-sub" id="metricRamDetails"></span>
-                    <div class="metric-bar-track"><div class="metric-bar-fill" id="metricRamBar"></div></div>
-                </div>
-                <canvas class="metric-sparkline" id="ramSparkline" width="85" height="30"></canvas>
-            </div>
-            <div class="metric-card">
-                <i class="fa-solid fa-network-wired metric-icon"></i>
-                <div class="metric-info">
-                    <span class="metric-label">Network</span>
-                    <div class="net-rates-container">
-                        <div class="net-rate-item">
-                            <i class="fa-solid fa-arrow-down"></i> <span id="netDownSpeed">0 KB/s</span>
+                
+                <!-- Vertical Telemetry Stack -->
+                <div class="telemetry-stack">
+                    <!-- CPU Metric Widget -->
+                    <div class="metric-card">
+                        <div style="display:flex; justify-content:space-between; align-items:center; width:100%;">
+                            <span class="metric-label" style="display:flex; align-items:center; gap:0.4rem;">
+                                <i class="fa-solid fa-microchip metric-icon" style="font-size:0.9rem; margin:0; opacity:0.8;"></i>
+                                CPU
+                            </span>
+                            <span class="metric-value">
+                                <span id="metricCpu">—</span> 
+                                <span style="font-size:0.7rem; opacity:0.6; font-weight:normal;" id="metricCpuTemp"></span>
+                            </span>
                         </div>
-                        <div class="net-rate-item">
-                            <i class="fa-solid fa-arrow-up"></i> <span id="netUpSpeed">0 KB/s</span>
+                        <div class="metric-bar-track" style="width:100%;"><div class="metric-bar-fill" id="metricCpuBar"></div></div>
+                        <canvas class="metric-sparkline" id="cpuSparkline" width="280" height="40" style="width:100%; height:40px; margin-top:0.25rem;"></canvas>
+                    </div>
+
+                    <!-- RAM Metric Widget -->
+                    <div class="metric-card">
+                        <div style="display:flex; justify-content:space-between; align-items:center; width:100%;">
+                            <span class="metric-label" style="display:flex; align-items:center; gap:0.4rem;">
+                                <i class="fa-solid fa-memory metric-icon" style="font-size:0.9rem; margin:0; opacity:0.8;"></i>
+                                RAM
+                            </span>
+                            <span class="metric-value" id="metricRam">—</span>
+                        </div>
+                        <div class="metric-value-sub" id="metricRamDetails" style="margin-top:-0.2rem; font-family:'JetBrains Mono', monospace; font-size:0.7rem;"></div>
+                        <div class="metric-bar-track" style="width:100%;"><div class="metric-bar-fill" id="metricRamBar"></div></div>
+                        <canvas class="metric-sparkline" id="ramSparkline" width="280" height="40" style="width:100%; height:40px; margin-top:0.25rem;"></canvas>
+                    </div>
+
+                    <!-- Network Metric Widget -->
+                    <div class="metric-card">
+                        <div style="display:flex; justify-content:space-between; align-items:center; width:100%;">
+                            <span class="metric-label" style="display:flex; align-items:center; gap:0.4rem;">
+                                <i class="fa-solid fa-network-wired metric-icon" style="font-size:0.9rem; margin:0; opacity:0.8;"></i>
+                                Network
+                            </span>
+                        </div>
+                        <div class="net-rates-container" style="display:flex; gap:1.25rem; margin-top:0.2rem; width:100%;">
+                            <div class="net-rate-item" style="font-family:'JetBrains Mono', monospace; font-size:0.82rem; display:flex; align-items:center; gap:0.3rem;">
+                                <i class="fa-solid fa-arrow-down" style="color:#34d399; font-size:0.7rem;"></i> <span id="netDownSpeed">0 B/s</span>
+                            </div>
+                            <div class="net-rate-item" style="font-family:'JetBrains Mono', monospace; font-size:0.82rem; display:flex; align-items:center; gap:0.3rem;">
+                                <i class="fa-solid fa-arrow-up" style="color:#60a5fa; font-size:0.7rem;"></i> <span id="netUpSpeed">0 B/s</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Disk Metric Widget -->
+                    <div class="metric-card">
+                        <div style="display:flex; justify-content:space-between; align-items:center; width:100%;">
+                            <span class="metric-label" style="display:flex; align-items:center; gap:0.4rem;">
+                                <i class="fa-solid fa-hard-drive metric-icon" style="font-size:0.9rem; margin:0; opacity:0.8;"></i>
+                                Disk Space
+                            </span>
+                            <span class="metric-value" id="metricDisk">—</span>
+                        </div>
+                        <div class="metric-value-sub" id="metricDiskDetails" style="margin-top:-0.2rem; font-family:'JetBrains Mono', monospace; font-size:0.7rem;"></div>
+                        <div class="metric-bar-track" style="width:100%;"><div class="metric-bar-fill" id="metricDiskBar"></div></div>
+                    </div>
+
+                    <!-- Uptime Metric Widget -->
+                    <div class="metric-card" style="padding: 0.8rem 1.2rem;">
+                        <div style="display:flex; justify-content:space-between; align-items:center; width:100%;">
+                            <span class="metric-label" style="display:flex; align-items:center; gap:0.4rem;">
+                                <i class="fa-solid fa-clock metric-icon" style="font-size:0.9rem; margin:0; opacity:0.8;"></i>
+                                Uptime
+                            </span>
+                            <span class="metric-value" id="metricUptime" style="font-size:0.82rem;">—</span>
                         </div>
                     </div>
                 </div>
-            </div>
-            <div class="metric-card">
-                <i class="fa-solid fa-hard-drive metric-icon"></i>
-                <div class="metric-info">
-                    <span class="metric-label">Disk</span>
-                    <span class="metric-value" id="metricDisk">—</span>
-                    <span class="metric-value-sub" id="metricDiskDetails"></span>
-                    <div class="metric-bar-track"><div class="metric-bar-fill" id="metricDiskBar"></div></div>
+                <div class="last-updated" id="lastUpdated" style="margin-top:0.5rem; text-align:center; font-size:0.75rem; color:var(--text-secondary);"></div>
+            </aside>
+
+            <!-- Main Content Area -->
+            <main class="main-content">
+                <!-- Search, Tabs and Actions -->
+                <div class="controls-row">
+                    <div class="tabs" id="categoryTabs">
+                        <button class="tab-btn active" data-category="all">All Services</button>
+                        <button class="tab-btn" data-category="media">Media & Cloud</button>
+                        <button class="tab-btn" data-category="downloads">Downloaders</button>
+                        <button class="tab-btn" data-category="system">Administration</button>
+                    </div>
+
+                    <div class="search-box">
+                        <i class="fa-solid fa-magnifying-glass search-icon"></i>
+                        <input type="text" id="searchInput" class="search-input" placeholder="Search services...">
+                    </div>
+
+                    <div class="action-buttons">
+                        <button class="btn-action" id="btnSettings" title="Manage Services"><i class="fa-solid fa-sliders"></i></button>
+                        <button class="btn-action" id="btnAddService" title="Add New Service"><i class="fa-solid fa-plus"></i></button>
+                    </div>
                 </div>
-            </div>
-            <div class="metric-card">
-                <i class="fa-solid fa-clock metric-icon"></i>
-                <div class="metric-info">
-                    <span class="metric-label">Uptime</span>
-                    <span class="metric-value" id="metricUptime">—</span>
+
+                <!-- Grid of Services -->
+                <div class="grid" id="servicesGrid">
+                    <!-- Dynamically populated -->
                 </div>
-            </div>
+
+                <!-- Footer Utilities -->
+                <footer style="margin-top: 2rem; padding: 1.5rem 0; border-top: 1px solid var(--card-border); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+                    <div class="utils-links">
+                        <a href="https://targat.zya.me/" target="_blank" class="util-link">
+                            <i class="fa-solid fa-car"></i> Vehicles
+                        </a>
+                    </div>
+
+                    <div style="display:flex; align-items:center; gap:1rem;">
+                        <div class="kbd-hint">
+                            <kbd>/</kbd> search &nbsp;
+                            <kbd>1</kbd>–<kbd>6</kbd> open &nbsp;
+                            <kbd>Esc</kbd> close
+                        </div>
+                        <button class="refresh-btn" id="refreshBtn" onclick="manualRefresh()" title="Refresh Status">
+                            <i class="fa-solid fa-rotate-right"></i> Refresh
+                        </button>
+                    </div>
+                </footer>
+            </main>
         </div>
-        <div class="last-updated" id="lastUpdated"></div>
-
-        <!-- Grid of Services -->
-        <div class="grid" id="servicesGrid">
-            <!-- Dynamically populated -->
-        </div>
-
-        <!-- Footer Utilities -->
-        <footer>
-            <div class="utils-links">
-                <a href="https://targat.zya.me/" target="_blank" class="util-link">
-                    <i class="fa-solid fa-car"></i> Vehicles
-                </a>
-            </div>
-
-            <div style="display:flex; align-items:center; gap:1rem;">
-                <div class="kbd-hint">
-                    <kbd>/</kbd> search &nbsp;
-                    <kbd>1</kbd>–<kbd>6</kbd> open &nbsp;
-                    <kbd>Esc</kbd> close
-                </div>
-                <button class="refresh-btn" id="refreshBtn" onclick="manualRefresh()" title="Refresh Status">
-                    <i class="fa-solid fa-rotate-right"></i> Refresh
-                </button>
-            </div>
-        </footer>
     </div>
 
     <!-- Password Auth Modal -->
@@ -1132,30 +1346,7 @@
         </div>
     </div>
 
-    <!-- Webcam Modal -->
-    <div class="modal" id="webcamModal">
-        <div class="modal-content" style="max-width: 700px; padding: 1.5rem;">
-            <div class="modal-header" style="margin-bottom: 1rem;">
-                <h3>Live Webcam Feed</h3>
-                <button class="modal-close" onclick="closeWebcamModal()">&times;</button>
-            </div>
-            <div style="width: 100%; border-radius: 14px; overflow: hidden; background: #000; display: flex; align-items: center; justify-content: center; position: relative; aspect-ratio: 4/3; border: 1px solid rgba(255,255,255,0.08);">
-                <img id="webcamStream" style="width: 100%; height: 100%; object-fit: contain;" src="" alt="Webcam Live Stream">
-                <audio id="webcamAudio" style="display:none;" autoplay muted></audio>
-                <div id="webcamLoading" style="position: absolute; color: #fff; font-size: 0.9rem; font-family: 'JetBrains Mono', monospace; display: flex; align-items: center; gap: 0.5rem;">
-                    <i class="fa-solid fa-spinner fa-spin"></i> INITIALIZING LIVE STREAM...
-                </div>
-            </div>
-            <div class="form-actions" style="margin-top: 1rem; padding-top: 1rem; display: flex; justify-content: space-between; align-items: center;">
-                <span id="webcamStatus" style="font-size: 0.78rem; font-family: 'JetBrains Mono', monospace; color: var(--text-secondary);">Exposed via Port 8085</span>
-                <div style="display: flex; gap: 0.75rem;">
-                    <button class="btn btn-secondary" onclick="toggleWebcamAudio()" id="webcamAudioBtn" style="display: flex; align-items: center; gap: 0.4rem;"><i class="fa-solid fa-volume-xmark"></i> Unmute</button>
-                    <button class="btn btn-secondary" onclick="closeWebcamModal()">Close Feed</button>
-                    <button class="btn btn-primary" onclick="toggleWebcamMode()" id="webcamModeBtn">Snapshot Mode</button>
-                </div>
-            </div>
-        </div>
-    </div>
+
 
     <!-- settings list Modal -->
     <div class="modal" id="settingsModal">
@@ -1335,6 +1526,7 @@
         // Initialize dashboard
         document.addEventListener("DOMContentLoaded", () => {
             loadServices();
+            updateWebcamWidgetState();
             setupEventListeners();
             checkNetStatus();
             setInterval(checkNetStatus, 25000);
@@ -1537,6 +1729,7 @@
             grid.innerHTML = "";
 
             const filtered = services.filter(service => {
+                if (service.id === "webcam") return false; // Filter out webcam card since it is natively embedded in the sidebar
                 const matchesCategory = activeCategory === "all" || service.category === activeCategory;
                 const matchesSearch = service.name.toLowerCase().includes(searchQuery) || 
                                       service.desc.toLowerCase().includes(searchQuery);
@@ -1846,6 +2039,7 @@
             if (hashed === PASSWORD_HASH) {
                 sessionStorage.setItem("dashboard_auth", "true");
                 closeModal("authModal");
+                updateWebcamWidgetState();
                 if (pendingAction) {
                     pendingAction();
                     pendingAction = null;
@@ -1856,69 +2050,150 @@
             }
         }
 
-        // ------------------ Live Webcam Stream System ------------------
+        // ------------------ Live Webcam Stream System (Embedded Sidebar Card) ------------------
         let webcamMode = "stream"; // stream or snapshot
+        let isCameraStreaming = false;
 
-        function openWebcamModal() {
-            // Require password verification to view the webcam feed!
-            requireAuth(() => {
-                const modal = document.getElementById("webcamModal");
-                const img = document.getElementById("webcamStream");
-                const audio = document.getElementById("webcamAudio");
-                const loading = document.getElementById("webcamLoading");
-                const modeBtn = document.getElementById("webcamModeBtn");
-                const audioBtn = document.getElementById("webcamAudioBtn");
+        async function handleSidebarAuth(event) {
+            event.preventDefault();
+            const passwordInput = document.getElementById("sidebarPassword").value;
+            const hashed = await sha256(passwordInput);
+            
+            if (hashed === PASSWORD_HASH) {
+                sessionStorage.setItem("dashboard_auth", "true");
+                updateWebcamWidgetState();
                 
-                webcamMode = "stream";
-                modeBtn.textContent = "Snapshot Mode";
-                modeBtn.style.display = "inline-block";
-                audio.muted = true;
-                audioBtn.innerHTML = `<i class="fa-solid fa-volume-xmark"></i> Unmute`;
-                audioBtn.style.display = "inline-block";
-                
-                loading.style.display = "flex";
-                loading.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> INITIALIZING LIVE STREAM...`;
-                img.style.opacity = "0.2";
-                
-                img.onload = () => {
-                    loading.style.display = "none";
-                    img.style.opacity = "1";
-                };
-                
-                // Append the security token to authorize the request on the Python side
-                const token = PASSWORD_HASH;
-                
-                img.onerror = () => {
-                    if (modal.classList.contains("active")) {
-                        loading.innerHTML = `<i class="fa-solid fa-triangle-exclamation" style="color: var(--status-offline);"></i> STREAM ERROR. RETRYING...`;
-                        setTimeout(() => {
-                            if (modal.classList.contains("active")) {
-                                img.src = (webcamMode === "stream" ? "https://9.1234.al/stream" : "https://9.1234.al/snapshot") + "?token=" + token + "&v=" + Date.now();
-                            }
-                        }, 3000);
-                    }
-                };
-
-                img.src = "https://9.1234.al/stream?token=" + token + "&v=" + Date.now();
-                audio.src = "https://9.1234.al/audio?token=" + token + "&v=" + Date.now();
-                audio.load();
-                
-                modal.classList.add("active");
-            });
+                // Also trigger any pending actions
+                if (pendingAction) {
+                    pendingAction();
+                    pendingAction = null;
+                }
+            } else {
+                const err = document.getElementById("sidebarAuthError");
+                if (err) err.style.display = "block";
+                const pwd = document.getElementById("sidebarPassword");
+                if (pwd) pwd.select();
+            }
         }
 
-        function closeWebcamModal() {
-            const modal = document.getElementById("webcamModal");
+        function updateWebcamWidgetState() {
+            const container = document.getElementById("sidebarCameraCard");
+            if (!container) return;
+
+            const isAuth = sessionStorage.getItem("dashboard_auth") === "true";
+            
+            // If not authenticated, render LOCKED state
+            if (!isAuth) {
+                isCameraStreaming = false;
+                container.innerHTML = `
+                    <div class="camera-overlay">
+                        <i class="fa-solid fa-lock lock-icon"></i>
+                        <h4>Telemetry Console Locked</h4>
+                        <p>Feed is encrypted. Enter Admin Password to unlock console & feeds.</p>
+                        <form class="lock-form" onsubmit="handleSidebarAuth(event)">
+                            <input type="password" id="sidebarPassword" class="form-control" placeholder="Admin Password" required style="width:100%; border-radius:10px; border:1px solid var(--card-border); background:rgba(255,255,255,0.03); color:#fff; padding:0.5rem; text-align:center; font-size:0.8rem; outline:none; margin-bottom:0.4rem;">
+                            <button type="submit" class="btn btn-primary" style="width:100%; border-radius:10px; font-size:0.8rem; padding:0.5rem;">Unlock Console</button>
+                            <div id="sidebarAuthError" style="color:var(--danger); font-size:0.75rem; margin-top:0.25rem; display:none;">Incorrect password.</div>
+                        </form>
+                    </div>
+                    <div class="camera-card-inner">
+                        <i class="fa-solid fa-video-slash" style="font-size:2.5rem; color:var(--text-secondary); opacity:0.15;"></i>
+                    </div>
+                `;
+                return;
+            }
+
+            // If authenticated, check if it's currently actively streaming
+            if (isCameraStreaming) {
+                return;
+            }
+
+            // Otherwise, render STANDBY state
+            container.innerHTML = `
+                <div class="camera-overlay" style="backdrop-filter:none; background:rgba(8,9,13,0.55);">
+                    <i class="fa-solid fa-video-slash" style="font-size:2.2rem; color:var(--text-secondary); margin-bottom:0.6rem; opacity:0.7;"></i>
+                    <h4 style="margin-bottom:0.3rem; font-family:'Outfit', sans-serif;">Camera Standby</h4>
+                    <p style="margin-bottom:1rem; padding:0 0.5rem;">Secure feed is offline. Click to connect webcam and microphone stream.</p>
+                    <button class="btn btn-primary" onclick="connectWebcamStream()" style="padding:0.45rem 1rem; font-size:0.8rem; border-radius:10px;"><i class="fa-solid fa-play"></i> Connect Camera</button>
+                </div>
+                <div class="camera-card-inner">
+                </div>
+            `;
+        }
+
+        function connectWebcamStream() {
+            const container = document.getElementById("sidebarCameraCard");
+            if (!container) return;
+
+            isCameraStreaming = true;
+            webcamMode = "stream";
+
+            container.innerHTML = `
+                <div class="camera-card-inner">
+                    <img id="webcamStream" style="width: 100%; height: 100%; object-fit: contain; opacity: 0.2; transition: opacity 0.3s ease;" src="" alt="Webcam Live Stream">
+                    <audio id="webcamAudio" style="display:none;" autoplay muted></audio>
+                    <div id="webcamLoading" style="position: absolute; color: #fff; font-size: 0.76rem; font-family: 'JetBrains Mono', monospace; display: flex; align-items: center; gap: 0.4rem; z-index: 5;">
+                        <i class="fa-solid fa-spinner fa-spin"></i> INITIALIZING STREAM...
+                    </div>
+                </div>
+                <div class="camera-control-bar">
+                    <span id="webcamStatus" style="opacity:0.65; font-size:0.65rem; font-family:'JetBrains Mono', monospace;">Port 8085</span>
+                    <div class="btn-group">
+                        <button class="btn-mini" onclick="toggleWebcamAudio()" id="webcamAudioBtn" style="display: flex; align-items: center; gap: 0.3rem;"><i class="fa-solid fa-volume-xmark"></i> Unmute</button>
+                        <button class="btn-mini" onclick="toggleWebcamMode()" id="webcamModeBtn">Snapshot</button>
+                        <button class="btn-mini btn-mini-danger" onclick="disconnectWebcamStream()" style="display: flex; align-items: center; gap: 0.3rem;"><i class="fa-solid fa-power-off"></i> Close</button>
+                    </div>
+                </div>
+            `;
+
             const img = document.getElementById("webcamStream");
             const audio = document.getElementById("webcamAudio");
-            
-            // Terminate active HTTP streams by clearing sources
-            img.onload = null;
-            img.onerror = null;
-            img.src = "";
-            audio.src = "";
+            const loading = document.getElementById("webcamLoading");
+            const modeBtn = document.getElementById("webcamModeBtn");
+            const audioBtn = document.getElementById("webcamAudioBtn");
+
+            audio.muted = true;
+            audioBtn.innerHTML = `<i class="fa-solid fa-volume-xmark"></i> Unmute`;
+
+            img.onload = () => {
+                loading.style.display = "none";
+                img.style.opacity = "1";
+            };
+
+            const token = PASSWORD_HASH;
+
+            img.onerror = () => {
+                if (isCameraStreaming) {
+                    loading.innerHTML = `<i class="fa-solid fa-triangle-exclamation" style="color: var(--status-offline);"></i> STREAM ERROR. RETRYING...`;
+                    setTimeout(() => {
+                        if (isCameraStreaming) {
+                            img.src = (webcamMode === "stream" ? "https://9.1234.al/stream" : "https://9.1234.al/snapshot") + "?token=" + token + "&v=" + Date.now();
+                        }
+                    }, 3000);
+                }
+            };
+
+            img.src = "https://9.1234.al/stream?token=" + token + "&v=" + Date.now();
+            audio.src = "https://9.1234.al/audio?token=" + token + "&v=" + Date.now();
             audio.load();
-            modal.classList.remove("active");
+        }
+
+        function disconnectWebcamStream() {
+            isCameraStreaming = false;
+            
+            const img = document.getElementById("webcamStream");
+            const audio = document.getElementById("webcamAudio");
+            if (img) {
+                img.onload = null;
+                img.onerror = null;
+                img.src = "";
+            }
+            if (audio) {
+                audio.src = "";
+                audio.load();
+            }
+
+            updateWebcamWidgetState();
         }
 
         // Toggle between live MJPEG streaming and low-resource single snapshots
@@ -1929,6 +2204,8 @@
             const modeBtn = document.getElementById("webcamModeBtn");
             const audioBtn = document.getElementById("webcamAudioBtn");
             
+            if (!img || !loading) return;
+
             loading.style.display = "flex";
             loading.innerHTML = webcamMode === "stream" ? `<i class="fa-solid fa-spinner fa-spin"></i> LOADING SNAPSHOT...` : `<i class="fa-solid fa-spinner fa-spin"></i> INITIALIZING LIVE STREAM...`;
             img.style.opacity = "0.2";
@@ -1942,7 +2219,7 @@
                 // Stop audio in snapshot mode
                 audio.src = "";
                 audio.load();
-                audioBtn.style.display = "none";
+                if (audioBtn) audioBtn.style.display = "none";
             } else {
                 webcamMode = "stream";
                 modeBtn.textContent = "Snapshot Mode";
@@ -1952,8 +2229,10 @@
                 audio.src = "https://9.1234.al/audio?token=" + token + "&v=" + Date.now();
                 audio.load();
                 audio.muted = true;
-                audioBtn.innerHTML = `<i class="fa-solid fa-volume-xmark"></i> Unmute`;
-                audioBtn.style.display = "inline-block";
+                if (audioBtn) {
+                    audioBtn.innerHTML = `<i class="fa-solid fa-volume-xmark"></i> Unmute`;
+                    audioBtn.style.display = "inline-block";
+                }
             }
         }
 
@@ -1961,7 +2240,8 @@
         function toggleWebcamAudio() {
             const audio = document.getElementById("webcamAudio");
             const btn = document.getElementById("webcamAudioBtn");
-            
+            if (!audio || !btn) return;
+
             if (audio.muted) {
                 audio.muted = false;
                 audio.play().catch(e => console.log("Play failed:", e));
