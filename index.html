@@ -130,7 +130,7 @@
         /* --- DASHBOARD WRAPPER --- */
         .dashboard-container {
             width: 100%;
-            max-width: 1440px;
+            max-width: 100%;
             z-index: 1;
             display: flex;
             flex-direction: column;
@@ -145,6 +145,12 @@
             gap: 1.25rem;
             width: 100%;
             position: relative;
+        }
+
+        @media (min-width: 1200px) {
+            .bento-grid {
+                grid-template-columns: repeat(5, 1fr);
+            }
         }
 
         /* --- BENTO CARDS --- */
@@ -1477,8 +1483,8 @@
                 </div>
             </div>
 
-            <!-- 6. TELEMETRY: NETWORK SPEED (Default span-1-1) -->
-            <div class="bento-card span-1-1" id="widget-network">
+            <!-- 6. TELEMETRY: NETWORK SPEED (Default span-2-1) -->
+            <div class="bento-card span-2-1" id="widget-network">
                 <div class="edit-controls-bar">
                     <div class="drag-handle-mini" title="Drag to reorder"><i data-lucide="grip-vertical"></i></div>
                     <select class="size-select" title="Change card size">
@@ -1565,8 +1571,8 @@
                 </div>
             </div>
 
-            <!-- 8. SYSTEM EVENT LOG WIDGET (Default span-1-2) -->
-            <div class="bento-card span-1-2 log-widget" id="widget-log">
+            <!-- 8. SYSTEM EVENT LOG WIDGET (Default span-3-2) -->
+            <div class="bento-card span-3-2 log-widget" id="widget-log">
                 <div class="edit-controls-bar">
                     <div class="drag-handle-mini" title="Drag to reorder"><i data-lucide="grip-vertical"></i></div>
                     <select class="size-select" title="Change card size">
@@ -1931,7 +1937,29 @@
         // --- GRID LAYOUT LOGIC (LOAD / SAVE) ---
         function getSavedLayout() {
             const local = localStorage.getItem("dashboard_grid_layout");
-            return local ? JSON.parse(local) : {};
+            if (local) {
+                return JSON.parse(local);
+            }
+            // Default layout matching the user's screenshot
+            return {
+                "widget-header": { span: "span-3-1", order: 1 },
+                "widget-auth-lock": { span: "span-1-2", order: 2 },
+                "widget-ram": { span: "span-1-1", order: 3 },
+                "widget-network": { span: "span-2-1", order: 4 },
+                "widget-cpu": { span: "span-1-1", order: 5 },
+                "widget-storage": { span: "span-1-1", order: 6 },
+                "widget-webcam": { span: "span-2-2", order: 7 },
+                "widget-log": { span: "span-3-2", order: 8 },
+                "service-s-flood": { span: "span-1-1", order: 9 },
+                "service-s-immich": { span: "span-1-1", order: 10 },
+                "service-s-cockpit": { span: "span-1-1", order: 11 },
+                "service-s-beszel": { span: "span-1-1", order: 12 },
+                "service-s-alist": { span: "span-1-1", order: 13 },
+                "service-s-plex": { span: "span-1-1", order: 14 },
+                "service-s-jellyfin": { span: "span-1-1", order: 15 },
+                "service-s-crafty": { span: "span-1-1", order: 16 },
+                "service-s-vaultwarden": { span: "span-1-1", order: 17 }
+            };
         }
 
         function loadGridLayout() {
