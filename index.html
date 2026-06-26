@@ -70,7 +70,7 @@
 
         .container {
             width: 100%;
-            max-width: 1380px;
+            max-width: 100%; /* Utilizes full screen */
             z-index: 1;
             display: flex;
             flex-direction: column;
@@ -273,135 +273,28 @@
             transform: scale(1.03);
         }
 
-        /* Metric Widgets Strip */
-        .metrics-bar {
+        /* Bento Grid Core Layout */
+        .bento-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 1rem;
-            margin-bottom: 2.2rem;
-        }
-
-        .metric-card {
-            background: rgba(10, 11, 16, 0.45);
-            border: 1px solid var(--card-border);
-            border-radius: 18px;
-            padding: 1rem 1.2rem;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 1rem;
-            backdrop-filter: blur(16px);
-            transition: all 0.3s ease;
-        }
-
-        .metric-card:hover {
-            border-color: rgba(255, 255, 255, 0.15);
-            background: rgba(14, 15, 22, 0.55);
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
-        }
-
-        .metric-info {
-            display: flex;
-            flex-direction: column;
-            gap: 0.35rem;
-            flex-grow: 1;
-            min-width: 0;
-        }
-
-        .metric-icon {
-            font-size: 1.15rem;
-            color: var(--text-secondary);
-            width: 24px;
-            text-align: center;
-            flex-shrink: 0;
-            opacity: 0.7;
-        }
-
-        .metric-label {
-            font-size: 0.68rem;
-            font-weight: 700;
-            letter-spacing: 0.08em;
-            text-transform: uppercase;
-            color: var(--text-secondary);
-        }
-
-        .metric-value {
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 0.88rem;
-            font-weight: 600;
-            color: var(--text-primary);
-        }
-
-        .metric-value-sub {
-            font-size: 0.72rem;
-            color: var(--text-secondary);
-            font-weight: 500;
-            margin-top: 0.1rem;
-        }
-
-        .metric-bar-track {
-            height: 3px;
-            background: rgba(255, 255, 255, 0.04);
-            border-radius: 2px;
-            overflow: hidden;
-            margin-top: 0.2rem;
-        }
-
-        .metric-bar-fill {
-            height: 100%;
-            border-radius: 2px;
-            background: rgba(255, 255, 255, 0.4);
-            transition: width 0.8s cubic-bezier(0.16, 1, 0.3, 1);
-            width: 0%;
-        }
-
-        .metric-bar-fill.warn {
-            background: var(--warning);
-            opacity: 0.8;
-        }
-
-        .metric-bar-fill.danger {
-            background: var(--danger);
-            opacity: 0.8;
-        }
-
-        .metric-sparkline {
-            width: 85px;
-            height: 30px;
-            flex-shrink: 0;
-        }
-
-        /* Network speed label detailed layouts */
-        .net-rates-container {
-            display: flex;
-            flex-direction: column;
-            gap: 0.15rem;
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 0.74rem;
-        }
-
-        .net-rate-item {
-            display: flex;
-            align-items: center;
-            gap: 0.4rem;
-            color: var(--text-secondary);
-        }
-
-        .net-rate-item i {
-            font-size: 0.65rem;
-            opacity: 0.6;
-        }
-
-        /* Services Grid */
-        .grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            grid-auto-rows: minmax(170px, auto);
             gap: 1.5rem;
+            grid-auto-flow: dense;
             margin-bottom: 3.5rem;
             flex-grow: 1;
         }
 
-        .card {
+        /* Responsive stack for smaller devices */
+        @media (max-width: 600px) {
+            .bento-grid {
+                grid-template-columns: 1fr;
+                grid-auto-rows: auto;
+                gap: 1.2rem;
+            }
+        }
+
+        /* Premium Unified Bento Card Foundation */
+        .card, .metric-card, .sidebar-card {
             background: var(--bg-card);
             backdrop-filter: blur(20px) saturate(180%);
             -webkit-backdrop-filter: blur(20px) saturate(180%);
@@ -413,6 +306,7 @@
             transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
             display: flex;
             flex-direction: column;
+            justify-content: space-between;
             position: relative;
             overflow: hidden;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
@@ -432,11 +326,53 @@
         }
 
         .card:hover {
-            transform: translateY(-5px);
+            transform: translateY(-4px);
             border-color: var(--card-border-glow);
             background: rgba(14, 15, 22, 0.6);
             box-shadow: 0 15px 40px rgba(0, 0, 0, 0.5), 
                         0 0 20px rgba(255, 255, 255, 0.02);
+        }
+
+        .metric-card {
+            justify-content: space-between;
+            gap: 0.5rem;
+        }
+
+        .metric-card:hover {
+            border-color: rgba(255, 255, 255, 0.15);
+            background: rgba(14, 15, 22, 0.55);
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Specific Bento spans */
+        .bento-webcam {
+            grid-column: span 2;
+            grid-row: span 2;
+            min-height: 356px;
+            padding: 0; /* Camera handles internal layout padding */
+        }
+        .bento-cpu {
+            grid-column: span 2;
+            grid-row: span 1;
+        }
+        .bento-ram {
+            grid-column: span 2;
+            grid-row: span 1;
+        }
+        
+        .card-wide {
+            grid-column: span 2;
+        }
+
+        /* Mobile overrides to stack everything */
+        @media (max-width: 600px) {
+            .bento-webcam, .bento-cpu, .bento-ram, .card-wide {
+                grid-column: span 1;
+            }
+            .bento-webcam {
+                min-height: auto;
+                aspect-ratio: 4/3;
+            }
         }
 
         /* Keyboard Selection Highlight */
@@ -569,6 +505,81 @@
             gap: 0.35rem;
         }
 
+        /* Telemetry sub-elements */
+        .metric-label {
+            font-size: 0.68rem;
+            font-weight: 700;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: var(--text-secondary);
+        }
+
+        .metric-value {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.88rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .metric-value-sub {
+            font-size: 0.72rem;
+            color: var(--text-secondary);
+            font-weight: 500;
+            margin-top: 0.1rem;
+        }
+
+        .metric-bar-track {
+            height: 4px;
+            background: rgba(255, 255, 255, 0.04);
+            border-radius: 2px;
+            overflow: hidden;
+        }
+
+        .metric-bar-fill {
+            height: 100%;
+            border-radius: 2px;
+            background: rgba(255, 255, 255, 0.4);
+            transition: width 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+            width: 0%;
+        }
+
+        .metric-bar-fill.warn {
+            background: var(--warning);
+            opacity: 0.8;
+        }
+
+        .metric-bar-fill.danger {
+            background: var(--danger);
+            opacity: 0.8;
+        }
+
+        .metric-sparkline {
+            width: 100%;
+            height: 50px;
+            flex-shrink: 0;
+        }
+
+        /* Network speed rates styling */
+        .net-rates-container {
+            display: flex;
+            flex-direction: column;
+            gap: 0.15rem;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.74rem;
+        }
+
+        .net-rate-item {
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            color: var(--text-secondary);
+        }
+
+        .net-rate-item i {
+            font-size: 0.65rem;
+            opacity: 0.6;
+        }
+
         /* Footer Utilities */
         footer {
             display: flex;
@@ -623,6 +634,134 @@
             color: var(--text-primary);
             background: rgba(255, 255, 255, 0.06);
             border-color: rgba(255, 255, 255, 0.15);
+        }
+
+        /* Dedicated Camera Widget styling */
+        .camera-card {
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            width: 100%;
+            height: 100%;
+        }
+
+        .camera-card-inner {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            background: #000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-grow: 1;
+        }
+
+        .camera-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            backdrop-filter: blur(20px) saturate(140%);
+            -webkit-backdrop-filter: blur(20px) saturate(140%);
+            background: rgba(8, 9, 13, 0.75);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 1.2rem;
+            z-index: 10;
+            text-align: center;
+            transition: all 0.4s ease;
+        }
+
+        .camera-overlay .lock-icon {
+            font-size: 2rem;
+            color: var(--text-secondary);
+            margin-bottom: 0.8rem;
+            opacity: 0.8;
+        }
+
+        .camera-overlay h4 {
+            font-size: 0.95rem;
+            font-weight: 700;
+            margin-bottom: 0.4rem;
+            color: var(--text-primary);
+            font-family: 'Outfit', sans-serif;
+        }
+
+        .camera-overlay p {
+            font-size: 0.74rem;
+            color: var(--text-secondary);
+            margin-bottom: 1rem;
+            line-height: 1.45;
+        }
+
+        .camera-overlay .lock-form {
+            display: flex;
+            flex-direction: column;
+            gap: 0.6rem;
+            width: 100%;
+            max-width: 220px;
+        }
+
+        .camera-overlay .lock-form .form-control {
+            text-align: center;
+            padding: 0.5rem;
+            font-size: 0.82rem;
+        }
+
+        .camera-overlay .lock-form .btn {
+            padding: 0.5rem;
+            font-size: 0.82rem;
+            font-weight: 700;
+            letter-spacing: 0.05em;
+        }
+
+        .camera-control-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(8, 9, 13, 0.85);
+            border-top: 1px solid var(--card-border);
+            padding: 0.6rem 0.8rem;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.72rem;
+            z-index: 11;
+            width: 100%;
+        }
+
+        .camera-control-bar .btn-group {
+            display: flex;
+            gap: 0.4rem;
+        }
+
+        .camera-control-bar .btn-mini {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: var(--text-primary);
+            padding: 0.3rem 0.5rem;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.7rem;
+            font-weight: 600;
+            transition: all 0.2s ease;
+        }
+
+        .camera-control-bar .btn-mini:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: rgba(255, 255, 255, 0.2);
+        }
+
+        .camera-control-bar .btn-mini.btn-mini-danger {
+            background: rgba(239, 68, 68, 0.15);
+            border-color: rgba(239, 68, 68, 0.3);
+            color: #f87171;
+        }
+
+        .camera-control-bar .btn-mini.btn-mini-danger:hover {
+            background: rgba(239, 68, 68, 0.25);
+            border-color: rgba(239, 68, 68, 0.4);
         }
 
         /* Redirect overlay screen */
@@ -931,11 +1070,11 @@
 
         .last-updated {
             font-size: 0.7rem;
-            color: rgba(255,255,255,0.15);
-            text-align: right;
-            margin-bottom: 0.5rem;
-            margin-top: -1.2rem;
+            color: var(--text-secondary);
+            text-align: center;
+            margin-top: 1.5rem;
             font-family: 'JetBrains Mono', monospace;
+            opacity: 0.8;
         }
 
         @keyframes pulseGlow {
@@ -947,221 +1086,6 @@
             0% { opacity: 1; transform: scale(1); }
             50% { opacity: 0.5; transform: scale(1.15); }
             100% { opacity: 1; transform: scale(1); }
-        }
-
-        /* Two-Column split dashboard layout */
-        .dashboard-layout {
-            display: grid;
-            grid-template-columns: 320px 1fr;
-            gap: 2rem;
-            align-items: start;
-            margin-bottom: 3.5rem;
-            flex-grow: 1;
-        }
-
-        .sidebar-panel {
-            display: flex;
-            flex-direction: column;
-            gap: 1.25rem;
-            position: sticky;
-            top: 2.5rem;
-        }
-
-        .sidebar-panel .metric-card {
-            flex-direction: column;
-            align-items: stretch;
-            gap: 0.6rem;
-            padding: 1.2rem 1.3rem;
-            background: rgba(10, 11, 16, 0.45);
-        }
-
-        .main-content {
-            display: flex;
-            flex-direction: column;
-            min-width: 0;
-        }
-
-        /* Sidebar widget cards */
-        .sidebar-card {
-            background: rgba(10, 11, 16, 0.45);
-            border: 1px solid var(--card-border);
-            border-radius: 20px;
-            backdrop-filter: blur(20px) saturate(180%);
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
-            overflow: hidden;
-            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-
-        /* Dedicated Camera Widget styling */
-        .camera-card {
-            display: flex;
-            flex-direction: column;
-            position: relative;
-            aspect-ratio: 4/3;
-            width: 100%;
-        }
-
-        .camera-card-inner {
-            width: 100%;
-            height: 100%;
-            position: relative;
-            background: #000;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .camera-overlay {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            backdrop-filter: blur(20px) saturate(140%);
-            -webkit-backdrop-filter: blur(20px) saturate(140%);
-            background: rgba(8, 9, 13, 0.75);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            padding: 1.2rem;
-            z-index: 10;
-            text-align: center;
-            transition: all 0.4s ease;
-        }
-
-        .camera-overlay .lock-icon {
-            font-size: 2rem;
-            color: var(--text-secondary);
-            margin-bottom: 0.8rem;
-            opacity: 0.8;
-        }
-
-        .camera-overlay h4 {
-            font-size: 0.95rem;
-            font-weight: 700;
-            margin-bottom: 0.4rem;
-            color: var(--text-primary);
-            font-family: 'Outfit', sans-serif;
-        }
-
-        .camera-overlay p {
-            font-size: 0.74rem;
-            color: var(--text-secondary);
-            margin-bottom: 1rem;
-            line-height: 1.45;
-        }
-
-        .camera-overlay .lock-form {
-            display: flex;
-            flex-direction: column;
-            gap: 0.6rem;
-            width: 100%;
-            max-width: 220px;
-        }
-
-        .camera-overlay .lock-form .form-control {
-            text-align: center;
-            padding: 0.5rem;
-            font-size: 0.82rem;
-        }
-
-        .camera-overlay .lock-form .btn {
-            padding: 0.5rem;
-            font-size: 0.82rem;
-            font-weight: 700;
-            letter-spacing: 0.05em;
-        }
-
-        .camera-control-bar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background: rgba(8, 9, 13, 0.85);
-            border-top: 1px solid var(--card-border);
-            padding: 0.6rem 0.8rem;
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 0.72rem;
-            z-index: 11;
-        }
-
-        .camera-control-bar .btn-group {
-            display: flex;
-            gap: 0.4rem;
-        }
-
-        .camera-control-bar .btn-mini {
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            color: var(--text-primary);
-            padding: 0.3rem 0.5rem;
-            border-radius: 6px;
-            cursor: pointer;
-            font-size: 0.7rem;
-            font-weight: 600;
-            transition: all 0.2s ease;
-        }
-
-        .camera-control-bar .btn-mini:hover {
-            background: rgba(255, 255, 255, 0.1);
-            border-color: rgba(255, 255, 255, 0.2);
-        }
-
-        .camera-control-bar .btn-mini.btn-mini-danger {
-            background: rgba(239, 68, 68, 0.15);
-            border-color: rgba(239, 68, 68, 0.3);
-            color: #f87171;
-        }
-
-        .camera-control-bar .btn-mini.btn-mini-danger:hover {
-            background: rgba(239, 68, 68, 0.25);
-            border-color: rgba(239, 68, 68, 0.4);
-        }
-
-        @media (max-width: 950px) {
-            .dashboard-layout {
-                grid-template-columns: 1fr;
-                gap: 1.5rem;
-            }
-            .sidebar-panel {
-                position: static;
-            }
-        }
-
-        @media (max-width: 768px) {
-            body {
-                padding: 1.5rem 1rem;
-            }
-            header {
-                flex-direction: column;
-                align-items: flex-start;
-                gap: 1.25rem;
-                margin-bottom: 2rem;
-            }
-            .status-section {
-                width: 100%;
-                justify-content: space-between;
-            }
-            .controls-row {
-                flex-direction: column;
-                align-items: stretch;
-                border-radius: 16px;
-                padding: 1rem;
-            }
-            .search-box {
-                max-width: 100%;
-            }
-            .metrics-bar {
-                grid-template-columns: 1fr;
-            }
-            .grid {
-                grid-template-columns: 1fr;
-            }
-            footer {
-                flex-direction: column;
-                align-items: flex-start;
-                gap: 1.25rem;
-            }
         }
     </style>
 </head>
@@ -1190,139 +1114,136 @@
             </div>
         </header>
 
-        <div class="dashboard-layout">
-            <!-- Sidebar Panel (Camera & Telemetry) -->
-            <aside class="sidebar-panel">
-                <!-- Webcam Card -->
-                <div class="sidebar-card camera-card" id="sidebarCameraCard">
-                    <!-- Standby / Streaming will be dynamically generated by JS -->
-                </div>
-                
-                <!-- Vertical Telemetry Stack -->
-                <div class="telemetry-stack">
-                    <!-- CPU Metric Widget -->
-                    <div class="metric-card">
-                        <div style="display:flex; justify-content:space-between; align-items:center; width:100%;">
-                            <span class="metric-label" style="display:flex; align-items:center; gap:0.4rem;">
-                                <i class="fa-solid fa-microchip metric-icon" style="font-size:0.9rem; margin:0; opacity:0.8;"></i>
-                                CPU
-                            </span>
-                            <span class="metric-value">
-                                <span id="metricCpu">—</span> 
-                                <span style="font-size:0.7rem; opacity:0.6; font-weight:normal;" id="metricCpuTemp"></span>
-                            </span>
-                        </div>
-                        <div class="metric-bar-track" style="width:100%;"><div class="metric-bar-fill" id="metricCpuBar"></div></div>
-                        <canvas class="metric-sparkline" id="cpuSparkline" width="280" height="40" style="width:100%; height:40px; margin-top:0.25rem;"></canvas>
-                    </div>
+        <!-- Search, Tabs and Actions -->
+        <div class="controls-row">
+            <div class="tabs" id="categoryTabs">
+                <button class="tab-btn active" data-category="all">All Services</button>
+                <button class="tab-btn" data-category="media">Media & Cloud</button>
+                <button class="tab-btn" data-category="downloads">Downloaders</button>
+                <button class="tab-btn" data-category="system">Administration</button>
+            </div>
 
-                    <!-- RAM Metric Widget -->
-                    <div class="metric-card">
-                        <div style="display:flex; justify-content:space-between; align-items:center; width:100%;">
-                            <span class="metric-label" style="display:flex; align-items:center; gap:0.4rem;">
-                                <i class="fa-solid fa-memory metric-icon" style="font-size:0.9rem; margin:0; opacity:0.8;"></i>
-                                RAM
-                            </span>
-                            <span class="metric-value" id="metricRam">—</span>
-                        </div>
-                        <div class="metric-value-sub" id="metricRamDetails" style="margin-top:-0.2rem; font-family:'JetBrains Mono', monospace; font-size:0.7rem;"></div>
-                        <div class="metric-bar-track" style="width:100%;"><div class="metric-bar-fill" id="metricRamBar"></div></div>
-                        <canvas class="metric-sparkline" id="ramSparkline" width="280" height="40" style="width:100%; height:40px; margin-top:0.25rem;"></canvas>
-                    </div>
+            <div class="search-box">
+                <i class="fa-solid fa-magnifying-glass search-icon"></i>
+                <input type="text" id="searchInput" class="search-input" placeholder="Search services...">
+            </div>
 
-                    <!-- Network Metric Widget -->
-                    <div class="metric-card">
-                        <div style="display:flex; justify-content:space-between; align-items:center; width:100%;">
-                            <span class="metric-label" style="display:flex; align-items:center; gap:0.4rem;">
-                                <i class="fa-solid fa-network-wired metric-icon" style="font-size:0.9rem; margin:0; opacity:0.8;"></i>
-                                Network
-                            </span>
-                        </div>
-                        <div class="net-rates-container" style="display:flex; gap:1.25rem; margin-top:0.2rem; width:100%;">
-                            <div class="net-rate-item" style="font-family:'JetBrains Mono', monospace; font-size:0.82rem; display:flex; align-items:center; gap:0.3rem;">
-                                <i class="fa-solid fa-arrow-down" style="color:#34d399; font-size:0.7rem;"></i> <span id="netDownSpeed">0 B/s</span>
-                            </div>
-                            <div class="net-rate-item" style="font-family:'JetBrains Mono', monospace; font-size:0.82rem; display:flex; align-items:center; gap:0.3rem;">
-                                <i class="fa-solid fa-arrow-up" style="color:#60a5fa; font-size:0.7rem;"></i> <span id="netUpSpeed">0 B/s</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Disk Metric Widget -->
-                    <div class="metric-card">
-                        <div style="display:flex; justify-content:space-between; align-items:center; width:100%;">
-                            <span class="metric-label" style="display:flex; align-items:center; gap:0.4rem;">
-                                <i class="fa-solid fa-hard-drive metric-icon" style="font-size:0.9rem; margin:0; opacity:0.8;"></i>
-                                Disk Space
-                            </span>
-                            <span class="metric-value" id="metricDisk">—</span>
-                        </div>
-                        <div class="metric-value-sub" id="metricDiskDetails" style="margin-top:-0.2rem; font-family:'JetBrains Mono', monospace; font-size:0.7rem;"></div>
-                        <div class="metric-bar-track" style="width:100%;"><div class="metric-bar-fill" id="metricDiskBar"></div></div>
-                    </div>
-
-                    <!-- Uptime Metric Widget -->
-                    <div class="metric-card" style="padding: 0.8rem 1.2rem;">
-                        <div style="display:flex; justify-content:space-between; align-items:center; width:100%;">
-                            <span class="metric-label" style="display:flex; align-items:center; gap:0.4rem;">
-                                <i class="fa-solid fa-clock metric-icon" style="font-size:0.9rem; margin:0; opacity:0.8;"></i>
-                                Uptime
-                            </span>
-                            <span class="metric-value" id="metricUptime" style="font-size:0.82rem;">—</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="last-updated" id="lastUpdated" style="margin-top:0.5rem; text-align:center; font-size:0.75rem; color:var(--text-secondary);"></div>
-            </aside>
-
-            <!-- Main Content Area -->
-            <main class="main-content">
-                <!-- Search, Tabs and Actions -->
-                <div class="controls-row">
-                    <div class="tabs" id="categoryTabs">
-                        <button class="tab-btn active" data-category="all">All Services</button>
-                        <button class="tab-btn" data-category="media">Media & Cloud</button>
-                        <button class="tab-btn" data-category="downloads">Downloaders</button>
-                        <button class="tab-btn" data-category="system">Administration</button>
-                    </div>
-
-                    <div class="search-box">
-                        <i class="fa-solid fa-magnifying-glass search-icon"></i>
-                        <input type="text" id="searchInput" class="search-input" placeholder="Search services...">
-                    </div>
-
-                    <div class="action-buttons">
-                        <button class="btn-action" id="btnSettings" title="Manage Services"><i class="fa-solid fa-sliders"></i></button>
-                        <button class="btn-action" id="btnAddService" title="Add New Service"><i class="fa-solid fa-plus"></i></button>
-                    </div>
-                </div>
-
-                <!-- Grid of Services -->
-                <div class="grid" id="servicesGrid">
-                    <!-- Dynamically populated -->
-                </div>
-
-                <!-- Footer Utilities -->
-                <footer style="margin-top: 2rem; padding: 1.5rem 0; border-top: 1px solid var(--card-border); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
-                    <div class="utils-links">
-                        <a href="https://targat.zya.me/" target="_blank" class="util-link">
-                            <i class="fa-solid fa-car"></i> Vehicles
-                        </a>
-                    </div>
-
-                    <div style="display:flex; align-items:center; gap:1rem;">
-                        <div class="kbd-hint">
-                            <kbd>/</kbd> search &nbsp;
-                            <kbd>1</kbd>–<kbd>6</kbd> open &nbsp;
-                            <kbd>Esc</kbd> close
-                        </div>
-                        <button class="refresh-btn" id="refreshBtn" onclick="manualRefresh()" title="Refresh Status">
-                            <i class="fa-solid fa-rotate-right"></i> Refresh
-                        </button>
-                    </div>
-                </footer>
-            </main>
+            <div class="action-buttons">
+                <button class="btn-action" id="btnSettings" title="Manage Services"><i class="fa-solid fa-sliders"></i></button>
+                <button class="btn-action" id="btnAddService" title="Add New Service"><i class="fa-solid fa-plus"></i></button>
+                <button class="btn-action" id="btnLogout" title="Logout Session" style="display: none;"><i class="fa-solid fa-right-from-bracket" style="color: var(--danger);"></i></button>
+            </div>
         </div>
+
+        <!-- Bento Grid Dashboard -->
+        <div class="bento-grid" id="bentoGrid">
+            <!-- 1. Webcam Card (2x2) -->
+            <div class="card camera-card bento-webcam" id="sidebarCameraCard">
+                <!-- Standby / Streaming will be dynamically generated by JS -->
+            </div>
+
+            <!-- 2. CPU Metric (2x1) -->
+            <div class="metric-card bento-cpu">
+                <div style="display:flex; justify-content:space-between; align-items:center; width:100%; margin-bottom: auto;">
+                    <span class="metric-label" style="display:flex; align-items:center; gap:0.5rem; font-size: 0.75rem;">
+                        <i class="fa-solid fa-microchip metric-icon" style="font-size:1.1rem; margin:0; opacity:0.8; color: var(--color-system);"></i>
+                        System CPU
+                    </span>
+                    <span class="metric-value" style="font-size: 1.1rem;">
+                        <span id="metricCpu">—</span> 
+                        <span style="font-size:0.8rem; opacity:0.6; font-weight:normal; margin-left: 0.3rem;" id="metricCpuTemp"></span>
+                    </span>
+                </div>
+                <div style="width: 100%; margin-top: 1rem;">
+                    <div class="metric-bar-track" style="width:100%;"><div class="metric-bar-fill" id="metricCpuBar"></div></div>
+                    <canvas class="metric-sparkline" id="cpuSparkline" width="560" height="50" style="width:100%; height:50px; margin-top:0.5rem;"></canvas>
+                </div>
+            </div>
+
+            <!-- 3. RAM Metric (2x1) -->
+            <div class="metric-card bento-ram">
+                <div style="display:flex; justify-content:space-between; align-items:center; width:100%; margin-bottom: auto;">
+                    <span class="metric-label" style="display:flex; align-items:center; gap:0.5rem; font-size: 0.75rem;">
+                        <i class="fa-solid fa-memory metric-icon" style="font-size:1.1rem; margin:0; opacity:0.8; color: var(--color-photos);"></i>
+                        Memory Usage
+                    </span>
+                    <span class="metric-value" id="metricRam" style="font-size: 1.1rem;">—</span>
+                </div>
+                <div class="metric-value-sub" id="metricRamDetails" style="margin-top:-0.5rem; margin-bottom: 0.5rem; font-family:'JetBrains Mono', monospace; font-size:0.75rem; color: var(--text-secondary);"></div>
+                <div style="width: 100%;">
+                    <div class="metric-bar-track" style="width:100%;"><div class="metric-bar-fill" id="metricRamBar"></div></div>
+                    <canvas class="metric-sparkline" id="ramSparkline" width="560" height="50" style="width:100%; height:50px; margin-top:0.5rem;"></canvas>
+                </div>
+            </div>
+
+            <!-- 4. Network Metric (1x1) -->
+            <div class="metric-card">
+                <div style="display:flex; justify-content:space-between; align-items:center; width:100%;">
+                    <span class="metric-label" style="display:flex; align-items:center; gap:0.5rem; font-size: 0.75rem;">
+                        <i class="fa-solid fa-network-wired metric-icon" style="font-size:1.1rem; margin:0; opacity:0.8; color: var(--color-files);"></i>
+                        Network
+                    </span>
+                </div>
+                <div class="net-rates-container" style="display:flex; flex-direction:column; gap:0.5rem; margin-top: 1rem; width:100%;">
+                    <div class="net-rate-item" style="font-family:'JetBrains Mono', monospace; font-size:0.85rem; display:flex; align-items:center; gap:0.5rem;">
+                        <i class="fa-solid fa-arrow-down" style="color:#34d399; font-size:0.8rem;"></i> 
+                        <span style="color: var(--text-secondary); font-size: 0.7rem; text-transform: uppercase;">Down:</span>
+                        <span id="netDownSpeed" style="color: var(--text-primary); font-weight: 600;">0 B/s</span>
+                    </div>
+                    <div class="net-rate-item" style="font-family:'JetBrains Mono', monospace; font-size:0.85rem; display:flex; align-items:center; gap:0.5rem;">
+                        <i class="fa-solid fa-arrow-up" style="color:#60a5fa; font-size:0.8rem;"></i>
+                        <span style="color: var(--text-secondary); font-size: 0.7rem; text-transform: uppercase;">Up:</span>
+                        <span id="netUpSpeed" style="color: var(--text-primary); font-weight: 600;">0 B/s</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 5. Disk Metric (1x1) -->
+            <div class="metric-card">
+                <div style="display:flex; justify-content:space-between; align-items:center; width:100%;">
+                    <span class="metric-label" style="display:flex; align-items:center; gap:0.5rem; font-size: 0.75rem;">
+                        <i class="fa-solid fa-hard-drive metric-icon" style="font-size:1.1rem; margin:0; opacity:0.8; color: var(--color-media);"></i>
+                        Storage
+                    </span>
+                    <span class="metric-value" id="metricDisk">—</span>
+                </div>
+                <div class="metric-value-sub" id="metricDiskDetails" style="margin-top:0.25rem; font-family:'JetBrains Mono', monospace; font-size:0.75rem; color: var(--text-secondary);"></div>
+                <div class="metric-bar-track" style="width:100%; margin-top:0.75rem;"><div class="metric-bar-fill" id="metricDiskBar"></div></div>
+            </div>
+
+            <!-- 6. Uptime Metric (1x1) -->
+            <div class="metric-card" style="justify-content: center; gap: 0.8rem;">
+                <span class="metric-label" style="display:flex; align-items:center; gap:0.5rem; font-size: 0.75rem;">
+                    <i class="fa-solid fa-clock metric-icon" style="font-size:1.1rem; margin:0; opacity:0.8; color: var(--color-games);"></i>
+                    System Uptime
+                </span>
+                <span class="metric-value" id="metricUptime" style="font-size:1.3rem; font-family: 'Outfit', sans-serif; font-weight: 700; letter-spacing: -0.02em;">—</span>
+            </div>
+
+            <!-- Service Cards are dynamically appended here -->
+        </div>
+
+        <div class="last-updated" id="lastUpdated"></div>
+
+        <!-- Footer Utilities -->
+        <footer style="margin-top: 2rem; padding: 1.5rem 0; border-top: 1px solid var(--card-border); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+            <div class="utils-links">
+                <a href="https://targat.zya.me/" target="_blank" class="util-link">
+                    <i class="fa-solid fa-car"></i> Vehicles
+                </a>
+            </div>
+
+            <div style="display:flex; align-items:center; gap:1rem;">
+                <div class="kbd-hint">
+                    <kbd>/</kbd> search &nbsp;
+                    <kbd>1</kbd>–<kbd>6</kbd> open &nbsp;
+                    <kbd>Esc</kbd> close
+                </div>
+                <button class="refresh-btn" id="refreshBtn" onclick="manualRefresh()" title="Refresh Status">
+                    <i class="fa-solid fa-rotate-right"></i> Refresh
+                </button>
+            </div>
+        </footer>
     </div>
 
     <!-- Password Auth Modal -->
@@ -1345,8 +1266,6 @@
             </form>
         </div>
     </div>
-
-
 
     <!-- settings list Modal -->
     <div class="modal" id="settingsModal">
@@ -1391,6 +1310,13 @@
                     <input type="text" id="fieldIcon" class="form-control" required placeholder="e.g. fa-solid fa-video">
                 </div>
                 <div class="form-group">
+                    <label for="fieldSize">Card Layout Size</label>
+                    <select id="fieldSize">
+                        <option value="1x1">Standard (1x1 block)</option>
+                        <option value="2x1">Wide (2x1 block)</option>
+                    </select>
+                </div>
+                <div class="form-group">
                     <label for="fieldTheme">Theme / Category Color</label>
                     <select id="fieldTheme">
                         <option value="icon-media">Orange (Media)</option>
@@ -1418,7 +1344,7 @@
     </div>
 
     <script>
-        // Default services configuration mapping to user's exact Cloudflare Tunnel URLs
+        // Default services configuration mapping to user's exact Cloudflare Tunnel URLs and Bento layout options
         const DEFAULT_SERVICES = [
             {
                 id: "flood",
@@ -1427,7 +1353,8 @@
                 desc: "High-speed torrent client and secure download manager.",
                 icon: "fa-solid fa-download",
                 theme: "icon-torrent",
-                category: "downloads"
+                category: "downloads",
+                size: "1x1"
             },
             {
                 id: "immich",
@@ -1436,7 +1363,8 @@
                 desc: "Private media vault with AI recognition and automated encrypted backup.",
                 icon: "fa-solid fa-images",
                 theme: "icon-photos",
-                category: "media"
+                category: "media",
+                size: "2x1"
             },
             {
                 id: "cockpit",
@@ -1445,7 +1373,8 @@
                 desc: "Core server interface for Docker orchestration and hardware telemetry.",
                 icon: "fa-solid fa-microchip",
                 theme: "icon-system",
-                category: "system"
+                category: "system",
+                size: "1x1"
             },
             {
                 id: "stats",
@@ -1454,7 +1383,8 @@
                 desc: "Infrastructure monitoring and real-time network traffic analytics.",
                 icon: "fa-solid fa-chart-simple",
                 theme: "icon-system",
-                category: "system"
+                category: "system",
+                size: "1x1"
             },
             {
                 id: "alist",
@@ -1463,7 +1393,8 @@
                 desc: "Unified file gateway aggregating local and cloud storage pools.",
                 icon: "fa-solid fa-folder-tree",
                 theme: "icon-files",
-                category: "media"
+                category: "media",
+                size: "1x1"
             },
             {
                 id: "plex",
@@ -1472,7 +1403,8 @@
                 desc: "Centralized media server for streaming movies and television series.",
                 icon: "fa-solid fa-film",
                 theme: "icon-media",
-                category: "media"
+                category: "media",
+                size: "2x1"
             },
             {
                 id: "jellyfin",
@@ -1481,7 +1413,8 @@
                 desc: "Free open-source media system for personal streaming without subscriptions.",
                 icon: "fa-solid fa-play-circle",
                 theme: "icon-media",
-                category: "media"
+                category: "media",
+                size: "1x1"
             },
             {
                 id: "crafty",
@@ -1490,7 +1423,8 @@
                 desc: "Minecraft server controller with web UI, console, and player management.",
                 icon: "fa-solid fa-cube",
                 theme: "icon-games",
-                category: "system"
+                category: "system",
+                size: "1x1"
             },
             {
                 id: "vaultwarden",
@@ -1499,16 +1433,8 @@
                 desc: "Self-hosted Bitwarden password vault. Secure, encrypted, and fully private.",
                 icon: "fa-solid fa-shield-halved",
                 theme: "icon-system",
-                category: "system"
-            },
-            {
-                id: "webcam",
-                name: "Live Webcam",
-                url: "https://9.1234.al",
-                desc: "Secure on-demand video stream from the server's connected webcam.",
-                icon: "fa-solid fa-camera",
-                theme: "icon-games",
-                category: "system"
+                category: "system",
+                size: "1x1"
             }
         ];
 
@@ -1522,11 +1448,17 @@
         const ramHistory = [];
         const MAX_HISTORY = 20;
         let selectedCardIndex = -1;
+        
+        // Secure webcam token (loaded dynamically after auth)
+        let webcamToken = "";
+        let webcamMode = "stream"; 
+        let isCameraStreaming = false;
+        let pendingAction = null;
 
         // Initialize dashboard
-        document.addEventListener("DOMContentLoaded", () => {
+        document.addEventListener("DOMContentLoaded", async () => {
+            await checkActiveSession();
             loadServices();
-            updateWebcamWidgetState();
             setupEventListeners();
             checkNetStatus();
             setInterval(checkNetStatus, 25000);
@@ -1538,16 +1470,18 @@
 
         // Load services from localStorage or set defaults
         function loadServices() {
-            const stored = localStorage.getItem("medi_server_services_v2");
+            const stored = localStorage.getItem("medi_server_services_v3");
             if (stored) {
                 try {
                     services = JSON.parse(stored);
+                    // Ensure all services have a size property
+                    services = services.map(s => ({ ...s, size: s.size || "1x1" }));
                 } catch(e) {
                     services = [...DEFAULT_SERVICES];
                 }
             } else {
                 services = [...DEFAULT_SERVICES];
-                localStorage.setItem("medi_server_services_v2", JSON.stringify(services));
+                localStorage.setItem("medi_server_services_v3", JSON.stringify(services));
             }
             renderServicesGrid();
         }
@@ -1581,6 +1515,12 @@
             document.getElementById("btnSettings").addEventListener("click", () => {
                 requireAuth(() => openSettingsModal());
             });
+
+            // Logout click
+            const logoutBtn = document.getElementById("btnLogout");
+            if (logoutBtn) {
+                logoutBtn.addEventListener("click", handleLogout);
+            }
         }
 
         // Helper to format net speed
@@ -1592,8 +1532,15 @@
 
         // Fetch central status API and update DOM + system metrics
         function fetchServiceStatusesAndRefresh() {
-            fetch("https://m.1234.al/status.php")
-                .then(res => res.json())
+            fetch("status.php")
+                .then(res => {
+                    if (res.status === 401) {
+                        sessionStorage.removeItem("dashboard_auth");
+                        updateWebcamWidgetState();
+                        throw new Error("Unauthorized");
+                    }
+                    return res.json();
+                })
                 .then(data => {
                     // Update system metrics if present
                     if (data.system) {
@@ -1642,7 +1589,7 @@
                     if (lu) lu.textContent = 'Last updated ' + new Date().toLocaleTimeString('en-US', { hour12: false });
                 })
                 .catch(err => {
-                    console.warn("Status API failed, falling back to client-side checks", err);
+                    console.warn("Telemetry fetch failed", err);
                 });
         }
 
@@ -1682,12 +1629,13 @@
                 ctx.lineTo(x, y);
             }
             
+            const colorGlow = isCpu ? '168, 85, 247' : '59, 130, 246'; // Purple for CPU, Blue for RAM
             const gradient = ctx.createLinearGradient(0, 0, width, 0);
-            gradient.addColorStop(0, 'rgba(255, 255, 255, 0.15)');
-            gradient.addColorStop(1, 'rgba(255, 255, 255, 0.8)');
+            gradient.addColorStop(0, `rgba(${colorGlow}, 0.2)`);
+            gradient.addColorStop(1, `rgba(${colorGlow}, 0.9)`);
             
             ctx.strokeStyle = gradient;
-            ctx.lineWidth = 1.5;
+            ctx.lineWidth = 2;
             ctx.stroke();
             
             // Fill area
@@ -1695,8 +1643,8 @@
             ctx.lineTo(0, height);
             ctx.closePath();
             const fillGradient = ctx.createLinearGradient(0, 0, 0, height);
-            fillGradient.addColorStop(0, 'rgba(255, 255, 255, 0.08)');
-            fillGradient.addColorStop(1, 'rgba(255, 255, 255, 0.0)');
+            fillGradient.addColorStop(0, `rgba(${colorGlow}, 0.12)`);
+            fillGradient.addColorStop(1, `rgba(${colorGlow}, 0.0)`);
             ctx.fillStyle = fillGradient;
             ctx.fill();
 
@@ -1707,10 +1655,10 @@
             const lastY = height - (lastVal / maxVal) * (height - 4) - 2;
             
             ctx.beginPath();
-            ctx.arc(lastX, lastY, 2, 0, 2 * Math.PI);
-            ctx.fillStyle = '#ffffff';
-            ctx.shadowBlur = 4;
-            ctx.shadowColor = '#ffffff';
+            ctx.arc(lastX, lastY, 3, 0, 2 * Math.PI);
+            ctx.fillStyle = `rgb(${colorGlow})`;
+            ctx.shadowBlur = 6;
+            ctx.shadowColor = `rgb(${colorGlow})`;
             ctx.fill();
             ctx.shadowBlur = 0; // reset
         }
@@ -1723,13 +1671,17 @@
             setTimeout(() => btn.classList.remove('spinning'), 800);
         }
 
-        // Render cards grid
+        // Render cards grid within Bento Grid
         function renderServicesGrid() {
-            const grid = document.getElementById("servicesGrid");
-            grid.innerHTML = "";
+            const grid = document.getElementById("bentoGrid");
+            if (!grid) return;
+
+            // Clean up any existing dynamic service cards first (they have the service-card class)
+            const existingServices = grid.querySelectorAll(".service-card");
+            existingServices.forEach(el => el.remove());
 
             const filtered = services.filter(service => {
-                if (service.id === "webcam") return false; // Filter out webcam card since it is natively embedded in the sidebar
+                if (service.id === "webcam") return false; // Handled statically as bento-webcam
                 const matchesCategory = activeCategory === "all" || service.category === activeCategory;
                 const matchesSearch = service.name.toLowerCase().includes(searchQuery) || 
                                       service.desc.toLowerCase().includes(searchQuery);
@@ -1737,20 +1689,30 @@
             });
 
             if (filtered.length === 0) {
-                grid.innerHTML = `
-                    <div style="grid-column: 1/-1; text-align: center; padding: 3rem; color: var(--text-secondary);">
-                        <i class="fa-regular fa-folder-open" style="font-size: 2.5rem; margin-bottom: 1rem; display: block;"></i>
-                        No services match your filters.
-                    </div>
+                const noMatch = document.createElement("div");
+                noMatch.className = "service-card";
+                noMatch.style.gridColumn = "1 / -1";
+                noMatch.style.textAlign = "center";
+                noMatch.style.padding = "3rem";
+                noMatch.style.color = "var(--text-secondary)";
+                noMatch.innerHTML = `
+                    <i class="fa-regular fa-folder-open" style="font-size: 2.5rem; margin-bottom: 1rem; display: block;"></i>
+                    No services match your filters.
                 `;
+                grid.appendChild(noMatch);
                 return;
             }
 
             filtered.forEach((service, index) => {
                 const card = document.createElement("a");
                 card.href = service.url;
-                card.className = `card card-${service.theme}`;
+                card.className = `card service-card card-${service.theme}`;
                 card.dataset.id = service.id;
+                
+                // Set wide size if configured
+                if (service.size === "2x1") {
+                    card.classList.add("card-wide");
+                }
 
                 // Mouse move effect for hover glow styling
                 card.addEventListener("mousemove", (e) => {
@@ -1764,11 +1726,7 @@
                 // Attach transition animation logic
                 card.addEventListener("click", function(e) {
                     e.preventDefault();
-                    if (service.id === "webcam") {
-                        openWebcamModal();
-                    } else {
-                        triggerRedirectAnimation(service.url, service.name, service.icon);
-                    }
+                    triggerRedirectAnimation(service.url, service.name, service.icon);
                 });
 
                 const cardIndex = index + 1;
@@ -1861,7 +1819,7 @@
 
         // Update keyboard card selection visuals
         function updateCardSelection() {
-            const cards = document.querySelectorAll("#servicesGrid .card");
+            const cards = document.querySelectorAll("#bentoGrid .service-card");
             cards.forEach((card, idx) => {
                 if (idx === selectedCardIndex) {
                     card.classList.add("keyboard-selected");
@@ -1895,7 +1853,7 @@
 
             // 1-9 to open nth visible service
             if (!inInput && e.key >= '1' && e.key <= '9') {
-                const cards = document.querySelectorAll('#servicesGrid .card');
+                const cards = document.querySelectorAll('#bentoGrid .service-card');
                 const idx = parseInt(e.key) - 1;
                 if (cards[idx]) cards[idx].click();
                 return;
@@ -1910,7 +1868,7 @@
 
             // Grid card arrow keys navigation
             if (!inInput) {
-                const cards = document.querySelectorAll('#servicesGrid .card');
+                const cards = document.querySelectorAll('#bentoGrid .service-card');
                 if (cards.length > 0) {
                     if (e.key === 'ArrowRight') {
                         e.preventDefault();
@@ -2008,10 +1966,7 @@
             }
         });
 
-        // ------------------ Password Authentication System ------------------
-        let pendingAction = null;
-        const PASSWORD_HASH = "6b86b273ff34fce19d6b804eff5a3f5747ada4eaa22f1d49c01e52ddb7875b4b"; // SHA-256 for admin password "1"
-
+        // ------------------ Secure Server-Side Session Authentication ------------------
         function requireAuth(action) {
             if (sessionStorage.getItem("dashboard_auth") === "true") {
                 action();
@@ -2024,63 +1979,146 @@
             setTimeout(() => document.getElementById("authPassword").focus(), 150);
         }
 
-        async function sha256(message) {
-            const msgBuffer = new TextEncoder().encode(message);
-            const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
-            const hashArray = Array.from(new Uint8Array(hashBuffer));
-            return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
-        }
-
         async function handleAuthSubmit(event) {
             event.preventDefault();
             const passwordInput = document.getElementById("authPassword").value;
-            const hashed = await sha256(passwordInput);
+            const errorEl = document.getElementById("authError");
             
-            if (hashed === PASSWORD_HASH) {
-                sessionStorage.setItem("dashboard_auth", "true");
-                closeModal("authModal");
-                updateWebcamWidgetState();
-                if (pendingAction) {
-                    pendingAction();
-                    pendingAction = null;
+            try {
+                const response = await fetch("status.php?action=login", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/x-www-form-urlencoded"
+                    },
+                    body: new URLSearchParams({ password: passwordInput })
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok && data.success) {
+                    sessionStorage.setItem("dashboard_auth", "true");
+                    closeModal("authModal");
+                    
+                    // Retrieve webcam feed token securely
+                    await fetchWebcamToken();
+                    
+                    updateWebcamWidgetState();
+                    fetchServiceStatusesAndRefresh();
+                    
+                    if (pendingAction) {
+                        pendingAction();
+                        pendingAction = null;
+                    }
+                } else {
+                    errorEl.style.display = "block";
+                    document.getElementById("authPassword").select();
                 }
-            } else {
-                document.getElementById("authError").style.display = "block";
-                document.getElementById("authPassword").select();
+            } catch (err) {
+                console.error("Login request failed", err);
+                errorEl.textContent = "Server communication error. Try again.";
+                errorEl.style.display = "block";
             }
         }
 
-        // ------------------ Live Webcam Stream System (Embedded Sidebar Card) ------------------
-        let webcamMode = "stream"; // stream or snapshot
-        let isCameraStreaming = false;
+        async function handleLogout() {
+            if (confirm("Are you sure you want to logout from your admin session?")) {
+                try {
+                    await fetch("status.php?action=logout");
+                } catch (e) {
+                    console.warn("Logout request failed", e);
+                }
+                sessionStorage.removeItem("dashboard_auth");
+                webcamToken = "";
+                disconnectWebcamStream();
+                updateWebcamWidgetState();
+                showToast("Logged out successfully");
+            }
+        }
 
+        async function checkActiveSession() {
+            try {
+                const res = await fetch("status.php?action=check_session");
+                if (res.ok) {
+                    const data = await res.json();
+                    if (data.authenticated) {
+                        sessionStorage.setItem("dashboard_auth", "true");
+                        await fetchWebcamToken();
+                    }
+                } else {
+                    sessionStorage.removeItem("dashboard_auth");
+                }
+            } catch (e) {
+                sessionStorage.removeItem("dashboard_auth");
+            }
+            updateWebcamWidgetState();
+        }
+
+        // ------------------ Live Webcam Stream System (Embedded Bento Grid Card) ------------------
         async function handleSidebarAuth(event) {
             event.preventDefault();
             const passwordInput = document.getElementById("sidebarPassword").value;
-            const hashed = await sha256(passwordInput);
+            const errorEl = document.getElementById("sidebarAuthError");
             
-            if (hashed === PASSWORD_HASH) {
-                sessionStorage.setItem("dashboard_auth", "true");
-                updateWebcamWidgetState();
+            try {
+                const response = await fetch("status.php?action=login", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/x-www-form-urlencoded"
+                    },
+                    body: new URLSearchParams({ password: passwordInput })
+                });
                 
-                // Also trigger any pending actions
-                if (pendingAction) {
-                    pendingAction();
-                    pendingAction = null;
+                const data = await response.json();
+                
+                if (response.ok && data.success) {
+                    sessionStorage.setItem("dashboard_auth", "true");
+                    
+                    // Retrieve webcam feed token securely
+                    await fetchWebcamToken();
+                    
+                    updateWebcamWidgetState();
+                    fetchServiceStatusesAndRefresh();
+                    
+                    if (pendingAction) {
+                        pendingAction();
+                        pendingAction = null;
+                    }
+                } else {
+                    if (errorEl) errorEl.style.display = "block";
+                    const pwd = document.getElementById("sidebarPassword");
+                    if (pwd) pwd.select();
                 }
-            } else {
-                const err = document.getElementById("sidebarAuthError");
-                if (err) err.style.display = "block";
-                const pwd = document.getElementById("sidebarPassword");
-                if (pwd) pwd.select();
+            } catch (err) {
+                console.error("Sidebar login request failed", err);
+                if (errorEl) {
+                    errorEl.textContent = "Server communication error.";
+                    errorEl.style.display = "block";
+                }
+            }
+        }
+
+        async function fetchWebcamToken() {
+            try {
+                const res = await fetch("status.php?action=get_webcam_token");
+                if (res.ok) {
+                    const data = await res.json();
+                    webcamToken = data.token;
+                }
+            } catch (e) {
+                console.warn("Failed to fetch secure webcam token", e);
             }
         }
 
         function updateWebcamWidgetState() {
             const container = document.getElementById("sidebarCameraCard");
+            const logoutBtn = document.getElementById("btnLogout");
             if (!container) return;
 
             const isAuth = sessionStorage.getItem("dashboard_auth") === "true";
+            
+            if (logoutBtn) {
+                logoutBtn.style.display = isAuth ? "flex" : "none";
+            }
             
             // If not authenticated, render LOCKED state
             if (!isAuth) {
@@ -2160,21 +2198,19 @@
                 img.style.opacity = "1";
             };
 
-            const token = PASSWORD_HASH;
-
             img.onerror = () => {
                 if (isCameraStreaming) {
                     loading.innerHTML = `<i class="fa-solid fa-triangle-exclamation" style="color: var(--status-offline);"></i> STREAM ERROR. RETRYING...`;
                     setTimeout(() => {
                         if (isCameraStreaming) {
-                            img.src = (webcamMode === "stream" ? "https://9.1234.al/stream" : "https://9.1234.al/snapshot") + "?token=" + token + "&v=" + Date.now();
+                            img.src = (webcamMode === "stream" ? "https://9.1234.al/stream" : "https://9.1234.al/snapshot") + "?token=" + webcamToken + "&v=" + Date.now();
                         }
                     }, 3000);
                 }
             };
 
-            img.src = "https://9.1234.al/stream?token=" + token + "&v=" + Date.now();
-            audio.src = "https://9.1234.al/audio?token=" + token + "&v=" + Date.now();
+            img.src = "https://9.1234.al/stream?token=" + webcamToken + "&v=" + Date.now();
+            audio.src = "https://9.1234.al/audio?token=" + webcamToken + "&v=" + Date.now();
             audio.load();
         }
 
@@ -2210,11 +2246,10 @@
             loading.innerHTML = webcamMode === "stream" ? `<i class="fa-solid fa-spinner fa-spin"></i> LOADING SNAPSHOT...` : `<i class="fa-solid fa-spinner fa-spin"></i> INITIALIZING LIVE STREAM...`;
             img.style.opacity = "0.2";
             
-            const token = PASSWORD_HASH;
             if (webcamMode === "stream") {
                 webcamMode = "snapshot";
                 modeBtn.textContent = "Live Stream";
-                img.src = "https://9.1234.al/snapshot?token=" + token + "&v=" + Date.now();
+                img.src = "https://9.1234.al/snapshot?token=" + webcamToken + "&v=" + Date.now();
                 
                 // Stop audio in snapshot mode
                 audio.src = "";
@@ -2223,10 +2258,10 @@
             } else {
                 webcamMode = "stream";
                 modeBtn.textContent = "Snapshot Mode";
-                img.src = "https://9.1234.al/stream?token=" + token + "&v=" + Date.now();
+                img.src = "https://9.1234.al/stream?token=" + webcamToken + "&v=" + Date.now();
                 
                 // Restart audio in stream mode
-                audio.src = "https://9.1234.al/audio?token=" + token + "&v=" + Date.now();
+                audio.src = "https://9.1234.al/audio?token=" + webcamToken + "&v=" + Date.now();
                 audio.load();
                 audio.muted = true;
                 if (audioBtn) {
@@ -2264,11 +2299,13 @@
                 document.getElementById("fieldUrl").value = service.url;
                 document.getElementById("fieldDesc").value = service.desc;
                 document.getElementById("fieldIcon").value = service.icon;
+                document.getElementById("fieldSize").value = service.size || "1x1";
                 document.getElementById("fieldTheme").value = service.theme;
                 document.getElementById("fieldCategory").value = service.category;
             } else {
                 document.getElementById("formModalTitle").textContent = "Add New Service";
                 document.getElementById("fieldId").value = "";
+                document.getElementById("fieldSize").value = "1x1";
             }
 
             document.getElementById("serviceFormModal").classList.add("active");
@@ -2288,10 +2325,11 @@
             const url = document.getElementById("fieldUrl").value;
             const desc = document.getElementById("fieldDesc").value;
             const icon = document.getElementById("fieldIcon").value;
+            const size = document.getElementById("fieldSize").value;
             const theme = document.getElementById("fieldTheme").value;
             const category = document.getElementById("fieldCategory").value;
 
-            const newService = { id, name, url, desc, icon, theme, category };
+            const newService = { id, name, url, desc, icon, size, theme, category };
             const existingIndex = services.findIndex(s => s.id === id);
 
             if (existingIndex > -1) {
@@ -2300,7 +2338,7 @@
                 services.push(newService);
             }
 
-            localStorage.setItem("medi_server_services_v2", JSON.stringify(services));
+            localStorage.setItem("medi_server_services_v3", JSON.stringify(services));
             closeModal("serviceFormModal");
             loadServices();
         }
@@ -2314,7 +2352,7 @@
                 const item = document.createElement("div");
                 item.className = "settings-item-row";
                 item.innerHTML = `
-                    <span>${service.name}</span>
+                    <span>${service.name} <small style="opacity:0.5; margin-left:0.4rem;">(${service.size})</small></span>
                     <div class="settings-item-row-buttons">
                         <button class="btn-item-action" onclick="editService('${service.id}')" title="Edit"><i class="fa-solid fa-pen-to-square"></i></button>
                         <button class="btn-item-action btn-item-delete" onclick="deleteService('${service.id}')" title="Delete"><i class="fa-solid fa-trash-can"></i></button>
@@ -2339,7 +2377,7 @@
         function deleteService(id) {
             if (confirm("Are you sure you want to remove this service from your dashboard?")) {
                 services = services.filter(s => s.id !== id);
-                localStorage.setItem("medi_server_services_v2", JSON.stringify(services));
+                localStorage.setItem("medi_server_services_v3", JSON.stringify(services));
                 openSettingsModal();
                 loadServices();
             }
@@ -2349,7 +2387,7 @@
         function resetDefaultServices() {
             if (confirm("Are you sure you want to reset the dashboard to the default services list? All custom additions will be lost.")) {
                 services = [...DEFAULT_SERVICES];
-                localStorage.setItem("medi_server_services_v2", JSON.stringify(services));
+                localStorage.setItem("medi_server_services_v3", JSON.stringify(services));
                 closeModal("settingsModal");
                 loadServices();
             }

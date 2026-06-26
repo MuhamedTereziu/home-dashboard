@@ -1,6 +1,96 @@
 <?php
-header("Access-Control-Allow-Origin: *");
+// CORS protection - allow only subdomains of 1234.al or same-origin
+$origin = $_SERVER['HTTP_ORIGIN'] ?? '';
+if ($origin !== '') {
+    if (preg_match('/^https?:\/\/([a-z0-9-]+\.)*1234\.al$/i', $origin)) {
+        header("Access-Control-Allow-Origin: " . $origin);
+        header("Access-Control-Allow-Credentials: true");
+        header("Access-Control-Allow-Headers: Content-Type, Authorization");
+        header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
+    }
+}
+
+// Handle OPTIONS preflight requests
+if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
+    exit(0);
+}
+
 header("Content-Type: application/json");
+
+// Configure session security
+ini_set('session.cookie_httponly', 1);
+ini_set('session.cookie_secure', 1);
+ini_set('session.cookie_samesite', 'Strict');
+session_start();
+
+// Define secure password SHA-256 hash (for "M-AIO-Cluster-Secure-2026!")
+define('PASSWORD_HASH', 'e53b14a1ba3208e2f00d574ec2b10a152049f4f17f7219af56e981e7ea9b24c1');
+// Web camera streamer token (SHA-256 hash of "1")
+define('WEBCAM_TOKEN', '6b86b273ff34fce19d6b804eff5a3f5747ada4eaa22f1d49c01e52ddb7875b4b');
+
+$action = $_GET['action'] ?? '';
+
+// Login action
+if ($action === 'login') {
+    if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+        http_response_code(405);
+        echo json_encode(["success" => false, "error" => "Method Not Allowed"]);
+        exit;
+    }
+    
+    $password = '';
+    // Support JSON or form-urlencoded POST
+    $contentType = $_SERVER['CONTENT_TYPE'] ?? '';
+    if (strpos($contentType, 'application/json') !== false) {
+        $input = json_decode(file_get_contents('php://input'), true);
+        $password = $input['password'] ?? '';
+    } else {
+        $password = $_POST['password'] ?? '';
+    }
+    
+    if (hash_equals(PASSWORD_HASH, hash('sha256', $password))) {
+        $_SESSION['authenticated'] = true;
+        echo json_encode(["success" => true]);
+    } else {
+        http_response_code(401);
+        echo json_encode(["success" => false, "error" => "Invalid password"]);
+    }
+    exit;
+}
+
+// Logout action
+if ($action === 'logout') {
+    $_SESSION = [];
+    if (ini_get("session.use_cookies")) {
+        $params = session_get_cookie_params();
+        setcookie(session_name(), '', time() - 42000,
+            $params["path"], $params["domain"],
+            $params["secure"], $params["httponly"]
+        );
+    }
+    session_destroy();
+    echo json_encode(["success" => true]);
+    exit;
+}
+
+// Authenticate session for all subsequent requests
+if (!isset($_SESSION['authenticated']) || $_SESSION['authenticated'] !== true) {
+    http_response_code(401);
+    echo json_encode(["error" => "Unauthorized"]);
+    exit;
+}
+
+// Retrieve webcam token
+if ($action === 'get_webcam_token') {
+    echo json_encode(["token" => WEBCAM_TOKEN]);
+    exit;
+}
+
+// Check session validity
+if ($action === 'check_session') {
+    echo json_encode(["authenticated" => true]);
+    exit;
+}
 
 // 1. Service Port Latency Monitoring (Disabled to stop specific container pings)
 $services = [];
@@ -86,7 +176,6 @@ function get_network_bytes() {
         $parts = preg_split('/\s+/', trim($line));
         if (count($parts) < 10) continue;
         $iface = rtrim($parts[0], ":");
-        // Exclude virtual/bridge/docker loopbacks
         if (!preg_match('/^(lo|docker|br-|veth|virbr)/', $iface)) {
             $rx += (float)$parts[1];
             $tx += (float)$parts[9];
@@ -137,4 +226,3 @@ echo json_encode([
         "net_up"     => intval(round($net_up))
     ]
 ]);
-
