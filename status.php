@@ -23,8 +23,8 @@ ini_set('session.cookie_secure', 1);
 ini_set('session.cookie_samesite', 'Strict');
 session_start();
 
-// Define secure password SHA-256 hash (for "M-AIO-Cluster-Secure-2026!")
-define('PASSWORD_HASH', 'e53b14a1ba3208e2f00d574ec2b10a152049f4f17f7219af56e981e7ea9b24c1');
+// Define secure password SHA-256 hash (for "1")
+define('PASSWORD_HASH', '6b86b273ff34fce19d6b804eff5a3f5747ada4eaa22f1d49c01e52ddb7875b4b');
 // Web camera streamer token (SHA-256 hash of "1")
 define('WEBCAM_TOKEN', '6b86b273ff34fce19d6b804eff5a3f5747ada4eaa22f1d49c01e52ddb7875b4b');
 
