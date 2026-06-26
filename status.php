@@ -19,8 +19,8 @@ header("Content-Type: application/json");
 
 // Configure session security
 ini_set('session.cookie_httponly', 1);
-ini_set('session.cookie_secure', 1);
-ini_set('session.cookie_samesite', 'Strict');
+ini_set('session.cookie_secure', 0); // Disable secure flag to support SSL-terminating proxies
+ini_set('session.cookie_samesite', 'Lax'); // Use Lax for better compatibility
 session_start();
 
 // Define secure password SHA-256 hash (for "1")
